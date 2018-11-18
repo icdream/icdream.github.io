@@ -1896,7 +1896,7 @@ pre .javascript .function {
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: #747316;
+  background: #d19542;
 }
 .links-of-blogroll {
   font-size: 13px;
@@ -3327,11 +3327,11 @@ a.fancybox {
   animation: heartAnimate 1.33s ease-in-out infinite;
 }
 .with-love {
-  color: #ff71a8;
+  color: #4169e1;
 }
 h2.love {
   border-left: none;
-  color: #ff71a8;
+  color: #4169e1;
   -webkit-text-fill-color: unset;
 }
 blockquote.question {
