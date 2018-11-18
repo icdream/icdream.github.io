@@ -145,7 +145,7 @@
     sidebar: {"position":"left","display":"hide","offset":12,"b2t":false,"scrollpercent":true,"onmobile":true},
     fancybox: true,
     tabs: true,
-    motion: {"enable":true,"async":true,"transition":{"post_block":"perspectiveLeftIn","post_header":"fadeIn","post_body":"fadeIn","coll_header":"perspectiveLeftIn","sidebar":"slideUpIn"}},
+    motion: {"enable":true,"async":true,"transition":{"post_block":"slideLeftIn","post_header":"fadeIn","post_body":"fadeIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     duoshuo: {
       userId: '0',
       author: '博主'
@@ -552,8 +552,8 @@
     <footer id="footer" class="footer">
       <div class="footer-inner">
         <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
-  <span class="with-love">
-    <i class="fa fa-heart"></i>
+  <span class="with-love" id="heart">
+    <i class="fa fa-flash"></i>
   </span>
   <span class="author" itemprop="copyrightHolder">cdream</span>
 
@@ -741,12 +741,22 @@
         notify: false,
         appId: 'XDDhAc8BrNAiwD3HykmqX1Fz-gzGzoHsz',
         appKey: 'pSfqMJiGnPB5sbPhGzCL6kkW',
-        placeholder: '总为浮云能蔽日，长安不见使人愁。',
+        placeholder: 'Everything that kills me makes me feel alive.',
         avatar:'mm',
         guest_info:guest,
         pageSize:'10' || 10,
     });
+
+    //新增以下代码即可，可以移除.info下所有子节点。
+var infoEle = document.querySelector('#comments .info');
+if (infoEle && infoEle.childNodes && infoEle.childNodes.length > 0){
+  infoEle.childNodes.forEach(function(item) {
+    item.parentNode.removeChild(item);
+  });
+}
+
   </script>
+  
 
 
 
