@@ -122,13 +122,13 @@
 
 
 
-<meta name="description" content="本文是我在学习 java集合过程中，针对HashMap的一篇总结文章。由于博主是非科班出身程序员，在学习HashMap原理时遇到了很多困难，所以如果你和博主一样，数据结构基础也不扎实甚至是没有基础，这篇文章可能也非常适合你！ 本文不包括红黑树部分分析">
+<meta name="description" content="本文是我在学习 java集合过程中，针对HashMap的一篇总结文章。由于博主是非科班出身程序员，在学习HashMap原理时遇到了很多困难，所以如果你和博主一样，数据结构基础也不扎实甚至是没有基础，这篇文章可能也非常适合你！ 本文基于jdk1.8，不包括红黑树部分分析">
 <meta name="keywords" content="Java基础_集合">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java集合——HashMap">
 <meta property="og:url" content="http://yoursite.com/2018/11/18/hashmap01/index.html">
 <meta property="og:site_name" content="cdream">
-<meta property="og:description" content="本文是我在学习 java集合过程中，针对HashMap的一篇总结文章。由于博主是非科班出身程序员，在学习HashMap原理时遇到了很多困难，所以如果你和博主一样，数据结构基础也不扎实甚至是没有基础，这篇文章可能也非常适合你！ 本文不包括红黑树部分分析">
+<meta property="og:description" content="本文是我在学习 java集合过程中，针对HashMap的一篇总结文章。由于博主是非科班出身程序员，在学习HashMap原理时遇到了很多困难，所以如果你和博主一样，数据结构基础也不扎实甚至是没有基础，这篇文章可能也非常适合你！ 本文基于jdk1.8，不包括红黑树部分分析">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://ws3.sinaimg.cn/large/006tNbRwly1fxfx2yy0cqj30z609at9h.jpg">
 <meta property="og:image" content="https://ws2.sinaimg.cn/large/006tNbRwly1fxfwz0z2drj30w40r8dik.jpg">
@@ -143,10 +143,10 @@
 <meta property="og:image" content="https://ws1.sinaimg.cn/large/006tNbRwly1fxewjxm09tj30vg0cqwjq.jpg">
 <meta property="og:image" content="https://ws3.sinaimg.cn/large/006tNbRwly1fxex1z60dqj30v60nuqaj.jpg">
 <meta property="og:image" content="https://ws4.sinaimg.cn/large/006tNbRwly1fxfw16m9bbj30su0k6111.jpg">
-<meta property="og:updated_time" content="2018-11-21T12:02:49.568Z">
+<meta property="og:updated_time" content="2018-11-21T13:03:44.626Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java集合——HashMap">
-<meta name="twitter:description" content="本文是我在学习 java集合过程中，针对HashMap的一篇总结文章。由于博主是非科班出身程序员，在学习HashMap原理时遇到了很多困难，所以如果你和博主一样，数据结构基础也不扎实甚至是没有基础，这篇文章可能也非常适合你！ 本文不包括红黑树部分分析">
+<meta name="twitter:description" content="本文是我在学习 java集合过程中，针对HashMap的一篇总结文章。由于博主是非科班出身程序员，在学习HashMap原理时遇到了很多困难，所以如果你和博主一样，数据结构基础也不扎实甚至是没有基础，这篇文章可能也非常适合你！ 本文基于jdk1.8，不包括红黑树部分分析">
 <meta name="twitter:image" content="https://ws3.sinaimg.cn/large/006tNbRwly1fxfx2yy0cqj30z609at9h.jpg">
 
 
@@ -476,7 +476,7 @@
 
       
         <p>&#x672C;&#x6587;&#x662F;&#x6211;&#x5728;&#x5B66;&#x4E60; java&#x96C6;&#x5408;&#x8FC7;&#x7A0B;&#x4E2D;&#xFF0C;&#x9488;&#x5BF9;HashMap&#x7684;&#x4E00;&#x7BC7;&#x603B;&#x7ED3;&#x6587;&#x7AE0;&#x3002;&#x7531;&#x4E8E;&#x535A;&#x4E3B;&#x662F;&#x975E;&#x79D1;&#x73ED;&#x51FA;&#x8EAB;&#x7A0B;&#x5E8F;&#x5458;&#xFF0C;&#x5728;&#x5B66;&#x4E60;HashMap&#x539F;&#x7406;&#x65F6;&#x9047;&#x5230;&#x4E86;&#x5F88;&#x591A;&#x56F0;&#x96BE;&#xFF0C;&#x6240;&#x4EE5;&#x5982;&#x679C;&#x4F60;&#x548C;&#x535A;&#x4E3B;&#x4E00;&#x6837;&#xFF0C;&#x6570;&#x636E;&#x7ED3;&#x6784;&#x57FA;&#x7840;&#x4E5F;&#x4E0D;&#x624E;&#x5B9E;&#x751A;&#x81F3;&#x662F;&#x6CA1;&#x6709;&#x57FA;&#x7840;&#xFF0C;&#x8FD9;&#x7BC7;&#x6587;&#x7AE0;&#x53EF;&#x80FD;&#x4E5F;&#x975E;&#x5E38;&#x9002;&#x5408;&#x4F60;&#xFF01;</p>
-<div class="note primary">&#x672C;&#x6587;&#x4E0D;&#x5305;&#x62EC;&#x7EA2;&#x9ED1;&#x6811;&#x90E8;&#x5206;&#x5206;&#x6790;</div>
+<div class="note primary">&#x672C;&#x6587;&#x57FA;&#x4E8E;jdk1.8&#xFF0C;&#x4E0D;&#x5305;&#x62EC;&#x7EA2;&#x9ED1;&#x6811;&#x90E8;&#x5206;&#x5206;&#x6790;</div>
 
 <p><img src="https://ws3.sinaimg.cn/large/006tNbRwly1fxfx2yy0cqj30z609at9h.jpg" alt="image-20181121193940281"></p>
 <a id="more"></a>
