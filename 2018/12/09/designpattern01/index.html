@@ -122,21 +122,21 @@
 
 
 
-<meta name="description" content="本文主要对观察者进行概述讲解，并使用观察者模式来模拟海姆达尔在发现敌人来袭后通知雷神托尔和洛基的过程。">
+<meta name="description" content="本文主要对观察者模式进行讲解，并使用观察者模式来模拟海姆达尔在发现敌人来袭后通知雷神托尔和洛基的过程。">
 <meta name="keywords" content="设计模式">
 <meta property="og:type" content="article">
 <meta property="og:title" content="设计模式——观察者模式(海姆达尔与仙宫人民)">
 <meta property="og:url" content="http://yoursite.com/2018/12/09/designpattern01/index.html">
 <meta property="og:site_name" content="cdream">
-<meta property="og:description" content="本文主要对观察者进行概述讲解，并使用观察者模式来模拟海姆达尔在发现敌人来袭后通知雷神托尔和洛基的过程。">
+<meta property="og:description" content="本文主要对观察者模式进行讲解，并使用观察者模式来模拟海姆达尔在发现敌人来袭后通知雷神托尔和洛基的过程。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://ws2.sinaimg.cn/large/006tNbRwly1fy0esjq5qpj31160esdh2.jpg">
 <meta property="og:image" content="https://ws2.sinaimg.cn/large/006tNbRwly1fy0ckqcoy8j30w80d2my5.jpg">
 <meta property="og:image" content="https://ws3.sinaimg.cn/large/006tNbRwly1fy0creff2wj31mg0isaei.jpg">
-<meta property="og:updated_time" content="2018-12-09T05:19:41.779Z">
+<meta property="og:updated_time" content="2018-12-12T16:05:55.869Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="设计模式——观察者模式(海姆达尔与仙宫人民)">
-<meta name="twitter:description" content="本文主要对观察者进行概述讲解，并使用观察者模式来模拟海姆达尔在发现敌人来袭后通知雷神托尔和洛基的过程。">
+<meta name="twitter:description" content="本文主要对观察者模式进行讲解，并使用观察者模式来模拟海姆达尔在发现敌人来袭后通知雷神托尔和洛基的过程。">
 <meta name="twitter:image" content="https://ws2.sinaimg.cn/large/006tNbRwly1fy0esjq5qpj31160esdh2.jpg">
 
 
@@ -465,7 +465,7 @@
       
 
       
-        <p>&#x672C;&#x6587;&#x4E3B;&#x8981;&#x5BF9;&#x89C2;&#x5BDF;&#x8005;&#x8FDB;&#x884C;&#x6982;&#x8FF0;&#x8BB2;&#x89E3;&#xFF0C;&#x5E76;&#x4F7F;&#x7528;&#x89C2;&#x5BDF;&#x8005;&#x6A21;&#x5F0F;&#x6765;&#x6A21;&#x62DF;&#x6D77;&#x59C6;&#x8FBE;&#x5C14;&#x5728;&#x53D1;&#x73B0;&#x654C;&#x4EBA;&#x6765;&#x88AD;&#x540E;&#x901A;&#x77E5;&#x96F7;&#x795E;&#x6258;&#x5C14;&#x548C;&#x6D1B;&#x57FA;&#x7684;&#x8FC7;&#x7A0B;&#x3002;</p>
+        <p>&#x672C;&#x6587;&#x4E3B;&#x8981;&#x5BF9;&#x89C2;&#x5BDF;&#x8005;&#x6A21;&#x5F0F;&#x8FDB;&#x884C;&#x8BB2;&#x89E3;&#xFF0C;&#x5E76;&#x4F7F;&#x7528;&#x89C2;&#x5BDF;&#x8005;&#x6A21;&#x5F0F;&#x6765;&#x6A21;&#x62DF;&#x6D77;&#x59C6;&#x8FBE;&#x5C14;&#x5728;&#x53D1;&#x73B0;&#x654C;&#x4EBA;&#x6765;&#x88AD;&#x540E;&#x901A;&#x77E5;&#x96F7;&#x795E;&#x6258;&#x5C14;&#x548C;&#x6D1B;&#x57FA;&#x7684;&#x8FC7;&#x7A0B;&#x3002;</p>
 <p><img src="https://ws2.sinaimg.cn/large/006tNbRwly1fy0esjq5qpj31160esdh2.jpg" alt="image-20181209130344471"></p>
 <a id="more"></a>
 <h2 id="&#x4E00;&#x3001;&#x6982;&#x5FF5;"><a href="#&#x4E00;&#x3001;&#x6982;&#x5FF5;" class="headerlink" title="&#x4E00;&#x3001;&#x6982;&#x5FF5;"></a>&#x4E00;&#x3001;&#x6982;&#x5FF5;</h2><h3 id="&#x5B9A;&#x4E49;"><a href="#&#x5B9A;&#x4E49;" class="headerlink" title="&#x5B9A;&#x4E49;"></a>&#x5B9A;&#x4E49;</h3><p>&#x89C2;&#x5BDF;&#x8005;&#x6A21;&#x5F0F;&#x4E5F;&#x53EB;&#x4F5C;&#x53D1;&#x5E03;-&#x8BA2;&#x9605;&#x6A21;&#x5F0F;&#xFF0C;&#x4E5F;&#x5C31;&#x662F;&#x4E8B;&#x4EF6;&#x76D1;&#x542C;&#x673A;&#x5236;&#x3002;&#x89C2;&#x5BDF;&#x8005;&#x6A21;&#x5F0F;&#x5B9A;&#x4E49;&#x4E86;&#x5BF9;&#x8C61;&#x4E4B;&#x95F4;&#x7684;&#x4F9D;&#x8D56;&#x5173;&#x7CFB;&#xFF0C;<strong>&#x8BA9;&#x591A;&#x4E2A;&#x89C2;&#x5BDF;&#x8005;&#x5BF9;&#x8C61;&#x540C;&#x65F6;&#x76D1;&#x542C;&#x67D0;&#x4E00;&#x4E2A;&#x4E3B;&#x9898;&#x5BF9;&#x8C61;&#xFF0C;&#x8FD9;&#x4E2A;&#x4E3B;&#x9898;&#x5BF9;&#x8C61;&#x5728;&#x72B6;&#x6001;&#x4E0A;&#x53D1;&#x751F;&#x53D8;&#x5316;&#x65F6;&#xFF0C;&#x4F1A;&#x901A;&#x77E5;&#x6240;&#x6709;&#x89C2;&#x5BDF;&#x8005;&#x5BF9;&#x8C61;&#xFF0C;&#x4F7F;&#x4ED6;&#x4EEC;&#x80FD;&#x591F;&#x81EA;&#x52A8;&#x66F4;&#x65B0;&#x81EA;&#x5DF1;&#xFF0C;&#x5E76;&#x91C7;&#x53D6;&#x76F8;&#x5E94;&#x6D3B;&#x52A8;</strong>&#x3002;</p>
@@ -621,8 +621,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/12/12/designpattern01/" rel="prev" title="设计模式--命令模式">
-                设计模式--命令模式 <i class="fa fa-chevron-right"></i>
+              <a href="/2018/12/12/designpattern02/" rel="prev" title="设计模式--命令模式（遥控器与灯）">
+                设计模式--命令模式（遥控器与灯） <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
