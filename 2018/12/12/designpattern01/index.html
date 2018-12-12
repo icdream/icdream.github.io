@@ -1,0 +1,1346 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#fff">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-flash.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="https://fonts.cat.net/css?family=Lato:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/safari-pinned-tab.svg?v=5.1.4" color="#fff">
+
+
+
+  <meta name="msapplication-config" content="/images/browserconfig.xml">
+
+
+
+  <meta name="keywords" content="设计模式,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="cdream" type="application/atom+xml">
+
+
+
+
+
+
+<meta name="description" content="&amp;#x4E00;&amp;#x3001;&amp;#x6982;&amp;#x8FF0;&amp;#x547D;&amp;#x4EE4;&amp;#x6A21;&amp;#x5F0F;&amp;#xFF08;&amp;#x82F1;&amp;#x8BED;&amp;#xFF1A;Command pattern&amp;#xFF09;&amp;#x662F;&amp;#x4E00;&amp;#x79CD;&amp;#x8BBE;&amp;#x8BA1;&amp;#x6A21;&amp;#x5F0F;&amp;#xFF0C;&amp;#x5B83;&amp;#x5C1D;&amp;">
+<meta name="keywords" content="设计模式">
+<meta property="og:type" content="article">
+<meta property="og:title" content="设计模式--命令模式">
+<meta property="og:url" content="http://yoursite.com/2018/12/12/designpattern01/index.html">
+<meta property="og:site_name" content="cdream">
+<meta property="og:description" content="&amp;#x4E00;&amp;#x3001;&amp;#x6982;&amp;#x8FF0;&amp;#x547D;&amp;#x4EE4;&amp;#x6A21;&amp;#x5F0F;&amp;#xFF08;&amp;#x82F1;&amp;#x8BED;&amp;#xFF1A;Command pattern&amp;#xFF09;&amp;#x662F;&amp;#x4E00;&amp;#x79CD;&amp;#x8BBE;&amp;#x8BA1;&amp;#x6A21;&amp;#x5F0F;&amp;#xFF0C;&amp;#x5B83;&amp;#x5C1D;&amp;">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://ws3.sinaimg.cn/large/006tNbRwly1fy4a7uyy2dj30tu0j0q8f.jpg">
+<meta property="og:updated_time" content="2018-12-12T15:42:29.005Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="设计模式--命令模式">
+<meta name="twitter:description" content="&amp;#x4E00;&amp;#x3001;&amp;#x6982;&amp;#x8FF0;&amp;#x547D;&amp;#x4EE4;&amp;#x6A21;&amp;#x5F0F;&amp;#xFF08;&amp;#x82F1;&amp;#x8BED;&amp;#xFF1A;Command pattern&amp;#xFF09;&amp;#x662F;&amp;#x4E00;&amp;#x79CD;&amp;#x8BBE;&amp;#x8BA1;&amp;#x6A21;&amp;#x5F0F;&amp;#xFF0C;&amp;#x5B83;&amp;#x5C1D;&amp;">
+<meta name="twitter:image" content="https://ws3.sinaimg.cn/large/006tNbRwly1fy4a7uyy2dj30tu0j0q8f.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"hide","offset":12,"b2t":false,"scrollpercent":true,"onmobile":true},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":true,"transition":{"post_block":"slideLeftIn","post_header":"fadeIn","post_body":"fadeIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/12/12/designpattern01/">
+
+
+
+
+
+  <title>设计模式--命令模式 | cdream</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">cdream</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">沉舟侧畔千帆过，病树前头万木春。</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/12/designpattern01/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="cdream">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="cdream">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">设计模式--命令模式</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-12T20:45:22+08:00">
+                2018-12-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/12/12/designpattern01/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2018/12/12/designpattern01/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1.6k
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="&#x4E00;&#x3001;&#x6982;&#x8FF0;"><a href="#&#x4E00;&#x3001;&#x6982;&#x8FF0;" class="headerlink" title="&#x4E00;&#x3001;&#x6982;&#x8FF0;"></a>&#x4E00;&#x3001;&#x6982;&#x8FF0;</h2><p><strong>&#x547D;&#x4EE4;&#x6A21;&#x5F0F;</strong>&#xFF08;&#x82F1;&#x8BED;&#xFF1A;<strong>Command pattern</strong>&#xFF09;&#x662F;&#x4E00;&#x79CD;&#x8BBE;&#x8BA1;&#x6A21;&#x5F0F;&#xFF0C;&#x5B83;&#x5C1D;&#x8BD5;&#x4EE5;&#x5BF9;&#x8C61;&#x6765;&#x4EE3;&#x8868;&#x5B9E;&#x9645;&#x884C;&#x52A8;&#x3002;&#x547D;&#x4EE4;&#x5BF9;&#x8C61;&#x53EF;&#x4EE5;&#x628A;&#x884C;&#x52A8;(action) &#x53CA;&#x5176;&#x53C2;&#x6570;&#x5C01;&#x88C5;&#x8D77;&#x6765;&#xFF0C;&#x4E8E;&#x662F;&#x8FD9;&#x4E9B;&#x884C;&#x52A8;&#x53EF;&#x4EE5;&#x88AB;&#x91CD;&#x590D;&#x4F7F;&#x7528;&#x3001;&#x64A4;&#x9500;&#x3001;&#x64A4;&#x9500;&#x540E;&#x91CD;&#x505A;&#x3002;</p>
+<p>&#x8FD9;&#x4E2A;&#x662F;&#x6982;&#x5FF5;&#x662F;&#x6765;&#x81EA;&#x7EF4;&#x57FA;&#x767E;&#x79D1;&#xFF0C;&#x6211;&#x89C9;&#x5F97;&#x6700;&#x5BB9;&#x6613;&#x7406;&#x89E3;&#xFF0C;&#x5C31;&#x662F;&#x628A;&#x547D;&#x4EE4;&#x5C01;&#x88C5;&#x6210;&#x5BF9;&#x8C61;&#xFF0C;&#x4F7F;&#x547D;&#x4EE4;&#x53EF;&#x4EE5;&#x91CD;&#x590D;&#x8C03;&#x7528;&#x3001;&#x64A4;&#x9500;&#xFF0C;&#x964D;&#x4F4E;&#x4E86;&#x8C03;&#x7528;&#x8005;&#x548C;&#x63A5;&#x53D7;&#x8005;&#x7684;&#x8026;&#x5408;&#xFF0C;&#x540C;&#x65F6;&#x5BB9;&#x6613;&#x6269;&#x5C55;&#x51FA;&#x65B0;&#x7684;&#x547D;&#x4EE4;&#x3002;</p>
+<div class="note"><strong>&#x5176;&#x4ED6;&#x63CF;&#x8FF0;</strong>&#xFF1A;<br>1.&#x5C06;&#x201C;&#x8BF7;&#x6C42;&#x201D;&#x5C01;&#x88C5;&#x6210;&#x5BF9;&#x8C61;&#xFF0C;&#x4EE5;&#x4FBF;&#x4F7F;&#x4E0D;&#x540C;&#x7684;&#x8BF7;&#x6C42;&#x3001;&#x961F;&#x5217;&#x6216;&#x65E5;&#x5FD7;&#x6765;&#x53C2;&#x6570;&#x5316;&#x5176;&#x4ED6;&#x5BF9;&#x8C61;&#xFF0C;&#x547D;&#x4EE4;&#x6A21;&#x5F0F;&#x4E5F;&#x652F;&#x6301;&#x53EF;&#x64A4;&#x9500;&#x64CD;&#x4F5C;&#x3002;&#xFF08;Head First &#x8BBE;&#x8BA1;&#x6A21;&#x5F0F;&#xFF09;<br>2.&#x547D;&#x4EE4;&#x6A21;&#x5F0F;&#x628A;&#x4E00;&#x4E2A;&#x8BF7;&#x6C42;&#x6216;&#x8005;&#x64CD;&#x4F5C;&#x5C01;&#x88C5;&#x5230;&#x4E00;&#x4E2A;&#x5BF9;&#x8C61;&#x4E2D;&#x3002;&#x547D;&#x4EE4;&#x6A21;&#x5F0F;&#x5141;&#x8BB8;&#x7CFB;&#x7EDF;&#x4F7F;&#x7528;&#x4E0D;&#x540C;&#x7684;&#x8BF7;&#x6C42;&#x628A;&#x5BA2;&#x6237;&#x7AEF;&#x53C2;&#x6570;&#x5316;&#xFF0C;&#x5BF9;&#x8BF7;&#x6C42;&#x6392;&#x961F;&#x6216;&#x8005;&#x8BB0;&#x5F55;&#x8BF7;&#x6C42;&#x65E5;&#x5FD7;&#xFF0C;&#x53EF;&#x4EE5;&#x63D0;&#x4F9B;&#x547D;&#x4EE4;&#x7684;&#x64A4;&#x9500;&#x548C;&#x6062;&#x590D;&#x529F;&#x80FD;&#x3002;&#xFF08;Java&#x4E0E;&#x6A21;&#x5F0F;&#xFF09;</div>
+
+<p>&#x5927;&#x5BB6;&#x505A;&#x9002;&#x5F53;&#x53C2;&#x8003;&#xFF0C;&#x4E0D;&#x7406;&#x89E3;&#x53EF;&#x4EE5;&#x5148;&#x770B;&#x770B;&#x4E0B;&#x9762;&#x7684;&#x6E90;&#x7801;&#xFF01;</p>
+<h2 id="&#x4E8C;&#x3001;&#x7ED3;&#x6784;"><a href="#&#x4E8C;&#x3001;&#x7ED3;&#x6784;" class="headerlink" title="&#x4E8C;&#x3001;&#x7ED3;&#x6784;"></a>&#x4E8C;&#x3001;&#x7ED3;&#x6784;</h2><p>&#x5982;&#x56FE;&#xFF0C;&#x8FD9;&#x662F;&#x547D;&#x4EE4;&#x6A21;&#x5F0F;&#x7684;&#x7ED3;&#x6784;&#xFF1A;</p>
+<p><img src="https://ws3.sinaimg.cn/large/006tNbRwly1fy4a7uyy2dj30tu0j0q8f.jpg" alt="image-20181212211929846"></p>
+<p>&#x4EE5;&#x7528;&#x9065;&#x63A7;&#x5668;&#x5F00;&#x706F;&#x4E3A;&#x4F8B;&#xFF08;Head First &#x8BBE;&#x8BA1;&#x6A21;&#x5F0F;&#x4F8B;&#x5B50;&#xFF09;</p>
+<ul>
+<li>Invoker&#xFF1A;&#x547D;&#x4EE4;&#x8C03;&#x7528;&#x8005;,&#x8D1F;&#x8D23;&#x8C03;&#x7528;&#x547D;&#x4EE4;&#x5BF9;&#x8C61;&#x7684;&#x8BF7;&#x6C42;&#x2014;&#x2014;<strong>&#x9065;&#x63A7;&#x5668;</strong></li>
+<li>Command&#xFF1A;&#x58F0;&#x660E;&#x4E86;&#x4E00;&#x4E2A;&#x5177;&#x4F53;&#x547D;&#x4EE4;&#x7C7B;&#x5B9E;&#x73B0;&#x7684;&#x63A5;&#x53E3;&#x2014;&#x2014;<strong>&#x547D;&#x4EE4;&#x7684;&#x63A5;&#x53E3;</strong></li>
+<li><p>ConcreteCommand&#xFF1A;&#x5177;&#x4F53;&#x547D;&#x4EE4;&#xFF0C;&#x5B9E;&#x73B0;&#x4E86;Invoker&#x548C;Receiver&#x4E4B;&#x95F4;&#x7684;&#x89E3;&#x8026;&#xFF0C;&#x901A;&#x5E38;&#x6301;&#x6709;&#x63A5;&#x6536;&#x8005;&#x5BF9;&#x8C61;&#x7684;&#x996E;&#x7528;&#x2014;&#x2014;<strong>&#x5F00;&#x706F;&#x6309;&#x94AE;&#x6267;&#x884C;&#x7684;&#x547D;&#x4EE4;</strong></p>
+</li>
+<li><p>Receiver:&#x547D;&#x4EE4;&#x63A5;&#x6536;&#x8005;&#xFF0C;&#x771F;&#x6B63;&#x63A5;&#x6536;&#x547D;&#x4EE4;&#x5E76;&#x6267;&#x884C;&#x52A8;&#x4F5C;&#x7684;&#x5BF9;&#x8C61;&#x2014;&#x2014;<strong>&#x706F;</strong></p>
+</li>
+<li>Client&#xFF1A;&#x5BA2;&#x6237;&#x7AEF;&#xFF0C;&#x521B;&#x9020;&#x5177;&#x4F53;&#x7684;&#x547D;&#x4EE4;&#xFF0C;&#x5E76;&#x786E;&#x5B9A;&#x63A5;&#x6536;&#x8005;</li>
+</ul>
+<h2 id="&#x4E09;&#x3001;&#x6E90;&#x4EE3;&#x7801;"><a href="#&#x4E09;&#x3001;&#x6E90;&#x4EE3;&#x7801;" class="headerlink" title="&#x4E09;&#x3001;&#x6E90;&#x4EE3;&#x7801;"></a>&#x4E09;&#x3001;&#x6E90;&#x4EE3;&#x7801;</h2><p>Receiver&#x2014;&#x2014;&#x4E8C;&#x6863;&#x4EAE;&#x5EA6;&#x7684;&#x706F;</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// &#x4E8C;&#x6863;&#x8C03;&#x8282;&#x7684;&#x706F;&#xFF0C;&#x5728;&#x8FD9;&#x91CC;&#x4F5C;&#x4E3A;&#x63A5;&#x6536;&#x8005;</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Light</span> </span>{</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> String HIGH = <span class="string">&quot;&#x8D3C;&#x4EAE;&quot;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> String MEDIUM = <span class="string">&quot;&#x6709;&#x70B9;&#x4EAE;&quot;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> String LOW = <span class="string">&quot;&#x5FEB;&#x706D;&#x706B;&#x4E86;&quot;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> String OFF = <span class="string">&quot;&#x771F;&#x7684;&#x706D;&#x706B;&#x4E86;~&quot;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> String luminance;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Light</span><span class="params">()</span> </span>{</span><br><span class="line">        <span class="keyword">this</span>.luminance = OFF;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">off</span><span class="params">()</span> </span>{</span><br><span class="line">        System.out.println(<span class="string">&quot;&#x706F;&#x5173;&#x95ED;&#x4E86;&quot;</span>);</span><br><span class="line">        <span class="keyword">this</span>.luminance = OFF;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">high</span><span class="params">()</span> </span>{</span><br><span class="line">        System.out.println(<span class="string">&quot;&#x8D3C;&#x4EAE;&quot;</span>);</span><br><span class="line">        <span class="keyword">this</span>.luminance = HIGH;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">medium</span><span class="params">()</span> </span>{</span><br><span class="line">        System.out.println(<span class="string">&quot;&#x633A;&#x4EAE;&#x5730;&#xFF01;&quot;</span>);</span><br><span class="line">        <span class="keyword">this</span>.luminance = MEDIUM;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">low</span><span class="params">()</span> </span>{</span><br><span class="line">        System.out.println(<span class="string">&quot;&#x5FEB;&#x706D;&#x706B;&#x4E86;&quot;</span>);</span><br><span class="line">        <span class="keyword">this</span>.luminance = LOW;</span><br><span class="line">    }</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getLuminance</span><span class="params">()</span></span>{</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.luminance;</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<p>Command&#x2014;&#x2014;&#x505A;&#x4E2A;&#x547D;&#x4EE4;&#x63A5;&#x53E3;&#xFF0C;&#x5E26;&#x64A4;&#x9500;&#x529F;&#x80FD;</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Command</span> </span>{</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">excute</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">undo</span><span class="params">()</span></span>;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<p>LightHighCommand&#x2014;&#x2014;&#x9AD8;&#x5149;&#x547D;&#x4EE4;</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LightHighCommand</span> <span class="keyword">implements</span> <span class="title">Command</span> </span>{</span><br><span class="line">    <span class="keyword">private</span> Light light;</span><br><span class="line">    <span class="keyword">private</span> String preLuminance;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">excute</span><span class="params">()</span> </span>{</span><br><span class="line">        <span class="comment">// &#x5907;&#x4EFD;&#x4E0A;&#x4E00;&#x4E2A;&#x547D;&#x4EE4;&#xFF0C;&#x64A4;&#x9500;&#x4F7F;&#x7528;</span></span><br><span class="line">        preLuminance = light.getLuminance();</span><br><span class="line">        light.high();</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">undo</span><span class="params">()</span> </span>{</span><br><span class="line">        <span class="keyword">if</span> (Light.HIGH.equals(preLuminance)){</span><br><span class="line">            light.high();</span><br><span class="line">        }<span class="keyword">else</span> <span class="keyword">if</span>(Light.MEDIUM.equals(preLuminance) ){</span><br><span class="line">            light.medium();</span><br><span class="line">        }<span class="keyword">else</span> <span class="keyword">if</span> (Light.LOW.equals(preLuminance)){</span><br><span class="line">            light.low();</span><br><span class="line">        }<span class="keyword">else</span> <span class="keyword">if</span> (Light.OFF.equals(preLuminance)){</span><br><span class="line">            light.off();</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">LightHighCommand</span><span class="params">(Light light)</span> </span>{</span><br><span class="line">        <span class="keyword">this</span>.light = light;</span><br><span class="line">    }</span><br><span class="line">    <span class="comment">// &#x667A;&#x80FD;&#x9065;&#x63A7;&#x5668;&#x6309;&#x952E;&#x529F;&#x80FD;&#x53EF;&#x4EE5;&#x63A7;&#x5236;&#x591A;&#x4E2A;&#x706F;</span></span><br><span class="line">    <span class="comment">// &#x5982;&#x679C;&#x63A7;&#x5236;&#x4EE4;&#x4E00;&#x4E2A;&#x63A5;&#x6536;&#x8005;&#xFF0C;&#x53EF;&#x4EE5;&#x4F20;&#x5165;&#xFF0C;&#x4E0D;&#x7528;&#x65B0;&#x5EFA;&#x547D;&#x4EE4;</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setLight</span><span class="params">(Light light)</span> </span>{</span><br><span class="line">        <span class="keyword">this</span>.light = light;</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<p>LightOffCommand&#x2014;&#x2014;&#x5173;&#x706F;&#x547D;&#x4EE4;</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LightOffCommand</span> <span class="keyword">implements</span> <span class="title">Command</span> </span>{</span><br><span class="line">    <span class="keyword">private</span> Light light;</span><br><span class="line">    <span class="keyword">private</span> String preLuminance;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">LightOffCommand</span><span class="params">(Light light)</span> </span>{</span><br><span class="line">        <span class="keyword">this</span>.light = light;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">excute</span><span class="params">()</span> </span>{</span><br><span class="line">        preLuminance = light.getLuminance();</span><br><span class="line">        light.off();</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">undo</span><span class="params">()</span> </span>{</span><br><span class="line">            <span class="keyword">if</span> (Light.HIGH.equals(preLuminance)){</span><br><span class="line">                light.high();</span><br><span class="line">            }<span class="keyword">else</span> <span class="keyword">if</span>(Light.MEDIUM.equals(preLuminance) ){</span><br><span class="line">                light.medium();</span><br><span class="line">            }<span class="keyword">else</span> <span class="keyword">if</span> (Light.LOW.equals(preLuminance)){</span><br><span class="line">                light.low();</span><br><span class="line">            }<span class="keyword">else</span> <span class="keyword">if</span> (Light.OFF.equals(preLuminance)){</span><br><span class="line">                light.off();</span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setLight</span><span class="params">(Light light)</span> </span>{</span><br><span class="line">        <span class="keyword">this</span>.light = light;</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<p>Invoker&#x2014;&#x2014;&#x9065;&#x63A7;&#x5668;</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RemoteControl</span> </span>{</span><br><span class="line">    <span class="keyword">private</span> Command off;</span><br><span class="line">    <span class="keyword">private</span> Command high;</span><br><span class="line">    <span class="keyword">private</span> Command medium;</span><br><span class="line">    <span class="keyword">private</span> Command low;</span><br><span class="line">    <span class="keyword">private</span> Command preCommand;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setOff</span><span class="params">(Command off)</span> </span>{</span><br><span class="line">        <span class="keyword">this</span>.off = off;</span><br><span class="line"></span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setHigh</span><span class="params">(Command high)</span> </span>{</span><br><span class="line">        <span class="keyword">this</span>.high = high;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setMedium</span><span class="params">(Command medium)</span> </span>{</span><br><span class="line">        <span class="keyword">this</span>.medium = medium;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setLow</span><span class="params">(Command low)</span> </span>{</span><br><span class="line">        <span class="keyword">this</span>.low = low;</span><br><span class="line"></span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">lightOff</span><span class="params">()</span> </span>{</span><br><span class="line">        off.excute();</span><br><span class="line">        preCommand = off;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">lightHigh</span><span class="params">()</span> </span>{</span><br><span class="line">        high.excute();</span><br><span class="line">        preCommand = high;</span><br><span class="line"></span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">lightMedium</span><span class="params">()</span> </span>{</span><br><span class="line">        medium.excute();</span><br><span class="line">        preCommand = medium;</span><br><span class="line"></span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">lightLow</span><span class="params">()</span> </span>{</span><br><span class="line">        low.excute();</span><br><span class="line">        preCommand = low;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">undo</span><span class="params">()</span> </span>{</span><br><span class="line">        <span class="keyword">if</span> (preCommand == <span class="keyword">null</span>) {</span><br><span class="line">            System.out.println(<span class="string">&quot;&#x65E0;&#x6CD5;&#x64A4;&#x9500;&quot;</span>);</span><br><span class="line">        } <span class="keyword">else</span> {</span><br><span class="line">            preCommand.undo();</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<p>Client&#x2014;&#x2014;&#x5BA2;&#x6237;&#x7AEF;</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Client</span> </span>{</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>{</span><br><span class="line">        <span class="comment">// &#x521B;&#x5EFA;&#x63A5;&#x6536;&#x8005;</span></span><br><span class="line">        Light light = <span class="keyword">new</span> Light();</span><br><span class="line">        <span class="comment">// &#x521B;&#x5EFA;&#x547D;&#x4EE4;</span></span><br><span class="line">        Command lightHighCommand = <span class="keyword">new</span> LightHighCommand(light);</span><br><span class="line">        Command lightOffCommand = <span class="keyword">new</span> LightOffCommand(light);</span><br><span class="line">        <span class="comment">// &#x521B;&#x5EFA;&#x8C03;&#x7528;&#x8005;</span></span><br><span class="line">        RemoteControl remoteControl = <span class="keyword">new</span> RemoteControl();</span><br><span class="line">        remoteControl.setHigh(lightHighCommand);</span><br><span class="line">        remoteControl.setOff(lightOffCommand);</span><br><span class="line">        <span class="comment">// &#x8C03;&#x7528;</span></span><br><span class="line">        remoteControl.lightHigh();</span><br><span class="line">        remoteControl.lightOff();</span><br><span class="line">        remoteControl.undo();</span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line">&#x2014;&#x2014;&#x2014;&#x2014;&#x2014;&#x2014;&#x2014;&#x2014;&gt;&#x7ED3;&#x679C;</span><br><span class="line">&#x8D3C;&#x4EAE;</span><br><span class="line">&#x706F;&#x5173;&#x95ED;&#x4E86;</span><br><span class="line">&#x8D3C;&#x4EAE;</span><br></pre></td></tr></tbody></table></figure>
+<p>&#x4EE5;&#x4E0A;&#x5C31;&#x662F;&#x4E00;&#x4E2A;&#x5E26;&#x64A4;&#x56DE;&#x529F;&#x80FD;&#x7684;&#x547D;&#x4EE4;&#x6A21;&#x5F0F;&#xFF0C;&#x5176;&#x4E2D;:</p>
+<p>&#x5982;&#x679C;&#x60F3;&#x5B9E;&#x73B0;<strong>&#x591A;&#x6B65;&#x64A4;&#x56DE;</strong>&#xFF0C;&#x53EF;&#x4EE5;&#x8003;&#x8651;&#x628A;&#x8C03;&#x7528;&#x8005;&#x4E2D;&#x7684;preCommand&#x6362;&#x6210;stack;</p>
+<p>&#x5982;&#x679C;&#x60F3;&#x5B9E;&#x73B0;<strong>&#x7EC4;&#x5408;&#x547D;&#x4EE4;</strong>&#xFF0C;&#x53EF;&#x4EE5;&#x91CD;&#x65B0;&#x521B;&#x5EFA;&#x4E00;&#x4E2A;<strong>&#x5B8F;&#x547D;&#x4EE4;</strong>&#xFF0C;&#x5982;&#x4E0B;</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MacroCommand</span> <span class="keyword">implements</span> <span class="title">Command</span> </span>{</span><br><span class="line">    <span class="keyword">private</span> Command[] commands;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">MacroCommand</span><span class="params">(Command[] commands)</span> </span>{</span><br><span class="line">        <span class="keyword">this</span>.commands = commands;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">excute</span><span class="params">()</span> </span>{</span><br><span class="line">        <span class="keyword">for</span> (Command command : commands) {</span><br><span class="line">            command.excute();</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">undo</span><span class="params">()</span> </span>{</span><br><span class="line">        <span class="keyword">for</span> (Command command : commands) {</span><br><span class="line">            command.undo();</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<p>&#x4F60;&#x53EF;&#x4EE5;&#x7528;&#x8FD9;&#x4E2A;&#x547D;&#x4EE4;&#x5B9E;&#x73B0;&#x4EFB;&#x4F55;&#x5F62;&#x5F0F;&#x7684;&#x547D;&#x4EE4;&#x7EC4;&#x5408;&#xFF0C;&#x751A;&#x81F3;&#x5982;&#x679C;&#x4F60;&#x89C9;&#x5F97;&#x4F60;&#x7684;&#x9065;&#x63A7;&#x5668;&#x53EF;&#x4EE5;&#x63A7;&#x5236;&#x7A7A;&#x8C03;&#xFF0C;&#x63A7;&#x5236;&#x7535;&#x6E90;&#xFF0C;&#x63A7;&#x5236;&#x7535;&#x996D;&#x9505;&#xFF0C;&#x4F60;&#x751A;&#x81F3;&#x53EF;&#x4EE5;&#x628A;&#x8FD9;&#x4E9B;&#x547D;&#x4EE4;&#x7EC4;&#x5408;&#x8FDB;&#x6765;~</p>
+<h2 id="&#x56DB;&#x3001;&#x547D;&#x4EE4;&#x6A21;&#x5F0F;&#x7684;&#x4F18;&#x7F3A;&#x70B9;"><a href="#&#x56DB;&#x3001;&#x547D;&#x4EE4;&#x6A21;&#x5F0F;&#x7684;&#x4F18;&#x7F3A;&#x70B9;" class="headerlink" title="&#x56DB;&#x3001;&#x547D;&#x4EE4;&#x6A21;&#x5F0F;&#x7684;&#x4F18;&#x7F3A;&#x70B9;"></a>&#x56DB;&#x3001;&#x547D;&#x4EE4;&#x6A21;&#x5F0F;&#x7684;&#x4F18;&#x7F3A;&#x70B9;</h2><h3 id="&#x4F18;&#x70B9;"><a href="#&#x4F18;&#x70B9;" class="headerlink" title="&#x4F18;&#x70B9;"></a>&#x4F18;&#x70B9;</h3><ul>
+<li><p><strong>&#x89E3;&#x8026;&#x5408;</strong>&#xFF1A;&#x5C06;&#x547D;&#x4EE4;&#x8C03;&#x7528;&#x8005;&#x548C;&#x547D;&#x4EE4;&#x6267;&#x884C;&#x8005;&#x901A;&#x8FC7;&#x547D;&#x4EE4;&#x8FDB;&#x884C;&#x89E3;&#x8026;&#xFF0C;&#x547D;&#x4EE4;&#x8C03;&#x7528;&#x8005;&#x4E0D;&#x5173;&#x5FC3;&#x7531;&#x8C01;&#x6765;&#x6267;&#x884C;&#x547D;&#x4EE4;&#xFF0C;&#x53EA;&#x8981;&#x547D;&#x4EE4;&#x6267;&#x884C;&#x5C31;&#x53EF;&#x4EE5;</p>
+</li>
+<li><p><strong>&#x66F4;&#x52A8;&#x6001;&#x7684;&#x63A7;&#x5236;</strong>&#xFF1A;&#x8BF7;&#x6C42;&#x88AB;&#x5C01;&#x88C5;&#x6210;&#x5BF9;&#x8C61;&#x540E;&#xFF0C;&#x53EF;&#x4EE5;&#x8F7B;&#x6613;&#x7684;&#x53C2;&#x6570;&#x5316;&#x3001;&#x961F;&#x5217;&#x5316;&#x3001;&#x65E5;&#x5FD7;&#x5316;&#xFF0C;&#x4F7F;&#x7CFB;&#x7EDF;&#x66F4;&#x52A0;&#x7075;&#x6D3B;&#x3002;</p>
+</li>
+<li><strong>&#x66F4;&#x5BB9;&#x6613;&#x7684;&#x547D;&#x4EE4;&#x7EC4;&#x5408;</strong>&#xFF1A;&#x6709;&#x4E86;&#x5B8F;&#x547D;&#x4EE4;&#x540E;&#xFF0C;&#x53EF;&#x4EE5;&#x4EFB;&#x610F;&#x7684;&#x5BF9;&#x547D;&#x4EE4;&#x8FDB;&#x884C;&#x7EC4;&#x5408;</li>
+<li><strong>&#x66F4;&#x597D;&#x6269;&#x5C55;&#x6027;</strong>&#xFF1A;&#x53EF;&#x4EE5;&#x8F7B;&#x6613;&#x7684;&#x6DFB;&#x52A0;&#x65B0;&#x7684;&#x547D;&#x4EE4;&#xFF0C;&#x5E76;&#x4E0D;&#x4F1A;&#x5F71;&#x54CD;&#x5230;&#x5176;&#x4ED6;&#x7684;&#x547D;&#x4EE4;</li>
+</ul>
+<h3 id="&#x7F3A;&#x70B9;"><a href="#&#x7F3A;&#x70B9;" class="headerlink" title="&#x7F3A;&#x70B9;"></a>&#x7F3A;&#x70B9;</h3><ul>
+<li>&#x547D;&#x4EE4;&#x8FC7;&#x591A;&#x65F6;&#xFF0C;&#x4F1A;&#x521B;&#x5EFA;&#x4E86;&#x8FC7;&#x591A;&#x7684;&#x547D;&#x4EE4;&#x7C7B;&#xFF0C;&#x4E0D;&#x65B9;&#x4FBF;&#x8FDB;&#x884C;&#x7BA1;&#x7406;</li>
+</ul>
+<h2 id="&#x4E94;&#x3001;&#x603B;&#x7ED3;"><a href="#&#x4E94;&#x3001;&#x603B;&#x7ED3;" class="headerlink" title="&#x4E94;&#x3001;&#x603B;&#x7ED3;"></a>&#x4E94;&#x3001;&#x603B;&#x7ED3;</h2><p>&#x672C;&#x6587;&#x5BF9;&#x547D;&#x4EE4;&#x6A21;&#x5F0F;&#x4F5C;&#x4E86;&#x7B80;&#x5355;&#x7684;&#x4ECB;&#x7ECD;&#xFF0C;&#x547D;&#x4EE4;&#x6A21;&#x5F0F;&#x53EA;&#x8981;&#x660E;&#x767D;&#x8C03;&#x7528;&#x8005;&#x5982;&#x4F55;&#x901A;&#x8FC7;&#x547D;&#x4EE4;&#x4E0E;&#x63A5;&#x6536;&#x8005;&#x4EA4;&#x4E92;&#xFF0C;&#x5C31;&#x6BD4;&#x8F83;&#x597D;&#x7406;&#x89E3;&#x3002;&#x5728;&#x5B9E;&#x9645;&#x5E94;&#x7528;&#x4E2D;&#xFF0C;&#x547D;&#x4EE4;&#x6A21;&#x5F0F;&#x53EF;&#x4EE5;&#x7528;&#x5728;&#x5E76;&#x884C;&#x5904;&#x7406;&#x3001;&#x4E8B;&#x52A1;&#x884C;&#x4E3A;&#x3001;&#x7EBF;&#x7A0B;&#x6C60;&#x7B49;&#x5730;&#x65B9;&#x3002;&#x4F8B;&#x5982;&#x4F20;&#x7EDF;&#x7684;&#x7EBF;&#x7A0B;&#x6C60;&#x5C31;&#x6709;addTask()&#x65B9;&#x6CD5;&#x5C06;&#x547D;&#x4EE4;&#x52A0;&#x5165;&#x5230;&#x7B49;&#x5F85;&#x88AB;&#x6267;&#x884C;&#x7684;&#x961F;&#x5217;&#x4E2D;&#xFF0C;&#x5141;&#x8BB8;&#x591A;&#x7EBF;&#x7A0B;&#x6267;&#x884C;&#x5B9E;&#x73B0;<code>java.lang.Runnable</code> &#x7684;&#x547D;&#x4EE4;&#xFF0C;&#x5C3D;&#x7BA1;&#x7EBF;&#x7A0B;&#x6C60;&#x672C;&#x8EAB;&#x5BF9;&#x5177;&#x4F53;&#x7684;&#x4EFB;&#x52A1;&#x6BEB;&#x65E0;&#x8BA4;&#x77E5;&#x3002;</p>
+<blockquote>
+<p>&#x672C;&#x6587;&#x9996;&#x53D1;&#x4E8E;<a href="https://icdream.github.io/" target="_blank" rel="noopener">cdream</a>&#x4E2A;&#x4EBA;&#x535A;&#x5BA2;</p>
+<p>&#x6B22;&#x8FCE;&#x8F6C;&#x8F7D;&#xFF0C;&#x8F6C;&#x8F7D;&#x8BF7;&#x6CE8;&#x660E;&#x51FA;&#x5904;&#xFF01;</p>
+</blockquote>
+<hr>
+<ol>
+<li><a href="http://product.dangdang.com/20021171.html" target="_blank" rel="noopener">Head First &#x8BBE;&#x8BA1;&#x6A21;&#x5F0F;,Eric Freeman &amp;Elisabeth Freeman with Kathy Sierra &amp; Bert Bates</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Command_pattern" target="_blank" rel="noopener">Command pattern&#xFF0C;wiki</a></li>
+<li><a href="https://www.cnblogs.com/java-my-life/archive/2012/06/01/2526972.html" target="_blank" rel="noopener">&#x300A;JAVA&#x4E0E;&#x6A21;&#x5F0F;&#x300B;&#x4E4B;&#x547D;&#x4EE4;&#x6A21;&#x5F0F;</a></li>
+</ol>
+<script>
+        document.querySelectorAll('.github-emoji')
+          .forEach(el => {
+            if (!el.dataset.src) { return; }
+            const img = document.createElement('img');
+            img.style = 'display:none !important;';
+            img.src = el.dataset.src;
+            img.addEventListener('error', () => {
+              img.remove();
+              el.style.color = 'inherit';
+              el.style.backgroundImage = 'none';
+              el.style.background = 'none';
+            });
+            img.addEventListener('load', () => {
+              img.remove();
+            });
+            document.body.appendChild(img);
+          });
+      </script>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/设计模式/" rel="tag"># 设计模式</a>
+          
+        </div>
+      
+
+      
+      
+        <div class="post-widgets">
+        
+          <div class="wp_rating">
+            <div id="wpac-rating"></div>
+          </div>
+        
+
+        
+
+        
+        </div>
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/12/09/designpattern01/" rel="next" title="设计模式——观察者模式(海姆达尔与仙宫人民)">
+                <i class="fa fa-chevron-left"></i> 设计模式——观察者模式(海姆达尔与仙宫人民)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+      <div id="sidebar-dimmer"></div>
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/uploads/avatar.png" alt="cdream">
+            
+              <p class="site-author-name" itemprop="name">cdream</p>
+              <p class="site-description motion-element" itemprop="description">屠龙勇士、持剑少年、中二病晚期</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                是一些有趣的地方
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://www.cnblogs.com/cdream-zs/" title="博客园" target="_blank">博客园</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一、概述"><span class="nav-number">1.</span> <span class="nav-text">一、概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二、结构"><span class="nav-number">2.</span> <span class="nav-text">二、结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三、源代码"><span class="nav-number">3.</span> <span class="nav-text">三、源代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#四、命令模式的优缺点"><span class="nav-number">4.</span> <span class="nav-text">四、命令模式的优缺点</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#优点"><span class="nav-number">4.1.</span> <span class="nav-text">优点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#缺点"><span class="nav-number">4.2.</span> <span class="nav-text">缺点</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#五、总结"><span class="nav-number">5.</span> <span class="nav-text">五、总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="heart">
+    <i class="fa fa-flash"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">cdream</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'XDDhAc8BrNAiwD3HykmqX1Fz-gzGzoHsz',
+        appKey: 'pSfqMJiGnPB5sbPhGzCL6kkW',
+        placeholder: 'Everything that kills me makes me feel alive.',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+
+    //新增以下代码即可，可以移除.info下所有子节点。
+var infoEle = document.querySelector('#comments .info');
+if (infoEle && infoEle.childNodes && infoEle.childNodes.length > 0){
+  infoEle.childNodes.forEach(function(item) {
+    item.parentNode.removeChild(item);
+  });
+}
+
+  </script>
+  
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+  <script type="text/javascript">
+  wpac_init = window.wpac_init || [];
+  wpac_init.push({widget: 'Rating', id: 15062,
+    el: 'wpac-rating',
+    color: 'fc6423'
+  });
+  (function() {
+    if ('WIDGETPACK_LOADED' in window) return;
+    WIDGETPACK_LOADED = true;
+    var mc = document.createElement('script');
+    mc.type = 'text/javascript';
+    mc.async = true;
+    mc.src = '//embed.widgetpack.com/widget.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(mc, s.nextSibling);
+  })();
+  </script>
+
+
+  
+
+  
+  <script type="text/javascript" src="/js/src/js.cookie.js?v=5.1.4"></script>
+  <script type="text/javascript" src="/js/src/scroll-cookie.js?v=5.1.4"></script>
+
+
+  
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-backstretch/2.0.4/jquery.backstretch.min.js"></script>
+<script>
++  $("body").backstretch("https://ws2.sinaimg.cn/large/006tNbRwly1fxb2gj33nhj319t0u0qv5.jpg")
+ </script>
+</body>
+</html>
