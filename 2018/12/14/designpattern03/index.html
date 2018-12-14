@@ -122,21 +122,21 @@
 
 
 
-<meta name="description" content="&amp;#x672C;&amp;#x6587;&amp;#x7B80;&amp;#x8FF0;&amp;#x9002;&amp;#x914D;&amp;#x5668;&amp;#x6A21;&amp;#x5F0F;&amp;#xFF0C;&amp;#x8003;&amp;#x8651;&amp;#x5230;java&amp;#x4E2D;&amp;#x6CA1;&amp;#x6709;&amp;#x591A;&amp;#x7EE7;&amp;#x627F;&amp;#x5C31;&amp;#x53EA;&amp;#x5199;&amp;#x4E86;&amp;#x5BF9;&amp;#x8">
+<meta name="description" content="本文简述适配器模式，考虑到java中没有多继承就只写了对象适配器模式，然后例子是怎么用转接口把3.5mm耳机插在小米8上面。">
 <meta name="keywords" content="设计模式">
 <meta property="og:type" content="article">
 <meta property="og:title" content="设计模式——适配器模式">
 <meta property="og:url" content="http://yoursite.com/2018/12/14/designpattern03/index.html">
 <meta property="og:site_name" content="cdream">
-<meta property="og:description" content="&amp;#x672C;&amp;#x6587;&amp;#x7B80;&amp;#x8FF0;&amp;#x9002;&amp;#x914D;&amp;#x5668;&amp;#x6A21;&amp;#x5F0F;&amp;#xFF0C;&amp;#x8003;&amp;#x8651;&amp;#x5230;java&amp;#x4E2D;&amp;#x6CA1;&amp;#x6709;&amp;#x591A;&amp;#x7EE7;&amp;#x627F;&amp;#x5C31;&amp;#x53EA;&amp;#x5199;&amp;#x4E86;&amp;#x5BF9;&amp;#x8">
+<meta property="og:description" content="本文简述适配器模式，考虑到java中没有多继承就只写了对象适配器模式，然后例子是怎么用转接口把3.5mm耳机插在小米8上面。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://ws1.sinaimg.cn/large/006tNbRwly1fy6kyjux7nj316i0am75r.jpg">
 <meta property="og:image" content="https://ws4.sinaimg.cn/large/006tNbRwly1fy6h3dhi2rj30jw0kqq3e.jpg">
 <meta property="og:image" content="https://ws2.sinaimg.cn/large/006tNbRwly1fy5xwwob9bj30qo0egwfa.jpg">
-<meta property="og:updated_time" content="2018-12-14T13:11:06.210Z">
+<meta property="og:updated_time" content="2018-12-14T13:34:44.709Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="设计模式——适配器模式">
-<meta name="twitter:description" content="&amp;#x672C;&amp;#x6587;&amp;#x7B80;&amp;#x8FF0;&amp;#x9002;&amp;#x914D;&amp;#x5668;&amp;#x6A21;&amp;#x5F0F;&amp;#xFF0C;&amp;#x8003;&amp;#x8651;&amp;#x5230;java&amp;#x4E2D;&amp;#x6CA1;&amp;#x6709;&amp;#x591A;&amp;#x7EE7;&amp;#x627F;&amp;#x5C31;&amp;#x53EA;&amp;#x5199;&amp;#x4E86;&amp;#x5BF9;&amp;#x8">
+<meta name="twitter:description" content="本文简述适配器模式，考虑到java中没有多继承就只写了对象适配器模式，然后例子是怎么用转接口把3.5mm耳机插在小米8上面。">
 <meta name="twitter:image" content="https://ws1.sinaimg.cn/large/006tNbRwly1fy6kyjux7nj316i0am75r.jpg">
 
 
@@ -467,6 +467,7 @@
       
         <p>&#x672C;&#x6587;&#x7B80;&#x8FF0;&#x9002;&#x914D;&#x5668;&#x6A21;&#x5F0F;&#xFF0C;&#x8003;&#x8651;&#x5230;java&#x4E2D;&#x6CA1;&#x6709;&#x591A;&#x7EE7;&#x627F;&#x5C31;&#x53EA;&#x5199;&#x4E86;&#x5BF9;&#x8C61;&#x9002;&#x914D;&#x5668;&#x6A21;&#x5F0F;&#xFF0C;&#x7136;&#x540E;&#x4F8B;&#x5B50;&#x662F;&#x600E;&#x4E48;&#x7528;&#x8F6C;&#x63A5;&#x53E3;&#x628A;3.5mm&#x8033;&#x673A;&#x63D2;&#x5728;&#x5C0F;&#x7C73;8&#x4E0A;&#x9762;&#x3002;</p>
 <p><img src="https://ws1.sinaimg.cn/large/006tNbRwly1fy6kyjux7nj316i0am75r.jpg" alt="image-20181214211029904"></p>
+<a id="more"></a>
 <h2 id="&#x4E00;&#x3001;&#x6982;&#x5FF5;"><a href="#&#x4E00;&#x3001;&#x6982;&#x5FF5;" class="headerlink" title="&#x4E00;&#x3001;&#x6982;&#x5FF5;"></a>&#x4E00;&#x3001;&#x6982;&#x5FF5;</h2><p><strong>&#x9002;&#x914D;&#x5668;&#x6A21;&#x5F0F;</strong>&#xFF08;&#x82F1;&#x8BED;&#xFF1A;adapter pattern&#xFF09;&#x6709;&#x65F6;&#x5019;&#x4E5F;&#x79F0;&#x5305;&#x88C5;&#x6837;&#x5F0F;&#x6216;&#x8005;&#x5305;&#x88C5;(wrapper)&#x3002;&#x5C06;&#x4E00;&#x4E2A;&#x7C7B;&#x7684;&#x63A5;&#x53E3;&#x8F6C;&#x63A5;&#x6210;&#x7528;&#x6237;&#x6240;&#x671F;&#x5F85;&#x7684;&#x3002;&#x4E00;&#x4E2A;&#x9002;&#x914D;&#x5668;&#x4F7F;&#x5F97;&#x56E0;&#x63A5;&#x53E3;&#x4E0D;&#x517C;&#x5BB9;&#x800C;&#x4E0D;&#x80FD;&#x5728;&#x4E00;&#x8D77;&#x5DE5;&#x4F5C;&#x7684;&#x7C7B;&#x80FD;&#x5728;&#x4E00;&#x8D77;&#x5DE5;&#x4F5C;&#xFF0C;&#x505A;&#x6CD5;&#x662F;&#x5C06;&#x7C7B;&#x81EA;&#x5DF1;&#x7684;&#x63A5;&#x53E3;&#x5305;&#x88F9;&#x5728;&#x4E00;&#x4E2A;&#x5DF2;&#x5B58;&#x5728;&#x7684;&#x7C7B;&#x4E2D;&#x3002;</p>
 <p>&#x9002;&#x914D;&#x5668;&#x6A21;&#x5F0F;&#x5141;&#x8BB8;&#x4E00;&#x4E2A;&#x5DF2;&#x5B58;&#x5728;&#x7684;&#x7C7B;&#x7684;&#x63A5;&#x53E3;&#x88AB;&#x7528;&#x4F5C;&#x53E6;&#x4E00;&#x4E2A;&#x63A5;&#x53E3;&#x3002;&#x901A;&#x5E38;&#x53EF;&#x4EE5;&#x5728;&#x4E0D;&#x9700;&#x8981;&#x4FEE;&#x6539;&#x6E90;&#x4EE3;&#x7801;&#x7684;&#x60C5;&#x51B5;&#x4E0B;&#x4F7F;&#x7528;&#x5DF2;&#x5B58;&#x5728;&#x7684;&#x7C7B;&#x3002;</p>
 <p>&#x5176;&#x5B9E;&#x5728;&#x751F;&#x6D3B;&#x4E2D;&#xFF0C;&#x9002;&#x914D;&#x5668;&#x968F;&#x5904;&#x770B;&#x89C1;&#xFF0C;&#x4F8B;&#x5982;&#x4E0B;&#x56FE;&#xFF0C;&#x4E00;&#x4E2A;type-c&#x8F6C;&#x8033;&#x673A;&#x53E3;&#x7684;&#x9002;&#x914D;&#x5668;&#x3002;&#x63A5;&#x4E0B;&#x6765;&#x8BA9;&#x6211;&#x770B;&#x770B;&#x9002;&#x914D;&#x5668;&#x6A21;&#x5F0F;&#x7684;&#x7ED3;&#x6784;&#xFF0C;&#x5E76;&#x7528;java&#x4EE3;&#x7801;&#x6765;&#x5B9E;&#x73B0;&#x4E00;&#x4E2A;type-c&#x63A5;&#x53E3;&#x7684;&#x624B;&#x673A;&#x4E0E;3.5mm&#x7684;&#x8033;&#x673A;&#x901A;&#x8FC7;&#x9002;&#x914D;&#x5668;&#x8FDE;&#x63A5;&#x3002;</p>
