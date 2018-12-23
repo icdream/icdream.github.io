@@ -122,22 +122,22 @@
 
 
 
-<meta name="description" content="&amp;#x672C;&amp;#x6587;&amp;#x7B80;&amp;#x5355;&amp;#x4ECB;&amp;#x7ECD;&amp;#x7EC4;&amp;#x5408;&amp;#x6A21;&amp;#x5F0F;&amp;#xFF0C;&amp;#x4EE5;&amp;#x7CFB;&amp;#x7EDF;&amp;#x6587;&amp;#x4EF6;&amp;#x548C;&amp;#x6587;&amp;#x4EF6;&amp;#x5939;&amp;#x4E3A;&amp;#x4F8B;&amp;#x3002;  &amp;#x4E00;&amp;#x300">
+<meta name="description" content="本文简单介绍组合模式，以系统文件和文件夹为例。">
 <meta name="keywords" content="设计模式">
 <meta property="og:type" content="article">
 <meta property="og:title" content="设计模式——组合模式">
 <meta property="og:url" content="http://yoursite.com/2018/12/20/designpattern06/index.html">
 <meta property="og:site_name" content="cdream">
-<meta property="og:description" content="&amp;#x672C;&amp;#x6587;&amp;#x7B80;&amp;#x5355;&amp;#x4ECB;&amp;#x7ECD;&amp;#x7EC4;&amp;#x5408;&amp;#x6A21;&amp;#x5F0F;&amp;#xFF0C;&amp;#x4EE5;&amp;#x7CFB;&amp;#x7EDF;&amp;#x6587;&amp;#x4EF6;&amp;#x548C;&amp;#x6587;&amp;#x4EF6;&amp;#x5939;&amp;#x4E3A;&amp;#x4F8B;&amp;#x3002;  &amp;#x4E00;&amp;#x300">
+<meta property="og:description" content="本文简单介绍组合模式，以系统文件和文件夹为例。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://yoursite.com/Users/cdream/Library/Application%20Support/typora-user-images/image-20181223141136417.png">
+<meta property="og:image" content="https://ws3.sinaimg.cn/large/006tNbRwly1fyhft3twcoj311k06ujsm.jpg">
 <meta property="og:image" content="https://ws3.sinaimg.cn/large/006tNbRwly1fye02sxcbej30qy0i475x.jpg">
 <meta property="og:image" content="https://ws3.sinaimg.cn/large/006tNbRwly1fyemnr068vj316u0ciabk.jpg">
-<meta property="og:updated_time" content="2018-12-23T06:16:55.015Z">
+<meta property="og:updated_time" content="2018-12-23T23:36:41.330Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="设计模式——组合模式">
-<meta name="twitter:description" content="&amp;#x672C;&amp;#x6587;&amp;#x7B80;&amp;#x5355;&amp;#x4ECB;&amp;#x7ECD;&amp;#x7EC4;&amp;#x5408;&amp;#x6A21;&amp;#x5F0F;&amp;#xFF0C;&amp;#x4EE5;&amp;#x7CFB;&amp;#x7EDF;&amp;#x6587;&amp;#x4EF6;&amp;#x548C;&amp;#x6587;&amp;#x4EF6;&amp;#x5939;&amp;#x4E3A;&amp;#x4F8B;&amp;#x3002;  &amp;#x4E00;&amp;#x300">
-<meta name="twitter:image" content="http://yoursite.com/Users/cdream/Library/Application%20Support/typora-user-images/image-20181223141136417.png">
+<meta name="twitter:description" content="本文简单介绍组合模式，以系统文件和文件夹为例。">
+<meta name="twitter:image" content="https://ws3.sinaimg.cn/large/006tNbRwly1fyhft3twcoj311k06ujsm.jpg">
 
 
 
@@ -466,7 +466,8 @@
 
       
         <p>&#x672C;&#x6587;&#x7B80;&#x5355;&#x4ECB;&#x7ECD;&#x7EC4;&#x5408;&#x6A21;&#x5F0F;&#xFF0C;&#x4EE5;&#x7CFB;&#x7EDF;&#x6587;&#x4EF6;&#x548C;&#x6587;&#x4EF6;&#x5939;&#x4E3A;&#x4F8B;&#x3002;</p>
-<p><img src="/Users/cdream/Library/Application%20Support/typora-user-images/image-20181223141136417.png" alt="image-20181223141136417"></p>
+<p><img src="https://ws3.sinaimg.cn/large/006tNbRwly1fyhft3twcoj311k06ujsm.jpg" alt="image-20181223141136417"></p>
+<a id="more"></a>
 <h2 id="&#x4E00;&#x3001;&#x6982;&#x8FF0;"><a href="#&#x4E00;&#x3001;&#x6982;&#x8FF0;" class="headerlink" title="&#x4E00;&#x3001;&#x6982;&#x8FF0;"></a>&#x4E00;&#x3001;&#x6982;&#x8FF0;</h2><p><strong>&#x5B9A;&#x4E49;</strong>&#xFF1A;&#x7EC4;&#x5408;&#x6A21;&#x5F0F;(Composite pattern)&#x5C06;&#x5BF9;&#x8C61;&#x6574;&#x5408;&#x5230;&#x6811;&#x72B6;&#x7ED3;&#x6784;&#x4E2D;&#x6765;&#x8868;&#x793A;&#x6574;&#x4F53;/&#x90E8;&#x5206;&#x7684;&#x5C42;&#x6B21;&#x5173;&#x7CFB;,&#x5728;&#x6811;&#x72B6;&#x7ED3;&#x6784;&#x4E2D;&#x5305;&#x62EC;&#x5BF9;&#x8C61;&#x548C;&#x5BF9;&#x8C61;&#x7EC4;&#x5408;&#x3002;&#x7EC4;&#x5408;&#x6A21;&#x5F0F;&#x80FD;&#x8BA9;&#x5BA2;&#x6237;&#x7528;&#x4E00;&#x81F4;&#x7684;&#x65B9;&#x5F0F;&#x5904;&#x7406;&#x4E2A;&#x522B;&#x5BF9;&#x8C61;&#x7684;&#x5BF9;&#x8C61;&#x7EC4;&#x5408;&#x3002;</p>
 <div class="note info"><strong>&#x7EC4;&#x5408;&#x6A21;&#x5F0F;&#x4E3B;&#x8981;&#x89E3;&#x51B3;&#x4E24;&#x4E2A;&#x95EE;&#x9898;</strong>&#xFF1A;<br>1.&#x90E8;&#x5206;-&#x6574;&#x4F53;&#x7684;&#x5C42;&#x7EA7;&#x7ED3;&#x6784;&#x4EE5;&#x6811;&#x72B6;&#x7ED3;&#x6784;&#x6765;&#x8868;&#x73B0;<br>2.&#x90E8;&#x5206;&#x6574;&#x4F53;&#x7684;&#x5C42;&#x7EA7;&#x7ED3;&#x6784;&#x4E2D;&#xFF0C;&#x5BF9;&#x8C61;&#x548C;&#x5BF9;&#x8C61;&#x7EC4;&#x5408;&#x8981;&#x4EE5;&#x4E00;&#x81F4;&#x65B9;&#x5F0F;&#x5904;&#x7406;</div>
 

@@ -122,20 +122,20 @@
 
 
 
-<meta name="description" content="&amp;#x672C;&amp;#x6587;&amp;#x4E3B;&amp;#x8981;&amp;#x8BB2;&amp;#x8FF0;&amp;#x5DE5;&amp;#x5382;&amp;#x65B9;&amp;#x6CD5;&amp;#x6A21;&amp;#x5F0F;&amp;#xFF0C;&amp;#x5E76;&amp;#x4E0E;&amp;#x7B80;&amp;#x5355;&amp;#x65B9;&amp;#x6CD5;&amp;#x6A21;&amp;#x5F0F;&amp;#x8FDB;&amp;#x884C;&amp;#x5BF9;&amp;#x6BD4;">
+<meta name="description" content="本文主要讲述工厂方法模式，并与简单方法模式进行对比。以汽车制造厂为例进行讲解。">
 <meta name="keywords" content="设计模式">
 <meta property="og:type" content="article">
 <meta property="og:title" content="设计模式--工厂方法模式">
 <meta property="og:url" content="http://yoursite.com/2018/12/22/designpattern07/index.html">
 <meta property="og:site_name" content="cdream">
-<meta property="og:description" content="&amp;#x672C;&amp;#x6587;&amp;#x4E3B;&amp;#x8981;&amp;#x8BB2;&amp;#x8FF0;&amp;#x5DE5;&amp;#x5382;&amp;#x65B9;&amp;#x6CD5;&amp;#x6A21;&amp;#x5F0F;&amp;#xFF0C;&amp;#x5E76;&amp;#x4E0E;&amp;#x7B80;&amp;#x5355;&amp;#x65B9;&amp;#x6CD5;&amp;#x6A21;&amp;#x5F0F;&amp;#x8FDB;&amp;#x884C;&amp;#x5BF9;&amp;#x6BD4;">
+<meta property="og:description" content="本文主要讲述工厂方法模式，并与简单方法模式进行对比。以汽车制造厂为例进行讲解。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://ws4.sinaimg.cn/large/006tNbRwly1fygmzbt2yuj30rm0kw0tq.jpg">
 <meta property="og:image" content="https://ws4.sinaimg.cn/large/006tNbRwly1fygmzu18e8j30y40es402.jpg">
-<meta property="og:updated_time" content="2018-12-23T06:04:59.513Z">
+<meta property="og:updated_time" content="2018-12-23T23:37:08.840Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="设计模式--工厂方法模式">
-<meta name="twitter:description" content="&amp;#x672C;&amp;#x6587;&amp;#x4E3B;&amp;#x8981;&amp;#x8BB2;&amp;#x8FF0;&amp;#x5DE5;&amp;#x5382;&amp;#x65B9;&amp;#x6CD5;&amp;#x6A21;&amp;#x5F0F;&amp;#xFF0C;&amp;#x5E76;&amp;#x4E0E;&amp;#x7B80;&amp;#x5355;&amp;#x65B9;&amp;#x6CD5;&amp;#x6A21;&amp;#x5F0F;&amp;#x8FDB;&amp;#x884C;&amp;#x5BF9;&amp;#x6BD4;">
+<meta name="twitter:description" content="本文主要讲述工厂方法模式，并与简单方法模式进行对比。以汽车制造厂为例进行讲解。">
 <meta name="twitter:image" content="https://ws4.sinaimg.cn/large/006tNbRwly1fygmzbt2yuj30rm0kw0tq.jpg">
 
 
@@ -466,6 +466,7 @@
       
         <p>&#x672C;&#x6587;&#x4E3B;&#x8981;&#x8BB2;&#x8FF0;&#x5DE5;&#x5382;&#x65B9;&#x6CD5;&#x6A21;&#x5F0F;&#xFF0C;&#x5E76;&#x4E0E;&#x7B80;&#x5355;&#x65B9;&#x6CD5;&#x6A21;&#x5F0F;&#x8FDB;&#x884C;&#x5BF9;&#x6BD4;&#x3002;&#x4EE5;&#x6C7D;&#x8F66;&#x5236;&#x9020;&#x5382;&#x4E3A;&#x4F8B;&#x8FDB;&#x884C;&#x8BB2;&#x89E3;&#x3002;</p>
 <p><img src="https://ws4.sinaimg.cn/large/006tNbRwly1fygmzbt2yuj30rm0kw0tq.jpg" alt="image-20181223133404085"></p>
+<a id="more"></a>
 <h2 id="&#x4E00;&#x3001;&#x6982;&#x5FF5;"><a href="#&#x4E00;&#x3001;&#x6982;&#x5FF5;" class="headerlink" title="&#x4E00;&#x3001;&#x6982;&#x5FF5;"></a>&#x4E00;&#x3001;&#x6982;&#x5FF5;</h2><p><strong>&#x5B9A;&#x4E49;</strong>&#xFF1A;&#x5DE5;&#x5382;&#x65B9;&#x6CD5;&#x6A21;&#x5F0F;(Factory method pattern)&#x662F;&#x6307;&#x5DE5;&#x5382;&#x7236;&#x7C7B;&#x8D1F;&#x8D23;&#x5B9A;&#x4E49;&#x521B;&#x5EFA;&#x4EA7;&#x54C1;&#x5BF9;&#x8C61;&#x7684;&#x516C;&#x5171;&#x63A5;&#x53E3;&#xFF0C;&#x800C;&#x5DE5;&#x5382;&#x5B50;&#x7C7B;&#x5219;&#x8D1F;&#x8D23;&#x751F;&#x6210;&#x5177;&#x4F53;&#x7684;&#x4EA7;&#x54C1;&#x5BF9;&#x8C61;&#xFF0C;&#x8FD9;&#x6837;&#x505A;&#x7684;&#x76EE;&#x7684;&#x662F;&#x5C06;&#x4EA7;&#x54C1;&#x7C7B;&#x7684;&#x5B9E;&#x4F8B;&#x5316;&#x64CD;&#x4F5C;&#x63A8;&#x8FDF;&#x5230;&#x5DE5;&#x5382;&#x5B50;&#x7C7B;&#x4E2D;&#x5B8C;&#x6210;&#xFF0C;&#x5373;&#x901A;&#x8FC7;&#x5DE5;&#x5382;&#x5B50;&#x7C7B;&#x6765;&#x786E;&#x5B9A;&#x7A76;&#x7ADF;&#x5E94;&#x8BE5;&#x5B9E;&#x4F8B;&#x5316;&#x54EA;&#x4E00;&#x4E2A;&#x5177;&#x4F53;&#x4EA7;&#x54C1;&#x7C7B;&#x3002;</p>
 <div class="note info"><strong>&#x5DE5;&#x5382;&#x65B9;&#x6CD5;&#x6A21;&#x5F0F;&#x4E3B;&#x8981;&#x89E3;&#x51B3;&#x4E24;&#x4E2A;&#x95EE;&#x9898;</strong>&#xFF1A;<br>1.&#x5B9A;&#x4E49;&#x4E00;&#x4E2A;&#x521B;&#x5EFA;&#x5BF9;&#x8C61;&#x7684;&#x5355;&#x72EC;&#x64CD;&#x4F5C;(&#x5DE5;&#x5382;&#x65B9;&#x6CD5;)<br>2.&#x5C06;&#x521B;&#x5EFA;&#x5BF9;&#x8C61;&#x63A8;&#x8FDF;&#x5230;&#x5B50;&#x7C7B;&#x5B8C;&#x6210;</div>
 
