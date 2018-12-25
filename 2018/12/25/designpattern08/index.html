@@ -111,7 +111,7 @@
 
 
 
-  <meta name="keywords" content="java,spring">
+  <meta name="keywords" content="设计模式,">
 
 
 
@@ -124,18 +124,20 @@
 
 
 
-<meta name="description" content="Blog &amp;#x8BB0;&amp;#x5F55;&amp;#x603B;&amp;#x7ED3;&amp;#x5B66;&amp;#x4E60;&amp;#x5185;&amp;#x5BB9;&amp;#x7814;&amp;#x7A76;&amp;#x5F00;&amp;#x6E90;&amp;#x6280;&amp;#x672F;&amp;#xFF0C;&amp;#x5206;&amp;#x4EAB;&amp;#x6280;&amp;#x672F;&amp;#x5E72;&amp;#x8D27;&amp;#x4E0E;&amp;#x5FC3;&amp;#x5F97;Rep">
-<meta name="keywords" content="java">
-<meta property="og:type" content="website">
-<meta property="og:title" content="about">
-<meta property="og:url" content="http://yoursite.com/about/index.html">
+<meta name="description" content="&amp;#x4E00;&amp;#x3001;&amp;#x6982;&amp;#x5FF5;&amp;#x5B9A;&amp;#x4E49;&amp;#xFF1A;&amp;#x4EE3;&amp;#x7406;&amp;#x6A21;&amp;#x5F0F;&amp;#xFF08;Proxy Pattern&amp;#xFF09;&amp;#x4EE3;&amp;#x7406;&amp;#x6A21;&amp;#x5F0F;&amp;#x7ED9;&amp;#x67D0;&amp;#x4E00;&amp;#x4E2A;&amp;#x5BF9;&amp;#x8C61;&amp;#x">
+<meta name="keywords" content="设计模式">
+<meta property="og:type" content="article">
+<meta property="og:title" content="设计模式——代理模式">
+<meta property="og:url" content="http://yoursite.com/2018/12/25/designpattern08/index.html">
 <meta property="og:site_name" content="cdream">
-<meta property="og:description" content="Blog &amp;#x8BB0;&amp;#x5F55;&amp;#x603B;&amp;#x7ED3;&amp;#x5B66;&amp;#x4E60;&amp;#x5185;&amp;#x5BB9;&amp;#x7814;&amp;#x7A76;&amp;#x5F00;&amp;#x6E90;&amp;#x6280;&amp;#x672F;&amp;#xFF0C;&amp;#x5206;&amp;#x4EAB;&amp;#x6280;&amp;#x672F;&amp;#x5E72;&amp;#x8D27;&amp;#x4E0E;&amp;#x5FC3;&amp;#x5F97;Rep">
+<meta property="og:description" content="&amp;#x4E00;&amp;#x3001;&amp;#x6982;&amp;#x5FF5;&amp;#x5B9A;&amp;#x4E49;&amp;#xFF1A;&amp;#x4EE3;&amp;#x7406;&amp;#x6A21;&amp;#x5F0F;&amp;#xFF08;Proxy Pattern&amp;#xFF09;&amp;#x4EE3;&amp;#x7406;&amp;#x6A21;&amp;#x5F0F;&amp;#x7ED9;&amp;#x67D0;&amp;#x4E00;&amp;#x4E2A;&amp;#x5BF9;&amp;#x8C61;&amp;#x">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-12-18T13:34:57.532Z">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tNbRwly1fyjdhtduj2j30zi0eq40f.jpg">
+<meta property="og:updated_time" content="2018-12-25T15:26:56.128Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="about">
-<meta name="twitter:description" content="Blog &amp;#x8BB0;&amp;#x5F55;&amp;#x603B;&amp;#x7ED3;&amp;#x5B66;&amp;#x4E60;&amp;#x5185;&amp;#x5BB9;&amp;#x7814;&amp;#x7A76;&amp;#x5F00;&amp;#x6E90;&amp;#x6280;&amp;#x672F;&amp;#xFF0C;&amp;#x5206;&amp;#x4EAB;&amp;#x6280;&amp;#x672F;&amp;#x5E72;&amp;#x8D27;&amp;#x4E0E;&amp;#x5FC3;&amp;#x5F97;Rep">
+<meta name="twitter:title" content="设计模式——代理模式">
+<meta name="twitter:description" content="&amp;#x4E00;&amp;#x3001;&amp;#x6982;&amp;#x5FF5;&amp;#x5B9A;&amp;#x4E49;&amp;#xFF1A;&amp;#x4EE3;&amp;#x7406;&amp;#x6A21;&amp;#x5F0F;&amp;#xFF08;Proxy Pattern&amp;#xFF09;&amp;#x4EE3;&amp;#x7406;&amp;#x6A21;&amp;#x5F0F;&amp;#x7ED9;&amp;#x67D0;&amp;#x4E00;&amp;#x4E2A;&amp;#x5BF9;&amp;#x8C61;&amp;#x">
+<meta name="twitter:image" content="https://ws2.sinaimg.cn/large/006tNbRwly1fyjdhtduj2j30zi0eq40f.jpg">
 
 
 
@@ -165,13 +167,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/about/">
+  <link rel="canonical" href="http://yoursite.com/2018/12/25/designpattern08/">
 
 
 
 
 
-  <title>about | cdream</title>
+  <title>设计模式——代理模式 | cdream</title>
   
 
 
@@ -328,24 +330,159 @@
 
   <div id="posts" class="posts-expand">
     
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/25/designpattern08/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="cdream">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="cdream">
+    </span>
+
     
-    
-    <div class="post-block page">
       <header class="post-header">
 
-	<h1 class="post-title" itemprop="name headline">about</h1>
-
-
-
-</header>
-
-      
-      
-      
-      <div class="post-body">
         
         
-          <div class="about-page post-block"><br><h2 id="Blog"><a href="#Blog" class="headerlink" title="Blog"></a>Blog</h2><br><p> &#x8BB0;&#x5F55;&#x603B;&#x7ED3;&#x5B66;&#x4E60;&#x5185;&#x5BB9;<br><br>&#x7814;&#x7A76;&#x5F00;&#x6E90;&#x6280;&#x672F;&#xFF0C;&#x5206;&#x4EAB;&#x6280;&#x672F;&#x5E72;&#x8D27;&#x4E0E;&#x5FC3;&#x5F97;<br></p><br><h2 id="Reputation"><a href="#Reputation" class="headerlink" title="Reputation"><br></a>Reputation</h2><p>&#x6211;&#x5440;&#xFF0C;&#x4F1A;&#x53D8;&#x7684;&#x8D8A;&#x6765;&#x8D8A;&#x5389;&#x5BB3;&#xFF01;</p><br><hr><br><h2 id="Contact"><a href="#Contact" class="headerlink" title="Contact"></a>Contact</h2><p> &#x1F427;&#xFF1A;763944797<br> Wechat&#xFF1A;cdream_zs<br> Mail&#xFF1A;<a href="mailto:cdream_zs@qq.com" target="_blank" rel="noopener">cdream_zs@qq.com</a></p><br></div>
+          <h1 class="post-title" itemprop="name headline">设计模式——代理模式</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-25T21:33:21+08:00">
+                2018-12-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/12/25/designpattern08/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2018/12/25/designpattern08/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  581
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="&#x4E00;&#x3001;&#x6982;&#x5FF5;"><a href="#&#x4E00;&#x3001;&#x6982;&#x5FF5;" class="headerlink" title="&#x4E00;&#x3001;&#x6982;&#x5FF5;"></a>&#x4E00;&#x3001;&#x6982;&#x5FF5;</h2><p><strong>&#x5B9A;&#x4E49;</strong>&#xFF1A;&#x4EE3;&#x7406;&#x6A21;&#x5F0F;&#xFF08;Proxy Pattern&#xFF09;&#x4EE3;&#x7406;&#x6A21;&#x5F0F;&#x7ED9;&#x67D0;&#x4E00;&#x4E2A;&#x5BF9;&#x8C61;&#x63D0;&#x4F9B;&#x4E00;&#x4E2A;&#x4EE3;&#x7406;&#x5BF9;&#x8C61;&#xFF0C;&#x5E76;&#x7531;&#x4EE3;&#x7406;&#x5BF9;&#x8C61;&#x63A7;&#x5236;&#x5BF9;&#x539F;&#x5BF9;&#x8C61;&#x7684;&#x8BBF;&#x95EE;&#x3002;&#x4EE3;&#x7406;&#x5BF9;&#x8C61;&#x5728;&#x5BA2;&#x6237;&#x7AEF;&#x4E86;&#x597D;&#x76EE;&#x6807;&#x5BF9;&#x8C61;&#x4E4B;&#x95F4;&#x8D77;&#x5230;&#x4E2D;&#x4ECB;&#x4F5C;&#x7528;&#x3002;</p>
+<div class="note info"><strong>&#x4EE3;&#x7406;&#x6A21;&#x5F0F;&#x4E3B;&#x8981;&#x89E3;&#x51B3;&#x4E24;&#x4E2A;&#x95EE;&#x9898;</strong>&#xFF1A;<br>1.&#x5B9A;&#x4E49;&#x4E00;&#x4E2A;&#x521B;&#x5EFA;&#x5BF9;&#x8C61;&#x7684;&#x5355;&#x72EC;&#x64CD;&#x4F5C;(&#x5DE5;&#x5382;&#x65B9;&#x6CD5;)<br>2.&#x5C06;&#x521B;&#x5EFA;&#x5BF9;&#x8C61;&#x63A8;&#x8FDF;&#x5230;&#x5B50;&#x7C7B;&#x5B8C;&#x6210;</div>
+
+<h2 id="&#x4E8C;&#x3001;&#x7ED3;&#x6784;"><a href="#&#x4E8C;&#x3001;&#x7ED3;&#x6784;" class="headerlink" title="&#x4E8C;&#x3001;&#x7ED3;&#x6784;"></a>&#x4E8C;&#x3001;&#x7ED3;&#x6784;</h2><p><strong>UML</strong>&#xFF1A;<img src="https://ws2.sinaimg.cn/large/006tNbRwly1fyjdhtduj2j30zi0eq40f.jpg" alt="image-20181225224431115"></p>
+<p><strong>&#x4E3B;&#x8981;&#x89D2;&#x8272;</strong>&#xFF1A;</p>
+<p><strong>&#x771F;&#x5B9E;&#x4E3B;&#x9898;&#x7C7B;</strong>&#xFF1A;&#x5BA2;&#x6237;&#x7AEF;&#x771F;&#x6B63;&#x60F3;&#x8C03;&#x7528;&#x7684;&#x7684;&#x4E3B;&#x9898;&#x7C7B;&#x3002;</p>
+<p>&#x4EE3;&#x7406;&#x7C7B;&#xFF1A;&#x4FDD;&#x5B58;&#x4E00;&#x4E2A;&#x771F;&#x5B9E;&#x4E3B;&#x9898;&#x7C7B;&#x7684;&#x5F15;&#x7528;&#xFF0C;&#x4F7F;&#x5F97;&#x4EE3;&#x7406;&#x5BF9;&#x8C61;&#x53EF;&#x4EE5;&#x8BBF;&#x95EE;&#x771F;&#x5B9E;&#x4E3B;&#x4F53;&#x5BF9;&#x8C61;&#x7684;&#x5B9E;&#x4F53;&#x3002;&#x771F;&#x5B9E;&#x4E3B;&#x9898;&#x7C7B;&#x548C;&#x4EE3;&#x7406;&#x5BF9;&#x8C61;&#x90FD;&#x4F1A;&#x7EE7;<strong>&#x627F;&#x76F8;&#x540C;&#x7684;&#x63A5;&#x53E3;</strong>&#xFF1A;&#x5728;&#x7528;&#x5230;&#x771F;&#x5B9E;&#x4E3B;&#x9898;&#x7C7B;&#x7684;&#x5730;&#x65B9;&#x90FD;&#x53EF;&#x4EE5;&#x4F7F;&#x7528;&#x4EE3;&#x7406;&#x7C7B;&#x6765;&#x5B8C;&#x6210;&#x3002;</p>
+<p><strong>&#x62BD;&#x8C61;&#x4E3B;&#x4F53;</strong>&#xFF1A;&#x5B9A;&#x4E49;&#x771F;&#x5B9E;&#x4E3B;&#x9898;&#x7C7B;&#x548C;&#x4EE3;&#x7406;&#x7C7B;&#x7684;&#x63A5;&#x53E3;&#x3002;</p>
+<h3 id="&#x4E09;&#x3001;&#x865A;&#x62DF;&#x4EE3;&#x7406;"><a href="#&#x4E09;&#x3001;&#x865A;&#x62DF;&#x4EE3;&#x7406;" class="headerlink" title="&#x4E09;&#x3001;&#x865A;&#x62DF;&#x4EE3;&#x7406;"></a>&#x4E09;&#x3001;&#x865A;&#x62DF;&#x4EE3;&#x7406;</h3><p>&#x865A;&#x62DF;&#x4EE3;&#x7406;&#x4F5C;&#x4E3A;&#x521B;&#x5EFA;&#x5F00;&#x9500;&#x5927;&#x7684;&#x5BF9;&#x8C61;&#x7684;&#x4EE3;&#x8868;&#x3002;&#x76F4;&#x5230;&#x6211;&#x4EEC;&#x771F;&#x6B63;&#x4F7F;&#x7528;&#x5BF9;&#x8C61;&#x65F6;&#x624D;&#x4F1A;&#x521B;&#x5EFA;&#x5B83;&#xFF0C;&#x5F53;&#x5BF9;&#x8C61;&#x5728;&#x521B;&#x5EFA;&#x524D;&#x548C;&#x521B;&#x5EFA;&#x4E2D;&#xFF0C;&#x7531;&#x865A;&#x62DF;&#x4EE3;&#x7406;&#x6765;&#x626E;&#x6F14;&#x5BF9;&#x8C61;&#x7684;&#x66FF;&#x8EAB;&#x3002;&#x5BF9;&#x8C61;&#x521B;&#x5EFA;&#x540E;&#xFF0C;&#x4EE3;&#x7406;&#x4F1A;&#x5C06;&#x8BF7;&#x6C42;&#x76F4;&#x63A5;&#x59D4;&#x6258;&#x7ED9;&#x5BF9;&#x8C61;&#x3002;</p>
+<p>&#x62BD;&#x8C61;&#x4E3B;&#x9898;&#x63A5;&#x53E3;</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">LargeObject</span> </span>{</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * &#x5E72;&#x4E86;&#x4E00;&#x4E2A;&#x8001;&#x5927;&#x7684;&#x4E8B;&#x4E86;&#xFF0C;&#x6240;&#x4EE5;&#x6211;&#x8FD9;&#x4E2A;&#x7C7B;&#x8001;&#x5927;&#x4E86;&#xFF01;</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doBigThing</span><span class="params">()</span></span>;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<p>&#x5177;&#x4F53;&#x4E3B;&#x9898;&#x89D2;&#x8272;,&#x5B9E;&#x73B0;&#x4E86;&#x62BD;&#x8C61;&#x4E3B;&#x9898;&#x63A5;&#x53E3;</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RealLargeObject</span> <span class="keyword">implements</span> <span class="title">LargeObject</span> </span>{</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doBigThing</span><span class="params">()</span> </span>{</span><br><span class="line">        System.out.println(<span class="string">&quot;&#x505A;&#x4E86;&#x8001;&#x5927;&#x7684;&#x4E00;&#x4E2A;&#x4E8B;&#x4E86;&quot;</span>);</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<p>&#x73B0;&#x5728;&#x6211;&#x4EEC;&#x8981;&#x5BF9;&#x7C7B;&#x8FDB;&#x884C;&#x8BBF;&#x95EE;&#x63A7;&#x5236;&#xFF0C;&#x5BF9;&#x201D;&#x5DE8;&#x578B;&#x5BF9;&#x8C61;&#x201D;&#x8FDB;&#x884C;&#x5EF6;&#x8FDF;&#x521B;&#x5EFA;&#x3002;</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ProxyLargeObject</span> <span class="keyword">implements</span> <span class="title">LargeObject</span> </span>{</span><br><span class="line">    <span class="keyword">private</span> LargeObject largeObject;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doBigThing</span><span class="params">()</span> </span>{</span><br><span class="line">        <span class="keyword">if</span> (largeObject==<span class="keyword">null</span>){</span><br><span class="line">            largeObject = <span class="keyword">new</span> RealLargeObject();</span><br><span class="line">        }</span><br><span class="line">        largeObject.doBigThing();</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<p>&#x5F53;&#x65F6;&#x4F7F;&#x7528;&#x4EE3;&#x7406;&#x7C7B;&#x65F6;&#xFF0C;&#x53EA;&#x6709;&#x5F53;&#x5BA2;&#x6237;&#x7AEF;&#x8C03;&#x7528;doBigThing&#x65B9;&#x6CD5;&#x7684;&#x65F6;&#x5019;&#x624D;&#x4F1A;&#x521B;&#x5EFA;LargeObject&#x5BF9;&#x8C61;&#x3002;</p>
+<p>&#x5F53;&#x6211;&#x4EEC;&#x9700;&#x8981;&#x5BF9;&#x5F00;&#x9500;&#x5927;&#x7684;&#x5BF9;&#x8C61;&#x8FDB;&#x884C;&#x5EF6;&#x8FDF;&#x521B;&#x5EFA;&#x6216;&#x9690;&#x85CF;&#x5176;&#x521B;&#x5EFA;&#x8FC7;&#x7A0B;&#x65F6;&#x53EF;&#x4EE5;&#x4F7F;&#x7528;&#x865A;&#x62DF;&#x4EE3;&#x7406;&#x6A21;&#x5F0F;&#x3002;</p>
+<h2 id="&#x56DB;&#x3001;&#x8FDC;&#x7A0B;&#x4EE3;&#x7406;"><a href="#&#x56DB;&#x3001;&#x8FDC;&#x7A0B;&#x4EE3;&#x7406;" class="headerlink" title="&#x56DB;&#x3001;&#x8FDC;&#x7A0B;&#x4EE3;&#x7406;"></a>&#x56DB;&#x3001;&#x8FDC;&#x7A0B;&#x4EE3;&#x7406;</h2><p>RMI</p>
 <script>
         document.querySelectorAll('.github-emoji')
           .forEach(el => {
@@ -365,15 +502,75 @@
             document.body.appendChild(img);
           });
       </script>
-        
-      </div>
-      
-      
       
     </div>
     
     
     
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/设计模式/" rel="tag"># 设计模式</a>
+          
+        </div>
+      
+
+      
+      
+        <div class="post-widgets">
+        
+          <div class="wp_rating">
+            <div id="wpac-rating"></div>
+          </div>
+        
+
+        
+
+        
+        </div>
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/12/22/designpattern07/" rel="next" title="设计模式--工厂方法模式">
+                <i class="fa fa-chevron-left"></i> 设计模式--工厂方法模式
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
   </div>
 
 
@@ -514,7 +711,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Blog"><span class="nav-number">1.</span> <span class="nav-text">Blog</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reputation"><span class="nav-number">2.</span> <span class="nav-text">Reputation</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Contact"><span class="nav-number">3.</span> <span class="nav-text">Contact</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一、概念"><span class="nav-number">1.</span> <span class="nav-text">一、概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二、结构"><span class="nav-number">2.</span> <span class="nav-text">二、结构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#三、虚拟代理"><span class="nav-number">2.1.</span> <span class="nav-text">三、虚拟代理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#四、远程代理"><span class="nav-number">3.</span> <span class="nav-text">四、远程代理</span></a></li></ol></div>
             
 
           </div>
@@ -1078,6 +1275,23 @@ if (infoEle && infoEle.childNodes && infoEle.childNodes.length > 0){
 
   
   
+  <script type="text/javascript">
+  wpac_init = window.wpac_init || [];
+  wpac_init.push({widget: 'Rating', id: 15062,
+    el: 'wpac-rating',
+    color: 'fc6423'
+  });
+  (function() {
+    if ('WIDGETPACK_LOADED' in window) return;
+    WIDGETPACK_LOADED = true;
+    var mc = document.createElement('script');
+    mc.type = 'text/javascript';
+    mc.async = true;
+    mc.src = '//embed.widgetpack.com/widget.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(mc, s.nextSibling);
+  })();
+  </script>
+
 
   
 
