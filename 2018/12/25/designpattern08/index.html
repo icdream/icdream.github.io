@@ -136,16 +136,16 @@
 <meta property="og:site_name" content="cdream">
 <meta property="og:description" content="本文主要对设计模式中的代理模式进行讲解，包括静态代理举例，动态代理中的jdk动态代理、cglib动态代理原理分析等几个方面。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://ws4.sinaimg.cn/large/006tNbRwly1fyranlqfijj31fu0f876f.jpg">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tNbRwly1fyrazxw9uvj31fa0ewwgl.jpg">
 <meta property="og:image" content="https://ws2.sinaimg.cn/large/006tNbRwly1fyjdhtduj2j30zi0eq40f.jpg">
-<meta property="og:image" content="http://yoursite.com/Users/cdream/Library/Application%20Support/typora-user-images/image-20181226203446138.png">
+<meta property="og:image" content="https://ws3.sinaimg.cn/large/006tNbRwly1fyrb1zb0z7j310u0kgn55.jpg">
 <meta property="og:image" content="https://ws3.sinaimg.cn/large/006tNbRwly1fyrahi5v26j30x80ce3zm.jpg">
 <meta property="og:image" content="https://ws4.sinaimg.cn/large/006tNbRwly1fyrahcunjoj30xa0gmdh7.jpg">
-<meta property="og:updated_time" content="2019-01-01T11:18:13.414Z">
+<meta property="og:updated_time" content="2019-01-01T11:25:31.230Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="设计模式——代理模式">
 <meta name="twitter:description" content="本文主要对设计模式中的代理模式进行讲解，包括静态代理举例，动态代理中的jdk动态代理、cglib动态代理原理分析等几个方面。">
-<meta name="twitter:image" content="https://ws4.sinaimg.cn/large/006tNbRwly1fyranlqfijj31fu0f876f.jpg">
+<meta name="twitter:image" content="https://ws2.sinaimg.cn/large/006tNbRwly1fyrazxw9uvj31fa0ewwgl.jpg">
 
 
 
@@ -448,7 +448,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  5.4k
+                  5.3k
                 </span>
               
 
@@ -474,11 +474,9 @@
 
       
         <p>&#x672C;&#x6587;&#x4E3B;&#x8981;&#x5BF9;&#x8BBE;&#x8BA1;&#x6A21;&#x5F0F;&#x4E2D;&#x7684;&#x4EE3;&#x7406;&#x6A21;&#x5F0F;&#x8FDB;&#x884C;&#x8BB2;&#x89E3;&#xFF0C;&#x5305;&#x62EC;&#x9759;&#x6001;&#x4EE3;&#x7406;&#x4E3E;&#x4F8B;&#xFF0C;&#x52A8;&#x6001;&#x4EE3;&#x7406;&#x4E2D;&#x7684;jdk&#x52A8;&#x6001;&#x4EE3;&#x7406;&#x3001;cglib&#x52A8;&#x6001;&#x4EE3;&#x7406;&#x539F;&#x7406;&#x5206;&#x6790;&#x7B49;&#x51E0;&#x4E2A;&#x65B9;&#x9762;&#x3002;</p>
-<p><img src="https://ws4.sinaimg.cn/large/006tNbRwly1fyranlqfijj31fu0f876f.jpg" alt="image-20190101191050422"></p>
+<p><img src="https://ws2.sinaimg.cn/large/006tNbRwly1fyrazxw9uvj31fa0ewwgl.jpg" alt="image-20190101192241922"></p>
 <a id="more"></a>
 <h2 id="&#x4E00;&#x3001;&#x6982;&#x5FF5;"><a href="#&#x4E00;&#x3001;&#x6982;&#x5FF5;" class="headerlink" title="&#x4E00;&#x3001;&#x6982;&#x5FF5;"></a>&#x4E00;&#x3001;&#x6982;&#x5FF5;</h2><p><strong>&#x5B9A;&#x4E49;</strong>&#xFF1A;&#x4EE3;&#x7406;&#x6A21;&#x5F0F;&#xFF08;Proxy Pattern&#xFF09;&#x4EE3;&#x7406;&#x6A21;&#x5F0F;&#x7ED9;&#x67D0;&#x4E00;&#x4E2A;&#x5BF9;&#x8C61;&#x63D0;&#x4F9B;&#x4E00;&#x4E2A;&#x4EE3;&#x7406;&#x5BF9;&#x8C61;&#xFF0C;&#x5E76;&#x7531;&#x4EE3;&#x7406;&#x5BF9;&#x8C61;&#x63A7;&#x5236;&#x5BF9;&#x539F;&#x5BF9;&#x8C61;&#x7684;&#x8BBF;&#x95EE;&#x3002;&#x4EE3;&#x7406;&#x5BF9;&#x8C61;&#x5728;&#x5BA2;&#x6237;&#x7AEF;&#x4E86;&#x548C;&#x76EE;&#x6807;&#x5BF9;&#x8C61;&#x4E4B;&#x95F4;&#x8D77;&#x5230;&#x4E2D;&#x4ECB;&#x4F5C;&#x7528;&#x3002;</p>
-<div class="note info"><strong>&#x4EE3;&#x7406;&#x6A21;&#x5F0F;&#x4E3B;&#x8981;&#x89E3;&#x51B3;&#x4E24;&#x4E2A;&#x95EE;&#x9898;</strong>&#xFF1A;<br>1.&#x5B9A;&#x4E49;&#x4E00;&#x4E2A;&#x521B;&#x5EFA;&#x5BF9;&#x8C61;&#x7684;&#x5355;&#x72EC;&#x64CD;&#x4F5C;(&#x5DE5;&#x5382;&#x65B9;&#x6CD5;)<br>2.&#x5C06;&#x521B;&#x5EFA;&#x5BF9;&#x8C61;&#x63A8;&#x8FDF;&#x5230;&#x5B50;&#x7C7B;&#x5B8C;&#x6210;</div>
-
 <h2 id="&#x4E8C;&#x3001;&#x7ED3;&#x6784;"><a href="#&#x4E8C;&#x3001;&#x7ED3;&#x6784;" class="headerlink" title="&#x4E8C;&#x3001;&#x7ED3;&#x6784;"></a>&#x4E8C;&#x3001;&#x7ED3;&#x6784;</h2><p><strong>UML</strong>&#xFF1A;<img src="https://ws2.sinaimg.cn/large/006tNbRwly1fyjdhtduj2j30zi0eq40f.jpg" alt="image-20181225224431115"></p>
 <p><strong>&#x4E3B;&#x8981;&#x89D2;&#x8272;</strong>&#xFF1A;</p>
 <p><strong>&#x771F;&#x5B9E;&#x4E3B;&#x9898;&#x7C7B;</strong>&#xFF1A;&#x5BA2;&#x6237;&#x7AEF;&#x771F;&#x6B63;&#x60F3;&#x8C03;&#x7528;&#x7684;&#x7684;&#x4E3B;&#x9898;&#x7C7B;&#x3002;</p>
@@ -495,7 +493,7 @@
 <p>&#x5F53;&#x6211;&#x4EEC;&#x9700;&#x8981;&#x5BF9;&#x5F00;&#x9500;&#x5927;&#x7684;&#x5BF9;&#x8C61;&#x8FDB;&#x884C;&#x5EF6;&#x8FDF;&#x521B;&#x5EFA;&#x6216;&#x9690;&#x85CF;&#x5176;&#x521B;&#x5EFA;&#x8FC7;&#x7A0B;&#x65F6;&#x53EF;&#x4EE5;&#x4F7F;&#x7528;&#x865A;&#x62DF;&#x4EE3;&#x7406;&#x6A21;&#x5F0F;&#x3002;</p>
 <h3 id="&#x8FDC;&#x7A0B;&#x4EE3;&#x7406;"><a href="#&#x8FDC;&#x7A0B;&#x4EE3;&#x7406;" class="headerlink" title="&#x8FDC;&#x7A0B;&#x4EE3;&#x7406;"></a>&#x8FDC;&#x7A0B;&#x4EE3;&#x7406;</h3><p><strong>&#x6982;&#x8FF0;</strong></p>
 <p>RMI</p>
-<p><img src="/Users/cdream/Library/Application%20Support/typora-user-images/image-20181226203446138.png" alt="image-20181226203446138"></p>
+<p><img src="https://ws3.sinaimg.cn/large/006tNbRwly1fyrb1zb0z7j310u0kgn55.jpg" alt="image-20181226203446138"></p>
 <p>&#x8FDC;&#x7A0B;&#x4EE3;&#x7406;RMI&#x5141;&#x8BB8;&#x4E00;&#x4E2A;jvm&#x4E0A;&#x7684;&#x5BF9;&#x8C61;&#x8C03;&#x7528;&#x53E6;&#x4E00;&#x4E2A;jvm&#x4E0A;&#x7684;&#x5BF9;&#x8C61;&#xFF0C;&#x6D41;&#x7A0B;&#x7C7B;&#x4F3C;&#x4E8E;&#x4E0A;&#x9762;&#x8FD9;&#x4E2A;&#x56FE;&#x3002;</p>
 <p>&#x5BA2;&#x6237;&#x5BF9;&#x8C61;&#x76F4;&#x63A5;&#x8C03;&#x7528;&#x8F85;&#x52A9;&#x5BF9;&#x8C61; stub&#x7684;&#x65B9;&#x6CD5;&#xFF0C;stub&#x6253;&#x5305;&#x8C03;&#x7528;&#x4FE1;&#x606F;&#xFF0C;&#x901A;&#x8FC7;&#x7F51;&#x7EDC;&#x628A;&#x4ED6;&#x8FD0;&#x9001;&#x7ED9;&#x670D;&#x52A1;&#x7AEF;&#x8F85;&#x52A9;&#x5BF9;&#x8C61; skeleton&#xFF0C;&#x670D;&#x52A1;&#x7AEF;&#x8F85;&#x52A9;&#x5BF9;&#x8C61;&#x8FDB;&#x884C;&#x89E3;&#x5305;&#xFF0C;&#x8C03;&#x7528;&#x771F;&#x6B63;&#x670D;&#x52A1;&#x5BF9;&#x8C61;&#x7684;&#x771F;&#x6B63;&#x65B9;&#x6CD5;&#x3002;</p>
 <p>&#x7136;&#x540E;&#x670D;&#x52A1;&#x5BF9;&#x8C61;&#x5C06;&#x7ED3;&#x679C;&#x8FD4;&#x56DE;&#x7ED9;&#x670D;&#x52A1;&#x8F85;&#x52A9;&#x5BF9;&#x8C61;&#xFF0C;&#x670D;&#x52A1;&#x8F85;&#x52A9;&#x5BF9;&#x8C61;&#x5C06;&#x7ED3;&#x679C;&#x6253;&#x5305;&#xFF0C;&#x7136;&#x540E;&#x5BA2;&#x6237;&#x670D;&#x52A1;&#x5BF9;&#x8C61;&#x5C06;&#x8FD4;&#x56DE;&#x7ED3;&#x679C;&#x89E3;&#x5305;&#x4EA4;&#x7ED9;&#x771F;&#x6B63;&#x5BA2;&#x6237;&#x5BF9;&#x8C61;&#x3002;</p>
