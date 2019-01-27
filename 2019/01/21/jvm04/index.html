@@ -128,21 +128,21 @@
 
 
 
-<meta name="description" content="&amp;#x672C;&amp;#x6587;&amp;#x4E3B;&amp;#x8981;&amp;#x4ECB;&amp;#x7ECD;&amp;#x5E38;&amp;#x89C1;&amp;#x7684;java&amp;#x5783;&amp;#x573E;&amp;#x6536;&amp;#x96C6;&amp;#x5668;&amp;#x3001;&amp;#x5982;&amp;#x4F55;&amp;#x9605;&amp;#x8BFB;jvm&amp;#x65E5;&amp;#x5FD7;&amp;#x548C;&amp;#x865A;&amp;#x62DF;&amp;">
+<meta name="description" content="本文主要介绍常见的java垃圾收集器、如何阅读jvm日志和虚拟机中内存的分配策略。">
 <meta name="keywords" content="jvm">
 <meta property="og:type" content="article">
 <meta property="og:title" content="cdream">
 <meta property="og:url" content="http://yoursite.com/2019/01/21/jvm04/index.html">
 <meta property="og:site_name" content="cdream">
-<meta property="og:description" content="&amp;#x672C;&amp;#x6587;&amp;#x4E3B;&amp;#x8981;&amp;#x4ECB;&amp;#x7ECD;&amp;#x5E38;&amp;#x89C1;&amp;#x7684;java&amp;#x5783;&amp;#x573E;&amp;#x6536;&amp;#x96C6;&amp;#x5668;&amp;#x3001;&amp;#x5982;&amp;#x4F55;&amp;#x9605;&amp;#x8BFB;jvm&amp;#x65E5;&amp;#x5FD7;&amp;#x548C;&amp;#x865A;&amp;#x62DF;&amp;">
+<meta property="og:description" content="本文主要介绍常见的java垃圾收集器、如何阅读jvm日志和虚拟机中内存的分配策略。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://ws4.sinaimg.cn/large/006tNc79ly1fzkuwdafb4j311u0gmmz3.jpg">
 <meta property="og:image" content="https://ws2.sinaimg.cn/large/006tNc79ly1fzj6bauw5oj30ve0n6ahw.jpg">
 <meta property="og:image" content="https://ws1.sinaimg.cn/large/006tNc79ly1fzj7hy6l1jj30yu0ba0xg.jpg">
-<meta property="og:updated_time" content="2019-01-27T00:55:24.962Z">
+<meta property="og:updated_time" content="2019-01-27T01:02:37.405Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="cdream">
-<meta name="twitter:description" content="&amp;#x672C;&amp;#x6587;&amp;#x4E3B;&amp;#x8981;&amp;#x4ECB;&amp;#x7ECD;&amp;#x5E38;&amp;#x89C1;&amp;#x7684;java&amp;#x5783;&amp;#x573E;&amp;#x6536;&amp;#x96C6;&amp;#x5668;&amp;#x3001;&amp;#x5982;&amp;#x4F55;&amp;#x9605;&amp;#x8BFB;jvm&amp;#x65E5;&amp;#x5FD7;&amp;#x548C;&amp;#x865A;&amp;#x62DF;&amp;">
+<meta name="twitter:description" content="本文主要介绍常见的java垃圾收集器、如何阅读jvm日志和虚拟机中内存的分配策略。">
 <meta name="twitter:image" content="https://ws4.sinaimg.cn/large/006tNc79ly1fzkuwdafb4j311u0gmmz3.jpg">
 
 
@@ -473,6 +473,7 @@
       
         <p>&#x672C;&#x6587;&#x4E3B;&#x8981;&#x4ECB;&#x7ECD;&#x5E38;&#x89C1;&#x7684;java&#x5783;&#x573E;&#x6536;&#x96C6;&#x5668;&#x3001;&#x5982;&#x4F55;&#x9605;&#x8BFB;jvm&#x65E5;&#x5FD7;&#x548C;&#x865A;&#x62DF;&#x673A;&#x4E2D;&#x5185;&#x5B58;&#x7684;&#x5206;&#x914D;&#x7B56;&#x7565;&#x3002;</p>
 <p><img src="https://ws4.sinaimg.cn/large/006tNc79ly1fzkuwdafb4j311u0gmmz3.jpg" alt="image-20190127085234851"></p>
+<a id="more"></a>
 <h2 id="&#x4E00;&#x3001;&#x5783;&#x573E;&#x6536;&#x96C6;&#x5668;"><a href="#&#x4E00;&#x3001;&#x5783;&#x573E;&#x6536;&#x96C6;&#x5668;" class="headerlink" title="&#x4E00;&#x3001;&#x5783;&#x573E;&#x6536;&#x96C6;&#x5668;"></a>&#x4E00;&#x3001;&#x5783;&#x573E;&#x6536;&#x96C6;&#x5668;</h2><p>&#x5783;&#x573E;&#x6536;&#x96C6;&#x5668;&#x53EF;&#x4EE5;&#x662F;&#x770B;&#x505A;&#x5185;&#x5B58;&#x56DE;&#x6536;&#x7684;&#x5177;&#x4F53;&#x5B9E;&#x73B0;&#x3002;Java&#x865A;&#x62DF;&#x673A;&#x89C4;&#x8303;&#x5BF9;&#x5783;&#x573E;&#x6536;&#x96C6;&#x5668;&#x5E76;&#x672A;&#x505A;&#x4EFB;&#x4F55;&#x89C4;&#x5B9A;&#xFF0C;&#x6240;&#x4EE5;&#x4E0D;&#x540C;&#x5382;&#x5546;&#x3001;&#x4E0D;&#x540C;&#x7248;&#x672C;&#x865A;&#x62DF;&#x673A;&#x63D0;&#x4F9B;&#x7684;&#x5783;&#x573E;&#x6536;&#x96C6;&#x5668;&#x6709;&#x5F88;&#x5927;&#x4E0D;&#x540C;&#x3002;&#x7248;&#x672C;&#x4E3B;&#x8981;&#x8BA8;&#x8BBA;HotSpot&#x865A;&#x62DF;&#x673A;&#x7684;&#x5783;&#x573E;&#x56DE;&#x6536;&#x5668;&#x3002;</p>
 <p><img src="https://ws2.sinaimg.cn/large/006tNc79ly1fzj6bauw5oj30ve0n6ahw.jpg" alt="image-20190125215618155"></p>
 <p>&#x672C;&#x56FE;&#x4E3A;&#x5E38;&#x89C1;&#x7684;&#x4E03;&#x79CD;&#x5783;&#x573E;&#x56DE;&#x6536;&#x5668;&#xFF0C;&#x4E0A;&#x534A;&#x90E8;&#x5206;&#x4E3A;&#x5E74;&#x8F7B;&#x4EE3;&#x7684;&#x56DE;&#x6536;&#x5668;&#xFF0C;&#x4E0B;&#x534A;&#x90E8;&#x5206;&#x4E3A;&#x8001;&#x5E74;&#x4EE3;&#x7684;&#x56DE;&#x6536;&#x5668;&#xFF0C;G1&#x6BD4;&#x8F83;&#x5168;&#x80FD;&#xFF0C;&#x4E0A;&#x53EF;&#x56DE;&#x6536;&#x5E74;&#x8F7B;&#x4EE3;&#xFF0C;&#x4E0B;&#x53EF;&#x5904;&#x7406;&#x8001;&#x5E74;&#x4EE3;&#x3002;&#x63A5;&#x4E0B;&#x6765;&#x6211;&#x4EEC;&#x5BF9;&#x5404;&#x6536;&#x96C6;&#x5668;&#x8FDB;&#x884C;&#x4ECB;&#x7ECD;&#x3002;</p>
