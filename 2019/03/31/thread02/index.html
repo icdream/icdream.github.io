@@ -1,0 +1,1443 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#fff">
+
+
+  <meta name="baidu-site-verification" content="0WmmK6b2qx">
+
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-flash.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+  <meta name="baidu-site-verification" content="ture">
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="https://fonts.cat.net/css?family=Lato:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/safari-pinned-tab.svg?v=5.1.4" color="#fff">
+
+
+
+  <meta name="msapplication-config" content="/images/browserconfig.xml">
+
+
+
+  <meta name="keywords" content="java多线程,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="cdream" type="application/atom+xml">
+
+
+
+
+
+
+<meta name="description" content="通常应用多线程技术时，我们并不会直接创建一个线程，因为系统启动一个新线程的成本是比较高的，涉及与操作系统的交互，而是使用线程池来对线程进行管理，尤其是有很多生命周期很短的线程，线程池会显著提升多线程程序的性能。 本文主要对线程池的源码进行分析，了解了源码，我们才能够更高效的使用线程池，同时出现异常时也能更容易的进行排查。  1.阅读本文时，务必开启IDE2.本文篇幅较大，可根据需要跳转到需要的章节">
+<meta name="keywords" content="java多线程">
+<meta property="og:type" content="article">
+<meta property="og:title" content="java多线程——线程池源码分析（一）">
+<meta property="og:url" content="http://yoursite.com/2019/03/31/thread02/index.html">
+<meta property="og:site_name" content="cdream">
+<meta property="og:description" content="通常应用多线程技术时，我们并不会直接创建一个线程，因为系统启动一个新线程的成本是比较高的，涉及与操作系统的交互，而是使用线程池来对线程进行管理，尤其是有很多生命周期很短的线程，线程池会显著提升多线程程序的性能。 本文主要对线程池的源码进行分析，了解了源码，我们才能够更高效的使用线程池，同时出现异常时也能更容易的进行排查。  1.阅读本文时，务必开启IDE2.本文篇幅较大，可根据需要跳转到需要的章节">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://ws4.sinaimg.cn/large/006tNc79ly1g1tvwbua5yj315i0pawh6.jpg">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tKfTcly1g1m61isj1fj30r20lqdh6.jpg">
+<meta property="og:image" content="https://ws4.sinaimg.cn/large/006tKfTcly1g1oohac29uj30yq092q7o.jpg">
+<meta property="og:image" content="https://ws4.sinaimg.cn/large/006tNc79ly1g1refmrsaaj30yu0hatj2.jpg">
+<meta property="og:updated_time" content="2019-04-07T03:05:45.374Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="java多线程——线程池源码分析（一）">
+<meta name="twitter:description" content="通常应用多线程技术时，我们并不会直接创建一个线程，因为系统启动一个新线程的成本是比较高的，涉及与操作系统的交互，而是使用线程池来对线程进行管理，尤其是有很多生命周期很短的线程，线程池会显著提升多线程程序的性能。 本文主要对线程池的源码进行分析，了解了源码，我们才能够更高效的使用线程池，同时出现异常时也能更容易的进行排查。  1.阅读本文时，务必开启IDE2.本文篇幅较大，可根据需要跳转到需要的章节">
+<meta name="twitter:image" content="https://ws4.sinaimg.cn/large/006tNc79ly1g1tvwbua5yj315i0pawh6.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"hide","offset":12,"b2t":false,"scrollpercent":true,"onmobile":true},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":true,"transition":{"post_block":"slideLeftIn","post_header":"fadeIn","post_body":"fadeIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/03/31/thread02/">
+
+
+
+
+
+  <title>java多线程——线程池源码分析（一） | cdream</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">cdream</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">沉舟侧畔千帆过，病树前头万木春。</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/31/thread02/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="cdream">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="cdream">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">java多线程——线程池源码分析（一）</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-03-31T11:47:36+08:00">
+                2019-03-31
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/03/31/thread02/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2019/03/31/thread02/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  6.4k
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>&#x901A;&#x5E38;&#x5E94;&#x7528;&#x591A;&#x7EBF;&#x7A0B;&#x6280;&#x672F;&#x65F6;&#xFF0C;&#x6211;&#x4EEC;&#x5E76;&#x4E0D;&#x4F1A;&#x76F4;&#x63A5;&#x521B;&#x5EFA;&#x4E00;&#x4E2A;&#x7EBF;&#x7A0B;&#xFF0C;&#x56E0;&#x4E3A;&#x7CFB;&#x7EDF;&#x542F;&#x52A8;&#x4E00;&#x4E2A;&#x65B0;&#x7EBF;&#x7A0B;&#x7684;&#x6210;&#x672C;&#x662F;&#x6BD4;&#x8F83;&#x9AD8;&#x7684;&#xFF0C;&#x6D89;&#x53CA;&#x4E0E;&#x64CD;&#x4F5C;&#x7CFB;&#x7EDF;&#x7684;&#x4EA4;&#x4E92;&#xFF0C;&#x800C;&#x662F;&#x4F7F;&#x7528;&#x7EBF;&#x7A0B;&#x6C60;&#x6765;&#x5BF9;&#x7EBF;&#x7A0B;&#x8FDB;&#x884C;&#x7BA1;&#x7406;&#xFF0C;&#x5C24;&#x5176;&#x662F;&#x6709;&#x5F88;&#x591A;&#x751F;&#x547D;&#x5468;&#x671F;&#x5F88;&#x77ED;&#x7684;&#x7EBF;&#x7A0B;&#xFF0C;&#x7EBF;&#x7A0B;&#x6C60;&#x4F1A;&#x663E;&#x8457;&#x63D0;&#x5347;&#x591A;&#x7EBF;&#x7A0B;&#x7A0B;&#x5E8F;&#x7684;&#x6027;&#x80FD;&#x3002;</p>
+<p>&#x672C;&#x6587;&#x4E3B;&#x8981;&#x5BF9;&#x7EBF;&#x7A0B;&#x6C60;&#x7684;&#x6E90;&#x7801;&#x8FDB;&#x884C;&#x5206;&#x6790;&#xFF0C;&#x4E86;&#x89E3;&#x4E86;&#x6E90;&#x7801;&#xFF0C;&#x6211;&#x4EEC;&#x624D;&#x80FD;&#x591F;&#x66F4;&#x9AD8;&#x6548;&#x7684;&#x4F7F;&#x7528;&#x7EBF;&#x7A0B;&#x6C60;&#xFF0C;&#x540C;&#x65F6;&#x51FA;&#x73B0;&#x5F02;&#x5E38;&#x65F6;&#x4E5F;&#x80FD;&#x66F4;&#x5BB9;&#x6613;&#x7684;&#x8FDB;&#x884C;&#x6392;&#x67E5;&#x3002;</p>
+<p><img src="https://ws4.sinaimg.cn/large/006tNc79ly1g1tvwbua5yj315i0pawh6.jpg" alt="image-20190407105748909"></p>
+<div class="note warning">1.&#x9605;&#x8BFB;&#x672C;&#x6587;&#x65F6;&#xFF0C;&#x52A1;&#x5FC5;&#x5F00;&#x542F;IDE<br>2.&#x672C;&#x6587;&#x7BC7;&#x5E45;&#x8F83;&#x5927;&#xFF0C;&#x53EF;&#x6839;&#x636E;&#x9700;&#x8981;&#x8DF3;&#x8F6C;&#x5230;&#x9700;&#x8981;&#x7684;&#x7AE0;&#x8282;&#x9605;&#x8BFB;</div>
+
+<a id="more"></a>
+<h2 id="&#x4E00;&#x3001;&#x7EBF;&#x7A0B;&#x6C60;&#x7684;&#x7EE7;&#x627F;&#x5173;&#x7CFB;&#x53CA;&#x63A5;&#x53E3;&#x65B9;&#x6CD5;"><a href="#&#x4E00;&#x3001;&#x7EBF;&#x7A0B;&#x6C60;&#x7684;&#x7EE7;&#x627F;&#x5173;&#x7CFB;&#x53CA;&#x63A5;&#x53E3;&#x65B9;&#x6CD5;" class="headerlink" title="&#x4E00;&#x3001;&#x7EBF;&#x7A0B;&#x6C60;&#x7684;&#x7EE7;&#x627F;&#x5173;&#x7CFB;&#x53CA;&#x63A5;&#x53E3;&#x65B9;&#x6CD5;"></a>&#x4E00;&#x3001;&#x7EBF;&#x7A0B;&#x6C60;&#x7684;&#x7EE7;&#x627F;&#x5173;&#x7CFB;&#x53CA;&#x63A5;&#x53E3;&#x65B9;&#x6CD5;</h2><p><img src="https://ws1.sinaimg.cn/large/006tKfTcly1g1m61isj1fj30r20lqdh6.jpg" alt="image-20190331184421413"></p>
+<h5 id="Executor&#xFF1A;&#x662F;&#x6700;&#x57FA;&#x7840;&#x7684;&#x6267;&#x884C;&#x63A5;&#x53E3;&#xFF1B;"><a href="#Executor&#xFF1A;&#x662F;&#x6700;&#x57FA;&#x7840;&#x7684;&#x6267;&#x884C;&#x63A5;&#x53E3;&#xFF1B;" class="headerlink" title="Executor&#xFF1A;&#x662F;&#x6700;&#x57FA;&#x7840;&#x7684;&#x6267;&#x884C;&#x63A5;&#x53E3;&#xFF1B;"></a>Executor&#xFF1A;&#x662F;&#x6700;&#x57FA;&#x7840;&#x7684;&#x6267;&#x884C;&#x63A5;&#x53E3;&#xFF1B;</h5><figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">execute</span><span class="params">(Runnable command)</span></span>;</span><br></pre></td></tr></tbody></table></figure>
+<p>&#x4EC5;&#x63D0;&#x4F9B;&#x4E00;&#x4E2A;&#x6267;&#x884C;&#x7EBF;&#x7A0B;&#x4F7F;&#x7528;&#x7684;&#x65B9;&#x6CD5;&#x3002;&#x8FD9;&#x4E2A;&#x7EBF;&#x7A0B;&#x4F1A;&#x5728;&#x672A;&#x6765;&#x4E00;&#x6BB5;&#x65F6;&#x95F4;&#x8FDB;&#x884C;&#x6267;&#x884C;&#xFF0C;&#x8FD9;&#x4E2A;&#x4EFB;&#x52A1;&#x53EF;&#x80FD;&#x4F1A;&#x6267;&#x884C;in a new thread,in a pooled thread,or in the calling thread&#xFF0C;&#x548C;&#x5177;&#x4F53;&#x7684;&#x5B9E;&#x73B0;&#x76F8;&#x5173;&#x3002;</p>
+<h5 id="ExecutorService&#xFF1A;&#x7EE7;&#x627F;&#x4E86;Executor&#xFF0C;&#x5E76;&#x63D0;&#x4F9B;&#x4E86;shutdown-&#x3001;submit-&#x7B49;&#x65B9;&#x6CD5;&#xFF0C;&#x53EF;&#x4EE5;&#x8BF4;&#x662F;&#x771F;&#x6B63;&#x7684;&#x7EBF;&#x7A0B;&#x6C60;&#x63A5;&#x53E3;&#xFF1B;"><a href="#ExecutorService&#xFF1A;&#x7EE7;&#x627F;&#x4E86;Executor&#xFF0C;&#x5E76;&#x63D0;&#x4F9B;&#x4E86;shutdown-&#x3001;submit-&#x7B49;&#x65B9;&#x6CD5;&#xFF0C;&#x53EF;&#x4EE5;&#x8BF4;&#x662F;&#x771F;&#x6B63;&#x7684;&#x7EBF;&#x7A0B;&#x6C60;&#x63A5;&#x53E3;&#xFF1B;" class="headerlink" title="ExecutorService&#xFF1A;&#x7EE7;&#x627F;&#x4E86;Executor&#xFF0C;&#x5E76;&#x63D0;&#x4F9B;&#x4E86;shutdown()&#x3001;submit()&#x7B49;&#x65B9;&#x6CD5;&#xFF0C;&#x53EF;&#x4EE5;&#x8BF4;&#x662F;&#x771F;&#x6B63;&#x7684;&#x7EBF;&#x7A0B;&#x6C60;&#x63A5;&#x53E3;&#xFF1B;"></a>ExecutorService&#xFF1A;&#x7EE7;&#x627F;&#x4E86;Executor&#xFF0C;&#x5E76;&#x63D0;&#x4F9B;&#x4E86;shutdown()&#x3001;submit()&#x7B49;&#x65B9;&#x6CD5;&#xFF0C;&#x53EF;&#x4EE5;&#x8BF4;&#x662F;&#x771F;&#x6B63;&#x7684;&#x7EBF;&#x7A0B;&#x6C60;&#x63A5;&#x53E3;&#xFF1B;</h5><p>&#x4E0E;shutdown&#x76F8;&#x5173;&#x7684;&#x65B9;&#x6CD5;</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * &#x5BF9;&#x4E4B;&#x524D;&#x63D0;&#x4EA4;&#x7684;&#x4EFB;&#x52A1;&#x8FDB;&#x884C;&#x4E00;&#x6B21;&#x6709;&#x987A;&#x5E8F;&#x7684;&#x5173;&#x95ED;&#xFF0C;&#x5E76;&#x4E14;&#x4E0D;&#x4F1A;&#x63A5;&#x53D7;&#x65B0;&#x7684;&#x4EFB;&#x52A1;&#xFF0C;&#x5982;&#x679C;&#x5DF2;&#x7ECF;&#x5173;&#x95ED;&#x7EE7;&#x7EED;&#x6267;&#x884C;&#x4E0D;&#x4F1A;&#x6709;&#x989D;&#x5916;&#x5F71;&#x54CD;&#x3002;</span></span><br><span class="line"><span class="comment"> * &#x8FD9;&#x4E2A;&#x65B9;&#x6CD5;&#x4E0D;&#x4F1A;&#x7B49;&#x5F85;&#x4E4B;&#x524D;&#x63D0;&#x4EA4;&#x7684;&#x4EFB;&#x52A1;&#x6267;&#x884C;&#x5B8C;&#x6BD5;&#x3002;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">shutdown</span><span class="params">()</span></span>;</span><br><span class="line"> </span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * &#x5C1D;&#x8BD5;&#x505C;&#x6B62;&#x6240;&#x6709;&#x6B63;&#x5728;&#x6267;&#x884C;&#x7684;&#x4EFB;&#x52A1;&#xFF0C;&#x6682;&#x505C;&#x5904;&#x7406;&#x6B63;&#x5728;&#x7B49;&#x5F85;&#x7684;&#x4EFB;&#x52A1;&#xFF0C;&#x8FD4;&#x56DE;&#x7B49;&#x5F85;&#x6267;&#x884C;&#x7684;&#x4EFB;&#x52A1;&#x96C6;&#x5408;</span></span><br><span class="line"><span class="comment"> * &#x8FD9;&#x4E2A;&#x65B9;&#x6CD5;&#x4E0D;&#x4F1A;&#x7B49;&#x5F85;&#x6B63;&#x5728;&#x6267;&#x884C;&#x7684;&#x4EFB;&#x52A1;&#x7EC8;&#x6B62;</span></span><br><span class="line"><span class="comment"> * &#x672C;&#x65B9;&#x6CD5;&#x4E0D;&#x63D0;&#x4F9B;&#x62C5;&#x4FDD;&#xFF0C;&#x4EFB;&#x52A1;&#x7684;fail response&#x90FD;&#x53EF;&#x80FD;&#x4E0D;&#x4F1A;&#x7EC8;&#x6B62;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function">List&lt;Runnable&gt; <span class="title">shutdownNow</span><span class="params">()</span></span>;</span><br><span class="line"> </span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * &#x5224;&#x65AD;executor&#x662F;&#x5426;&#x88AB;&#x5173;&#x95ED;</span></span><br><span class="line"><span class="comment"> * &#x5982;&#x679C;&#x5DF2;&#x7ECF;&#x88AB;shutdown&#xFF0C;&#x8FD4;&#x56DE;true</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">boolean</span> <span class="title">isShutdown</span><span class="params">()</span></span>;</span><br><span class="line"> </span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * &#x5224;&#x65AD;&#x7528;&#x7528;shutdown/shutdownNow&#x540E;&#x662F;&#x5426;&#x6240;&#x6709;&#x7684;&#x4EFB;&#x52A1;&#x90FD;&#x88AB;&#x7ED3;&#x675F;&#x3002;</span></span><br><span class="line"><span class="comment"> * &#x5982;&#x679C;&#x6240;&#x6709;&#x4EFB;&#x52A1;&#x90FD;&#x5DF2;&#x7ECF;&#x88AB;&#x7EC8;&#x6B62;&#xFF0C;&#x8FD4;&#x56DE;true</span></span><br><span class="line"><span class="comment"> * &#x662F;&#x5426;&#x4E3A;&#x7EC8;&#x6B62;&#x72B6;&#x6001;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">boolean</span> <span class="title">isTerminated</span><span class="params">()</span></span>;</span><br><span class="line"> </span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * &#x5728;&#x4E00;&#x4E2A;shutdown&#x8BF7;&#x6C42;&#x540E;&#xFF0C;&#x963B;&#x585E;&#x7B49;&#x5F85;&#x6240;&#x6709;&#x4EFB;&#x52A1;&#x6267;&#x884C;&#x5B8C;&#x6BD5;</span></span><br><span class="line"><span class="comment"> * &#x6216;&#x8005;&#x5230;&#x8FBE;&#x8D85;&#x65F6;&#x65F6;&#x95F4;&#xFF0C;&#x6216;&#x8005;&#x5F53;&#x524D;&#x7EBF;&#x7A0B;&#x88AB;&#x4E2D;&#x65AD;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">boolean</span> <span class="title">awaitTermination</span><span class="params">(<span class="keyword">long</span> timeout, TimeUnit unit)</span> <span class="keyword">throws</span> InterruptedException</span>;</span><br></pre></td></tr></tbody></table></figure>
+<p>&#x4E0E;submit&#x76F8;&#x5173;&#x7684;&#x65B9;&#x6CD5;</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * &#x63D0;&#x4EA4;&#x4E00;&#x4E2A;&#x53EF;&#x6267;&#x884C;&#x7684;&#xFF08;Runnable&#xFF09;&#x4EFB;&#x52A1;&#xFF0C;&#x8FD4;&#x56DE;&#x4E00;&#x4E2A;Future&#x4EE3;&#x8868;&#x8FD9;&#x4E2A;&#x4EFB;&#x52A1;&#x6267;&#x884C;&#x72B6;&#x6001;</span></span><br><span class="line"><span class="comment"> * &#x7B49;&#x5230;&#x4EFB;&#x52A1;&#x6210;&#x529F;&#x6267;&#x884C;&#xFF0C;Future#get()&#x65B9;&#x6CD5;&#x4F1A;&#x8FD4;&#x56DE;null</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line">Future&lt;?&gt; submit(Runnable task);</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * &#x63D0;&#x4EA4;&#x4E00;&#x4E2A;&#x53EF;&#x4EE5;&#x6267;&#x884C;&#x7684;&#x4EFB;&#x52A1;&#xFF0C;&#x8FD4;&#x56DE;&#x4E00;&#x4E2A;Future&#x4EE3;&#x8868;&#x8FD9;&#x4E2A;&#x4EFB;&#x52A1;&#x6267;&#x884C;&#x72B6;&#x6001;</span></span><br><span class="line"><span class="comment"> * &#x7B49;&#x5230;&#x4EFB;&#x52A1;&#x6267;&#x884C;&#x7ED3;&#x675F;&#xFF0C;Future#get()&#x65B9;&#x6CD5;&#x4F1A;&#x8FD4;&#x56DE;&#x8FD9;&#x4E2A;&#x7ED9;&#x5B9A;&#x7684;result</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line">&lt;T&gt; <span class="function">Future&lt;T&gt; <span class="title">submit</span><span class="params">(Runnable task, T result)</span></span>;</span><br><span class="line"> </span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * &#x63D0;&#x4EA4;&#x4E00;&#x4E2A;&#x6709;&#x8FD4;&#x56DE;&#x503C;&#x7684;&#x4EFB;&#x52A1;&#xFF0C;&#x5E76;&#x8FD4;&#x56DE;&#x4E00;&#x4E2A;Future&#x4EE3;&#x8868;&#x7B49;&#x5F85;&#x7684;&#x4EFB;&#x52A1;&#x6267;&#x884C;&#x7684;&#x7ED3;&#x679C;</span></span><br><span class="line"><span class="comment"> * &#x7B49;&#x5230;&#x4EFB;&#x52A1;&#x6210;&#x529F;&#x6267;&#x884C;&#xFF0C;Future#get()&#x65B9;&#x6CD5;&#x4F1A;&#x8FD4;&#x56DE;&#x4EFB;&#x52A1;&#x6267;&#x884C;&#x7684;&#x7ED3;&#x679C;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line">&lt;T&gt; <span class="function">Future&lt;T&gt; <span class="title">submit</span><span class="params">(Callable&lt;T&gt; task)</span></span>;</span><br></pre></td></tr></tbody></table></figure>
+<p>&#x4E0E;invoke&#x76F8;&#x5173;&#x7684;&#x65B9;&#x6CD5;</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * &#x6267;&#x884C;&#x7ED9;&#x5B9A;&#x4EFB;&#x52A1;&#xFF0C;&#x5F53;&#x6240;&#x6709;&#x4EFB;&#x52A1;&#x5B8C;&#x6210;&#x540E;&#x8FD4;&#x56DE;&#x4E00;&#x4E2A;List&lt;Futrue&lt;T&gt;&gt;&#x5217;&#x8868;&#xFF0C;&#x6301;&#x6709;&#x4EFB;&#x52A1;&#x6267;&#x884C;&#x7684;&#x7ED3;&#x679C;&#x4E0E;&#x72B6;&#x6001;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line">&lt;T&gt; List&lt;Future&lt;T&gt;&gt; invokeAll(Collection&lt;? extends Callable&lt;T&gt;&gt; tasks)</span><br><span class="line">    <span class="keyword">throws</span> InterruptedException;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * &#x6267;&#x884C;&#x7ED9;&#x5B9A;&#x4EFB;&#x52A1;&#xFF0C;&#x5F53;&#x6240;&#x6709;&#x4EFB;&#x52A1;&#x5B8C;&#x6210;&#x6216;&#x8D85;&#x65F6;&#x540E;&#x8FD4;&#x56DE;&#x4E00;&#x4E2A;List&lt;Futrue&lt;T&gt;&gt;&#x5217;&#x8868;&#xFF0C;&#x6301;&#x6709;&#x4EFB;&#x52A1;&#x6267;&#x884C;&#x7684;&#x7ED3;&#x679C;&#x4E0E;&#x72B6;&#x6001;</span></span><br><span class="line"><span class="comment"> * &#x5982;&#x679C;&#x8D85;&#x65F6;&#x4F1A;&#x53D6;&#x6D88;&#x5176;&#x4ED6;&#x672A;&#x6267;&#x884C;&#x5B8C;&#x6210;&#x7684;&#x4EFB;&#x52A1;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line">&lt;T&gt; List&lt;Future&lt;T&gt;&gt; invokeAll(Collection&lt;? extends Callable&lt;T&gt;&gt; tasks,</span><br><span class="line">                              <span class="keyword">long</span> timeout, TimeUnit unit)</span><br><span class="line">    <span class="keyword">throws</span> InterruptedException;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * &#x6267;&#x884C;&#x7ED9;&#x5B9A;&#x4EFB;&#x52A1;&#xFF0C;&#x6709;&#x4E00;&#x4E2A;&#x4EFB;&#x52A1;&#x5B8C;&#x6210;&#x540E;&#xFF0C;&#x65E0;&#x8BBA;&#x5F02;&#x5E38;&#x8FD8;&#x662F;&#x6B63;&#x5E38;</span></span><br><span class="line"><span class="comment"> * &#x8FD4;&#x56DE;&#x4E00;&#x4E2A;Futrue&lt;T&gt;&#xFF0C;&#x6301;&#x6709;&#x4EFB;&#x52A1;&#x6267;&#x884C;&#x7684;&#x7ED3;&#x679C;&#x4E0E;&#x72B6;&#x6001;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line">&lt;T&gt; <span class="function">T <span class="title">invokeAny</span><span class="params">(Collection&lt;? extends Callable&lt;T&gt;&gt; tasks)</span></span></span><br><span class="line"><span class="function">    <span class="keyword">throws</span> InterruptedException, ExecutionException</span>;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * &#x6267;&#x884C;&#x7ED9;&#x5B9A;&#x4EFB;&#x52A1;&#xFF0C;&#x6709;&#x4E00;&#x4E2A;&#x4EFB;&#x52A1;&#x5B8C;&#x6210;&#x6216;&#x8D85;&#x65F6;&#xFF0C;&#x65E0;&#x8BBA;&#x5F02;&#x5E38;&#x8FD8;&#x662F;&#x6B63;&#x5E38;</span></span><br><span class="line"><span class="comment"> * &#x8FD4;&#x56DE;&#x4E00;&#x4E2A;Futrue&lt;T&gt;&#xFF0C;&#x6301;&#x6709;&#x4EFB;&#x52A1;&#x6267;&#x884C;&#x7684;&#x7ED3;&#x679C;&#x4E0E;&#x72B6;&#x6001;</span></span><br><span class="line"><span class="comment"> * &#x8D85;&#x65F6;&#x53D6;&#x6D88;&#x6B63;&#x5728;&#x6267;&#x884C;&#x7684;&#x4EFB;&#x52A1;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line">&lt;T&gt; <span class="function">T <span class="title">invokeAny</span><span class="params">(Collection&lt;? extends Callable&lt;T&gt;&gt; tasks,</span></span></span><br><span class="line"><span class="function"><span class="params">                <span class="keyword">long</span> timeout, TimeUnit unit)</span></span></span><br><span class="line"><span class="function">    <span class="keyword">throws</span> InterruptedException, ExecutionException, TimeoutException</span>;</span><br></pre></td></tr></tbody></table></figure>
+<h5 id="AbstractExecutorService&#xFF1A;&#x5BF9;ExcutorService&#x4E2D;&#x7684;&#x5927;&#x591A;&#x6570;&#x65B9;&#x6CD5;&#x505A;&#x4E86;&#x57FA;&#x672C;&#x5B9E;&#x73B0;&#xFF1B;"><a href="#AbstractExecutorService&#xFF1A;&#x5BF9;ExcutorService&#x4E2D;&#x7684;&#x5927;&#x591A;&#x6570;&#x65B9;&#x6CD5;&#x505A;&#x4E86;&#x57FA;&#x672C;&#x5B9E;&#x73B0;&#xFF1B;" class="headerlink" title="AbstractExecutorService&#xFF1A;&#x5BF9;ExcutorService&#x4E2D;&#x7684;&#x5927;&#x591A;&#x6570;&#x65B9;&#x6CD5;&#x505A;&#x4E86;&#x57FA;&#x672C;&#x5B9E;&#x73B0;&#xFF1B;"></a>AbstractExecutorService&#xFF1A;&#x5BF9;ExcutorService&#x4E2D;&#x7684;&#x5927;&#x591A;&#x6570;&#x65B9;&#x6CD5;&#x505A;&#x4E86;&#x57FA;&#x672C;&#x5B9E;&#x73B0;&#xFF1B;</h5><h5 id="TheadPoolExecutor&#xFF1A;&#x8FD9;&#x4E2A;&#x662F;&#x7EBF;&#x7A0B;&#x6C60;&#x7684;&#x5177;&#x4F53;&#x5B9E;&#x73B0;&#xFF0C;&#x4E5F;&#x662F;&#x6211;&#x4EEC;&#x4EE3;&#x7801;&#x5206;&#x6790;&#x7684;&#x4E3B;&#x8981;&#x90E8;&#x5206;&#xFF1B;"><a href="#TheadPoolExecutor&#xFF1A;&#x8FD9;&#x4E2A;&#x662F;&#x7EBF;&#x7A0B;&#x6C60;&#x7684;&#x5177;&#x4F53;&#x5B9E;&#x73B0;&#xFF0C;&#x4E5F;&#x662F;&#x6211;&#x4EEC;&#x4EE3;&#x7801;&#x5206;&#x6790;&#x7684;&#x4E3B;&#x8981;&#x90E8;&#x5206;&#xFF1B;" class="headerlink" title="TheadPoolExecutor&#xFF1A;&#x8FD9;&#x4E2A;&#x662F;&#x7EBF;&#x7A0B;&#x6C60;&#x7684;&#x5177;&#x4F53;&#x5B9E;&#x73B0;&#xFF0C;&#x4E5F;&#x662F;&#x6211;&#x4EEC;&#x4EE3;&#x7801;&#x5206;&#x6790;&#x7684;&#x4E3B;&#x8981;&#x90E8;&#x5206;&#xFF1B;"></a>TheadPoolExecutor&#xFF1A;&#x8FD9;&#x4E2A;&#x662F;&#x7EBF;&#x7A0B;&#x6C60;&#x7684;&#x5177;&#x4F53;&#x5B9E;&#x73B0;&#xFF0C;&#x4E5F;&#x662F;&#x6211;&#x4EEC;&#x4EE3;&#x7801;&#x5206;&#x6790;&#x7684;&#x4E3B;&#x8981;&#x90E8;&#x5206;&#xFF1B;</h5><h5 id="ScheduledExecutorService&#xFF1A;&#x7EE7;&#x627F;&#x4E86;ExecutorService&#x63A5;&#x53E3;&#xFF0C;&#x63D0;&#x4F9B;&#x4E0E;&#x6267;&#x884C;&#x5468;&#x671F;&#x6027;&#x4EFB;&#x52A1;&#x76F8;&#x5173;&#x7684;&#x529F;&#x80FD;&#xFF1B;"><a href="#ScheduledExecutorService&#xFF1A;&#x7EE7;&#x627F;&#x4E86;ExecutorService&#x63A5;&#x53E3;&#xFF0C;&#x63D0;&#x4F9B;&#x4E0E;&#x6267;&#x884C;&#x5468;&#x671F;&#x6027;&#x4EFB;&#x52A1;&#x76F8;&#x5173;&#x7684;&#x529F;&#x80FD;&#xFF1B;" class="headerlink" title="ScheduledExecutorService&#xFF1A;&#x7EE7;&#x627F;&#x4E86;ExecutorService&#x63A5;&#x53E3;&#xFF0C;&#x63D0;&#x4F9B;&#x4E0E;&#x6267;&#x884C;&#x5468;&#x671F;&#x6027;&#x4EFB;&#x52A1;&#x76F8;&#x5173;&#x7684;&#x529F;&#x80FD;&#xFF1B;"></a>ScheduledExecutorService&#xFF1A;&#x7EE7;&#x627F;&#x4E86;ExecutorService&#x63A5;&#x53E3;&#xFF0C;&#x63D0;&#x4F9B;&#x4E0E;&#x6267;&#x884C;&#x5468;&#x671F;&#x6027;&#x4EFB;&#x52A1;&#x76F8;&#x5173;&#x7684;&#x529F;&#x80FD;&#xFF1B;</h5><figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * &#x5728;&#x7ED9;&#x5B9A;&#x5EF6;&#x65F6;&#x540E;&#xFF0C;&#x521B;&#x5EFA;&#x5E76;&#x6267;&#x884C;&#x4E00;&#x4E2A;&#x4E00;&#x6B21;&#x6027;&#x7684;Runnable&#x4EFB;&#x52A1;</span></span><br><span class="line"><span class="comment"> * &#x4EFB;&#x52A1;&#x6267;&#x884C;&#x5B8C;&#x6BD5;&#x540E;&#xFF0C;ScheduledFuture#get()&#x65B9;&#x6CD5;&#x4F1A;&#x8FD4;&#x56DE;null</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> ScheduledFuture&lt;?&gt; schedule(Runnable command, <span class="keyword">long</span> delay, TimeUnit unit);</span><br><span class="line"> </span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * &#x5728;&#x7ED9;&#x5B9A;&#x5EF6;&#x65F6;&#x540E;&#xFF0C;&#x521B;&#x5EFA;&#x5E76;&#x6267;&#x884C;&#x4E00;&#x4E2A;ScheduledFutureTask</span></span><br><span class="line"><span class="comment"> * &#x8FD4;&#x56DE;ScheduledFuture &#x53EF;&#x4EE5;&#x83B7;&#x53D6;&#x7ED3;&#x679C;&#x6216;&#x53D6;&#x6D88;&#x4EFB;&#x52A1;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> &lt;V&gt; <span class="function">ScheduledFuture&lt;V&gt; <span class="title">schedule</span><span class="params">(Callable&lt;V&gt; callable, ong delay, TimeUnit unit)</span></span>;</span><br><span class="line"> </span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * &#x521B;&#x5EFA;&#x5E76;&#x6267;&#x884C;&#x4E00;&#x4E2A;&#x5728;&#x7ED9;&#x5B9A;&#x521D;&#x59CB;&#x5EF6;&#x8FDF;&#x540E;&#x9996;&#x6B21;&#x542F;&#x7528;&#x7684;&#x5B9A;&#x671F;&#x64CD;&#x4F5C;&#xFF0C;&#x540E;&#x7EED;&#x64CD;&#x4F5C;&#x5177;&#x6709;&#x7ED9;&#x5B9A;&#x7684;&#x5468;&#x671F;</span></span><br><span class="line"><span class="comment"> * &#x4E5F;&#x5C31;&#x662F;&#x5C06;&#x5728; initialDelay &#x540E;&#x5F00;&#x59CB;&#x6267;&#x884C;&#xFF0C;&#x7136;&#x540E;&#x5728; initialDelay+period &#x540E;&#x6267;&#x884C;&#xFF0C;&#x63A5;&#x7740;&#x5728; initialDelay </span></span><br><span class="line"><span class="comment"> * + 2 * period &#x540E;&#x6267;&#x884C;&#xFF0C;&#x4F9D;&#x6B64;&#x7C7B;&#x63A8;</span></span><br><span class="line"><span class="comment"> * &#x5982;&#x679C;&#x6267;&#x884C;&#x4EFB;&#x52A1;&#x53D1;&#x751F;&#x5F02;&#x5E38;&#xFF0C;&#x968F;&#x540E;&#x7684;&#x4EFB;&#x52A1;&#x5C06;&#x88AB;&#x7981;&#x6B62;&#xFF0C;&#x5426;&#x5219;&#x4EFB;&#x52A1;&#x53EA;&#x4F1A;&#x5728;&#x88AB;&#x53D6;&#x6D88;&#x6216;&#x8005;Executor&#x88AB;&#x7EC8;&#x6B62;&#x540E;&#x505C;&#x6B62;</span></span><br><span class="line"><span class="comment"> * &#x5982;&#x679C;&#x4EFB;&#x4F55;&#x6267;&#x884C;&#x7684;&#x4EFB;&#x52A1;&#x8D85;&#x8FC7;&#x4E86;&#x5468;&#x671F;&#xFF0C;&#x968F;&#x540E;&#x7684;&#x6267;&#x884C;&#x4F1A;&#x5EF6;&#x65F6;&#xFF0C;&#x4E0D;&#x4F1A;&#x5E76;&#x53D1;&#x6267;&#x884C;</span></span><br><span class="line"><span class="comment"> * &#x4F8B;&#x5982;&#x5EF6;&#x65F6;&#x4E3A;3s&#xFF0C;&#x7B2C;2s&#x5F00;&#x59CB;&#x6267;&#x884C;&#x4EFB;&#x52A1;&#xFF0C;&#x4E0B;&#x4E00;&#x6B21;&#x6267;&#x884C;&#x5C31;&#x4F1A;&#x662F;&#x7B2C;5s&#xFF0C;&#x4E0B;&#x4E0B;&#x6B21;&#x5C31;&#x662F;8s</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> ScheduledFuture&lt;?&gt; scheduleAtFixedRate(Runnable command,</span><br><span class="line">                                                  <span class="keyword">long</span> initialDelay,</span><br><span class="line">                                                  <span class="keyword">long</span> period,</span><br><span class="line">                                                  TimeUnit unit);</span><br><span class="line"> </span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * &#x521B;&#x5EFA;&#x5E76;&#x6267;&#x884C;&#x4E00;&#x4E2A;&#x5728;&#x7ED9;&#x5B9A;&#x521D;&#x59CB;&#x5EF6;&#x8FDF;&#x540E;&#x9996;&#x6B21;&#x542F;&#x7528;&#x7684;&#x5B9A;&#x671F;&#x64CD;&#x4F5C;&#xFF0C;&#x968F;&#x540E;&#xFF0C;&#x5728;&#x6BCF;&#x4E00;&#x6B21;&#x6267;&#x884C;&#x7EC8;&#x6B62;&#x548C;&#x4E0B;&#x4E00;&#x6B21;&#x6267;&#x884C;&#x5F00;&#x59CB;&#x4E4B;&#x95F4;&#x90FD;&#x5B58;&#x5728;&#x7ED9;</span></span><br><span class="line"><span class="comment"> * &#x5B9A;&#x7684;&#x5EF6;&#x8FDF;</span></span><br><span class="line"><span class="comment"> * &#x5982;&#x679C;&#x6267;&#x884C;&#x4EFB;&#x52A1;&#x53D1;&#x751F;&#x5F02;&#x5E38;&#xFF0C;&#x968F;&#x540E;&#x7684;&#x4EFB;&#x52A1;&#x5C06;&#x88AB;&#x7981;&#x6B62;&#xFF0C;&#x5426;&#x5219;&#x4EFB;&#x52A1;&#x53EA;&#x4F1A;&#x5728;&#x88AB;&#x53D6;&#x6D88;&#x6216;&#x8005;Executor&#x88AB;&#x7EC8;&#x6B62;&#x540E;&#x505C;&#x6B62;</span></span><br><span class="line"><span class="comment"> * &#x4F8B;&#x5982;&#x5EF6;&#x65F6;&#x4E3A;3s&#xFF0C;&#x4EFB;&#x52A1;&#x6267;&#x884C;4s&#xFF0C;&#x7B2C;2s&#x5F00;&#x59CB;&#x6267;&#x884C;&#x4EFB;&#x52A1;&#xFF0C;&#x4E0B;&#x4E00;&#x6B21;&#x6267;&#x884C;&#x4EFB;&#x52A1;&#x5C31;&#x662F;9s&#xFF0C;&#x4E0B;&#x4E0B;&#x6B21;&#x5C31;&#x662F;16s</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> ScheduledFuture&lt;?&gt; scheduleWithFixedDelay(Runnable command,</span><br><span class="line">                                                     <span class="keyword">long</span> initialDelay,</span><br><span class="line">                                                     <span class="keyword">long</span> delay,</span><br><span class="line">                                                     TimeUnit unit);</span><br></pre></td></tr></tbody></table></figure>
+<h5 id="ScheduledThreadPoolExecutor&#xFF1A;&#x662F;&#x53EF;&#x4EE5;&#x6267;&#x884C;&#x5468;&#x671F;&#x6027;&#x4EFB;&#x52A1;&#x7684;&#x7EBF;&#x7A0B;&#x6C60;&#x7684;&#x5177;&#x4F53;&#x5B9E;&#x73B0;"><a href="#ScheduledThreadPoolExecutor&#xFF1A;&#x662F;&#x53EF;&#x4EE5;&#x6267;&#x884C;&#x5468;&#x671F;&#x6027;&#x4EFB;&#x52A1;&#x7684;&#x7EBF;&#x7A0B;&#x6C60;&#x7684;&#x5177;&#x4F53;&#x5B9E;&#x73B0;" class="headerlink" title="ScheduledThreadPoolExecutor&#xFF1A;&#x662F;&#x53EF;&#x4EE5;&#x6267;&#x884C;&#x5468;&#x671F;&#x6027;&#x4EFB;&#x52A1;&#x7684;&#x7EBF;&#x7A0B;&#x6C60;&#x7684;&#x5177;&#x4F53;&#x5B9E;&#x73B0;;"></a>ScheduledThreadPoolExecutor&#xFF1A;&#x662F;&#x53EF;&#x4EE5;&#x6267;&#x884C;&#x5468;&#x671F;&#x6027;&#x4EFB;&#x52A1;&#x7684;&#x7EBF;&#x7A0B;&#x6C60;&#x7684;&#x5177;&#x4F53;&#x5B9E;&#x73B0;;</h5><h2 id="&#x4E8C;&#x3001;ThreadPoolExecutor&#x5206;&#x6790;"><a href="#&#x4E8C;&#x3001;ThreadPoolExecutor&#x5206;&#x6790;" class="headerlink" title="&#x4E8C;&#x3001;ThreadPoolExecutor&#x5206;&#x6790;"></a>&#x4E8C;&#x3001;ThreadPoolExecutor&#x5206;&#x6790;</h2><h3 id="&#x6784;&#x9020;&#x51FD;&#x6570;&#x53CA;&#x53C2;&#x6570;&#x542B;&#x4E49;"><a href="#&#x6784;&#x9020;&#x51FD;&#x6570;&#x53CA;&#x53C2;&#x6570;&#x542B;&#x4E49;" class="headerlink" title="&#x6784;&#x9020;&#x51FD;&#x6570;&#x53CA;&#x53C2;&#x6570;&#x542B;&#x4E49;"></a>&#x6784;&#x9020;&#x51FD;&#x6570;&#x53CA;&#x53C2;&#x6570;&#x542B;&#x4E49;</h3><p>ThreadPoolExecutor&#x63D0;&#x4F9B;&#x56DB;&#x4E2A;&#x6784;&#x9020;&#x51FD;&#x6570;&#xFF0C;&#x4F46;&#x5176;&#x4ED6;&#x4E09;&#x4E2A;&#x90FD;&#x662F;&#x57FA;&#x4E8E;&#x4E0B;&#x9762;&#x8FD9;&#x6784;&#x9020;&#x51FD;&#x6570;</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">ThreadPoolExecutor</span><span class="params">(<span class="keyword">int</span> corePoolSize,</span></span></span><br><span class="line"><span class="function"><span class="params">                          <span class="keyword">int</span> maximumPoolSize,</span></span></span><br><span class="line"><span class="function"><span class="params">                          <span class="keyword">long</span> keepAliveTime,</span></span></span><br><span class="line"><span class="function"><span class="params">                          TimeUnit unit,</span></span></span><br><span class="line"><span class="function"><span class="params">                          BlockingQueue&lt;Runnable&gt; workQueue,</span></span></span><br><span class="line"><span class="function"><span class="params">                          ThreadFactory threadFactory,</span></span></span><br><span class="line"><span class="function"><span class="params">                          RejectedExecutionHandler handler)</span> </span>{}</span><br></pre></td></tr></tbody></table></figure>
+<p>&#x53C2;&#x6570;&#x542B;&#x4E49;&#xFF1A;</p>
+<p><strong>corePoolSize</strong></p>
+<ul>
+<li>&#x7EBF;&#x7A0B;&#x6C60;&#x4E2D;&#x7684;&#x6838;&#x5FC3;&#x7EBF;&#x7A0B;&#x6570;&#x91CF;&#xFF0C;&#x5F53;&#x63D0;&#x4EA4;&#x4E00;&#x4E2A;&#x4EFB;&#x52A1;&#x65F6;&#xFF0C;&#x7EBF;&#x7A0B;&#x6C60;&#x521B;&#x5EFA;&#x4E00;&#x4E2A;&#x65B0;&#x7EBF;&#x7A0B;&#x6267;&#x884C;&#x4EFB;&#x52A1;&#xFF0C;&#x76F4;&#x5230;&#x5F53;&#x524D;&#x7EBF;&#x7A0B;&#x6570;&#x7B49;&#x4E8E;corePoolSize&#xFF0C;&#x5373;&#x4F7F;&#x6709;&#x5176;&#x4ED6;&#x7A7A;&#x95F2;&#x7EBF;&#x7A0B;&#x80FD;&#x6267;&#x884C;&#x65B0;&#x6765;&#x7684;&#x4EFB;&#x52A1;&#xFF0C;&#x4E5F;&#x4F1A;&#x7EE7;&#x7EED;&#x521B;&#x5EFA;&#x65B0;&#x7684;&#x7EBF;&#x7A0B;&#xFF1B;</li>
+<li>&#x5982;&#x679C;&#x5F53;&#x524D;&#x7EBF;&#x7A0B;&#x6570;&#x4E3A;corePoolSize&#xFF0C;&#x7EE7;&#x7EED;&#x63D0;&#x4EA4;&#x7684;&#x4EFB;&#x52A1;&#x88AB;&#x4FDD;&#x5B58;&#x5230;&#x963B;&#x585E;&#x961F;&#x5217;&#x4E2D;&#xFF0C;&#x7B49;&#x5F85;&#x88AB;&#x6267;&#x884C;&#xFF1B;</li>
+</ul>
+<p><strong>maximumPoolSize</strong></p>
+<ul>
+<li><p>&#x7EBF;&#x7A0B;&#x6C60;&#x5141;&#x8BB8;&#x7EBF;&#x7A0B;&#x7684;&#x6700;&#x5927;&#x6570;&#x91CF;&#xFF0C;&#x5728;&#x963B;&#x585E;&#x961F;&#x5217;&#x88AB;&#x586B;&#x6EE1;&#x540E;&#xFF0C;&#x4F1A;&#x521B;&#x5EFA;&#x65B0;&#x7684;&#x7EBF;&#x7A0B;&#x6267;&#x884C;&#x4EFB;&#x52A1;&#xFF0C;&#x524D;&#x63D0;&#x662F;&#x5F53;&#x524D;&#x7EBF;&#x7A0B;&#x6570;&#x5C0F;&#x4E8E;maximumPoolSize</p>
+</li>
+<li><p>&#x5F53;workQueue&#x4E3A;&#x65E0;&#x754C;&#x961F;&#x5217;&#x65F6;&#xFF0C;maxiumPoolSize&#x5219;&#x4E0D;&#x4F1A;&#x8D77;&#x4F5C;&#x7528;&#xFF0C;&#x56E0;&#x4E3A;&#x65B0;&#x7684;&#x4EFB;&#x52A1;&#x4F1A;&#x4E00;&#x76F4;&#x653E;&#x5165;&#x5230;workQueue&#x4E2D;</p>
+</li>
+</ul>
+<p><strong>workQueue</strong></p>
+<ul>
+<li>&#x7EBF;&#x7A0B;&#x5B58;&#x6D3B;&#x65F6;&#x95F4;&#xFF0C;&#x5F53;&#x7EBF;&#x7A0B;&#x6CA1;&#x6709;&#x4EFB;&#x52A1;&#x6267;&#x884C;&#x65F6;&#xFF0C;&#x7EE7;&#x7EED;&#x5B58;&#x6D3B;&#x7684;&#x65F6;&#x95F4;&#xFF0C;&#x9ED8;&#x8BA4;&#x60C5;&#x51B5;&#x53EA;&#x5BF9;&#x7EBF;&#x7A0B;&#x6570;&#x5927;&#x4E8E;corePoolSize&#x662F;&#x6709;&#x7528;&#x3002;</li>
+<li>&#x963B;&#x585E;&#x961F;&#x5217;&#x7684;&#x9009;&#x62E9;<ul>
+<li>ArrayBlockingQueue&#xFF1A;&#x662F;&#x4E00;&#x4E2A;&#x57FA;&#x4E8E;&#x6570;&#x7EC4;&#x7ED3;&#x6784;&#x7684;&#x6709;&#x754C;&#x963B;&#x585E;&#x961F;&#x5217;&#xFF0C;&#x6B64;&#x961F;&#x5217;&#x6309; FIFO&#xFF08;&#x5148;&#x8FDB;&#x5148;&#x51FA;&#xFF09;&#x539F;&#x5219;&#x5BF9;&#x5143;&#x7D20;&#x8FDB;&#x884C;&#x6392;&#x5E8F;&#xFF0C;&#x6307;&#x5B9A;&#x961F;&#x5217;&#x7684;&#x6700;&#x5927;&#x957F;&#x5EA6;&#xFF0C;&#x4F7F;&#x7528;&#x6709;&#x754C;&#x961F;&#x5217;&#x53EF;&#x4EE5;&#x9632;&#x6B62;&#x8D44;&#x6E90;&#x8017;&#x5C3D;&#xFF0C;&#x4F46;&#x4F1A;&#x51FA;&#x73B0;&#x4EFB;&#x52A1;&#x8FC7;&#x591A;&#x65F6;&#x7684;&#x62D2;&#x7EDD;&#x95EE;&#x9898;&#xFF0C;&#x9700;&#x8981;&#x8FDB;&#x884C;&#x534F;&#x8C03;&#x3002;</li>
+<li>LinkedBlockingQueue&#xFF1A;&#x4E00;&#x4E2A;&#x57FA;&#x4E8E;&#x94FE;&#x8868;&#x7ED3;&#x6784;&#x7684;&#x6709;&#x754C;&#x963B;&#x585E;&#x961F;&#x5217;&#xFF0C;&#x6B64;&#x961F;&#x5217;&#x6309;FIFO &#xFF08;&#x5148;&#x8FDB;&#x5148;&#x51FA;&#xFF09; &#x6392;&#x5E8F;&#x5143;&#x7D20;&#xFF0C;&#x541E;&#x5410;&#x91CF;&#x901A;&#x5E38;&#x8981;&#x9AD8;&#x4E8E;ArrayBlockingQueue&#x3002;&#x9759;&#x6001;&#x5DE5;&#x5382;&#x65B9;&#x6CD5;Executors.newFixedThreadPool()&#x4F7F;&#x7528;&#x4E86;&#x8FD9;&#x4E2A;&#x961F;&#x5217;&#x3002;</li>
+<li>SynchronousQueue&#xFF1A;&#x4E00;&#x4E2A;&#x4E0D;&#x5B58;&#x50A8;&#x5143;&#x7D20;&#x7684;&#x963B;&#x585E;&#x961F;&#x5217;&#x3002;&#x6BCF;&#x4E2A;&#x63D2;&#x5165;&#x64CD;&#x4F5C;&#x5FC5;&#x987B;&#x7B49;&#x5230;&#x53E6;&#x4E00;&#x4E2A;&#x7EBF;&#x7A0B;&#x8C03;&#x7528;&#x79FB;&#x9664;&#x64CD;&#x4F5C;&#xFF0C;&#x5426;&#x5219;&#x63D2;&#x5165;&#x64CD;&#x4F5C;&#x4E00;&#x76F4;&#x5904;&#x4E8E;&#x963B;&#x585E;&#x72B6;&#x6001;&#xFF0C;&#x541E;&#x5410;&#x91CF;&#x901A;&#x5E38;&#x8981;&#x9AD8;&#x4E8E;LinkedBlockingQueue&#xFF0C;&#x9759;&#x6001;&#x5DE5;&#x5382;&#x65B9;&#x6CD5;Executors.newCachedThreadPool&#x4F7F;&#x7528;&#x4E86;&#x8FD9;&#x4E2A;&#x961F;&#x5217;&#x3002;</li>
+<li>PriorityBlockingQueue&#xFF1A;&#x4E00;&#x4E2A;&#x5177;&#x6709;&#x4F18;&#x5148;&#x7EA7;&#x7684;&#x65E0;&#x9650;&#x963B;&#x585E;&#x961F;&#x5217;&#x3002;</li>
+</ul>
+</li>
+</ul>
+<p><strong>keepAliveTime</strong></p>
+<p>&#x7EBF;&#x7A0B;&#x7A7A;&#x95F2;&#x65F6;&#x7684;&#x5B58;&#x6D3B;&#x65F6;&#x95F4;&#xFF0C;&#x9ED8;&#x8BA4;&#x60C5;&#x51B5;&#x4E0B;&#xFF0C;&#x8BE5;&#x53C2;&#x6570;&#x53EA;&#x5728;&#x7EBF;&#x7A0B;&#x6570;&#x5927;&#x4E8E;corePoolSize&#x65F6;&#x624D;&#x6709;&#x7528;&#x3002;</p>
+<p><strong>TimeUnit</strong></p>
+<ul>
+<li><p>keepAliveTime&#x7684;&#x5355;&#x4F4D;</p>
+</li>
+<li><p>TimeUnit&#x9759;&#x6001;&#x7C7B;&#x63D0;&#x4F9B;&#x5E38;&#x91CF;</p>
+</li>
+</ul>
+<p><strong>threadFactory</strong></p>
+<ul>
+<li>&#x521B;&#x5EFA;&#x7EBF;&#x7A0B;&#x7684;&#x5DE5;&#x5382;&#xFF0C;&#x901A;&#x8FC7;&#x81EA;&#x5B9A;&#x4E49;&#x7684;&#x7EBF;&#x7A0B;&#x5DE5;&#x5382;&#x53EF;&#x4EE5;&#x7ED9;&#x6BCF;&#x4E2A;&#x65B0;&#x5EFA;&#x7684;&#x7EBF;&#x7A0B;&#x8BBE;&#x7F6E;&#x4E00;&#x4E2A;&#x5177;&#x6709;&#x8BC6;&#x522B;&#x5EA6;&#x7684;&#x7EBF;&#x7A0B;&#x540D;&#x3002;&#x9ED8;&#x8BA4;&#x4E3A;DefaultThreadFactory&#xFF0C;&#x81EA;&#x5B9A;&#x4E49;&#x53EF;&#x4EE5;&#x5B9E;&#x73B0;ThreadFactory&#x63A5;&#x53E3;</li>
+</ul>
+<p><strong>handler</strong></p>
+<ul>
+<li>&#x7EBF;&#x7A0B;&#x6C60;&#x7684;&#x9971;&#x548C;&#x7B56;&#x7565;&#xFF0C;&#x5F53;&#x963B;&#x585E;&#x961F;&#x5217;&#x6EE1;&#x4E86;&#xFF0C;&#x4E14;&#x6CA1;&#x6709;&#x7A7A;&#x95F2;&#x7684;&#x5DE5;&#x4F5C;&#x7EBF;&#x7A0B;&#xFF0C;&#x5982;&#x679C;&#x7EE7;&#x7EED;&#x63D0;&#x4EA4;&#x4EFB;&#x52A1;&#xFF0C;&#x5FC5;&#x987B;&#x91C7;&#x53D6;&#x4E00;&#x79CD;&#x7B56;&#x7565;&#x5904;&#x7406;&#x8BE5;&#x4EFB;&#x52A1;</li>
+<li>&#x7EBF;&#x7A0B;&#x6C60;&#x63D0;&#x4F9B;&#x5982;&#x4E0B;&#x56DB;&#x79CD;&#x7B56;&#x7565;<ul>
+<li>AbortPolicy&#xFF1A;&#x76F4;&#x63A5;&#x629B;&#x51FA;&#x5F02;&#x5E38;&#xFF0C;&#x9ED8;&#x8BA4;&#x7B56;&#x7565;</li>
+<li>CallerRunsPolicy&#xFF1A;&#x7528;&#x8C03;&#x7528;&#x8005;&#x6240;&#x5728;&#x7684;&#x7EBF;&#x7A0B;&#x6765;&#x6267;&#x884C;&#x4EFB;&#x52A1;</li>
+<li>DiscardOldestPolicy&#xFF1A;&#x4E22;&#x5F03;&#x963B;&#x585E;&#x961F;&#x5217;&#x4E2D;&#x9760;&#x6700;&#x524D;&#x7684;&#x4EFB;&#x52A1;&#xFF0C;&#x5E76;&#x6267;&#x884C;&#x5F53;&#x524D;&#x4EFB;&#x52A1;</li>
+<li>DiscardPolicy&#xFF1A;&#x76F4;&#x63A5;&#x4E22;&#x5F03;&#x4EFB;&#x52A1;</li>
+</ul>
+</li>
+<li>&#x53EF;&#x4EE5;&#x6839;&#x636E;&#x5177;&#x4F53;&#x4F7F;&#x7528;&#x573A;&#x666F;&#xFF0C;&#x5B9E;&#x73B0;RejectedExecutionHandler&#x63A5;&#x53E3;&#xFF0C;&#x81EA;&#x5B9A;&#x4E49;&#x62D2;&#x7EDD;&#x7B56;&#x7565;</li>
+</ul>
+<h3 id="&#x7EBF;&#x7A0B;&#x6C60;&#x7684;&#x6267;&#x884C;&#x6D41;&#x7A0B;"><a href="#&#x7EBF;&#x7A0B;&#x6C60;&#x7684;&#x6267;&#x884C;&#x6D41;&#x7A0B;" class="headerlink" title="&#x7EBF;&#x7A0B;&#x6C60;&#x7684;&#x6267;&#x884C;&#x6D41;&#x7A0B;"></a>&#x7EBF;&#x7A0B;&#x6C60;&#x7684;&#x6267;&#x884C;&#x6D41;&#x7A0B;</h3><ol>
+<li><p>&#x5982;&#x679C;&#x5F53;&#x524D;worker&#x6570;&#x91CF;&#x5C0F;&#x4E8E;corePoolSize&#xFF0C;&#x5219;&#x65B0;&#x5EFA;&#x4E00;&#x4E2A;woker&#x5E76;&#x628A;&#x5F53;&#x524D;&#x4EFB;&#x52A1;&#x5206;&#x914D;&#x7ED9;&#x8BE5;woker&#x7EBF;&#x7A0B;</p>
+</li>
+<li><p>&#x5982;&#x679C;&#x5F53;&#x524D;worker&#x6570;&#x91CF;&#x5927;&#x4E8E;corePoolSize&#xFF0C;&#x5219;&#x4F1A;&#x5C06;&#x4EFB;&#x52A1;&#x52A0;&#x5165;&#x5230;workerQueue&#x4E2D;</p>
+</li>
+<li><p>&#x5982;&#x679C;wokerQueue&#x662F;&#x6709;&#x754C;&#x961F;&#x5217;&#xFF0C;&#x5E76;&#x4E14;&#x5DF2;&#x7ECF;&#x586B;&#x6EE1;&#xFF0C;&#x5219;&#x4F1A;&#x5224;&#x65AD;&#x5F53;&#x524D;woker&#x6570;&#x91CF;&#x5C0F;&#x4E8E;maximumPoolSize&#xFF0C;&#x5982;&#x679C;&#x5C0F;&#x4E8E;&#xFF0C;&#x5219;&#x65B0;&#x5EFA;&#x4E00;&#x4E2A;woker&#x5E76;&#x628A;&#x5F53;&#x524D;&#x4EFB;&#x52A1;&#x5206;&#x914D;&#x7ED9;&#x8BE5;woker&#x7EBF;&#x7A0B;&#xFF0C;&#x6210;&#x529F;&#x5219;&#x8FD4;&#x56DE;&#x3002;</p>
+</li>
+<li><p>&#x5F53;worker&#x7684;&#x6570;&#x91CF;&#x5DF2;&#x7ECF;&#x7B49;&#x4E8E;maximumPoolSize&#x5219;&#x8C03;&#x7528;&#x62D2;&#x7EDD;&#x7B56;&#x7565;&#x5904;&#x7406;&#x8BE5;&#x4EFB;&#x52A1;&#x3002;</p>
+</li>
+</ol>
+<p><img src="https://ws4.sinaimg.cn/large/006tKfTcly1g1oohac29uj30yq092q7o.jpg" alt="image-20190402225324214"></p>
+<p>&#x53E6;&#x5916;&#xFF0C;&#x5F53;&#x7EBF;&#x7A0B;&#x6C60;&#x4E2D;&#x7EBF;&#x7A0B;&#x5927;&#x4E8E;corePoolSize&#xFF0C;&#x5E76;&#x4E14;&#x7A7A;&#x95F2;&#x65F6;&#x95F4;&#x8D85;&#x8FC7;keepAliveTime&#x65F6;&#xFF0C;&#x5C06;&#x4F1A;&#x88AB;&#x79FB;&#x51FA;&#x7EBF;&#x7A0B;&#x6C60;&#x3002;</p>
+<h3 id="&#x6E90;&#x7801;&#x5206;&#x6790;"><a href="#&#x6E90;&#x7801;&#x5206;&#x6790;" class="headerlink" title="&#x6E90;&#x7801;&#x5206;&#x6790;"></a>&#x6E90;&#x7801;&#x5206;&#x6790;</h3><h4 id="&#x7EBF;&#x7A0B;&#x6C60;&#x7684;&#x72B6;&#x6001;"><a href="#&#x7EBF;&#x7A0B;&#x6C60;&#x7684;&#x72B6;&#x6001;" class="headerlink" title="&#x7EBF;&#x7A0B;&#x6C60;&#x7684;&#x72B6;&#x6001;"></a>&#x7EBF;&#x7A0B;&#x6C60;&#x7684;&#x72B6;&#x6001;</h4><figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ct1&#x662F;&#x4E00;&#x4E2A;&#x539F;&#x5B50;&#x6574;&#x6570;&#x578B;&#xFF0C;&#x5176;&#x4E2D;&#x6253;&#x5305;&#x4E86;&#x4E24;&#x4E2A;&#x6982;&#x5FF5;&#x6982;&#x5FF5;</span></span><br><span class="line"><span class="comment">// &#x5176;&#x4E2D;&#x9AD8;3&#x4F4D;&#x662F;&#x7EF4;&#x62A4;&#x7EBF;&#x7A0B;&#x6C60;&#x7684;&#x8FD0;&#x884C;&#x72B6;&#x6001;&#xFF0C;&#x4F4E;29&#x4F4D;&#x662F;&#x7528;&#x6765;&#x4F4D;&#x7F6E;&#x7EBF;&#x7A0B;&#x6C60;&#x4E2D;&#x7EBF;&#x7A0B;&#x7684;&#x6570;&#x91CF;</span></span><br><span class="line"><span class="comment">// 3&#x4F4D;&#x7684;&#x539F;&#x56E0;&#x662F;&#x56E0;&#x4E3A;&#x7EBF;&#x7A0B;&#x6709;&#x4E94;&#x79CD;&#x72B6;&#x6001;&#xFF0C;&#x5411;&#x4E0A;&#x53D6;2&#x6B21;&#x65B9;&#x6570;&#x662F;8&#x4E5F;&#x5C31;&#x662F;3&#x4F4D;</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> AtomicInteger ctl = <span class="keyword">new</span> AtomicInteger(ctlOf(RUNNING, <span class="number">0</span>));</span><br><span class="line"><span class="comment">// &#x8FD9;&#x4E2A;&#x662F;29&#xFF0C;&#x505A;&#x4F4D;&#x8FD0;&#x7B97;&#x7528;&#x7684;</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> COUNT_BITS = Integer.SIZE - <span class="number">3</span>;</span><br><span class="line"><span class="comment">// &#x8FD9;&#x4E2A;&#x662F;&#x7EBF;&#x7A0B;&#x7684;&#x5BB9;&#x91CF;&#xFF0C;&#x4E5F;&#x5C31;&#x662F;&#x4F4E;29&#x4F4D;&#x7684;&#x6700;&#x5927;&#x503C;</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> CAPACITY   = (<span class="number">1</span> &lt;&lt; COUNT_BITS) - <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// runState is stored in the high-order bits</span></span><br><span class="line"><span class="comment">// &#x9AD8;3&#x4F4D;&#x5206;&#x522B;&#x662F;100-&gt;000-&gt;001-&gt;010-&gt;011</span></span><br><span class="line"><span class="comment">// &#x6CE8;&#x610F;&#x9AD8;1&#x4F4D;&#x662F;&#x7B26;&#x53F7;&#x4F4D;&#xFF0C;&#x4F4E;29&#x4F4D;&#x90FD;&#x662F;0</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> RUNNING    = -<span class="number">1</span> &lt;&lt; COUNT_BITS;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> SHUTDOWN   =  <span class="number">0</span> &lt;&lt; COUNT_BITS;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> STOP       =  <span class="number">1</span> &lt;&lt; COUNT_BITS;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> TIDYING    =  <span class="number">2</span> &lt;&lt; COUNT_BITS;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> TERMINATED =  <span class="number">3</span> &lt;&lt; COUNT_BITS;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Packing and unpacking ctl</span></span><br><span class="line"><span class="comment">// &#x5F53;&#x4E0E;~Capcity&#x505A;&#x4E14;&#x8FD0;&#x7B97;&#x65F6;&#x83B7;&#x5F97;&#x7684;&#x662F;&#x9AD8;3&#x4F4D;&#x7684;&#x503C;&#xFF0C;&#x4E5F;&#x5C31;&#x662F;&#x7EBF;&#x7A0B;&#x6C60;&#x7684;&#x72B6;&#x6001;</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">runStateOf</span><span class="params">(<span class="keyword">int</span> c)</span>     </span>{ <span class="keyword">return</span> c &amp; ~CAPACITY; }</span><br><span class="line"><span class="comment">// &#x8FD9;&#x91CC;&#x53EF;&#x4EE5;&#x770B;&#x4E0B;&#x56FE;&#x7684;&#x60C5;&#x51B5;&#xFF0C;&#x5F53;&#x4E0E;Capacity&#x505A;&#x4E14;&#x8FD0;&#x7B97;&#x65F6;&#x83B7;&#x5F97;&#x7684;&#x662F;&#x4F4E;29&#x4F4D;&#x7684;&#x503C;&#xFF0C;&#x4E5F;&#x5C31;&#x662F;&#x8FD0;&#x884C;&#x7684;&#x7EBF;&#x7A0B;&#x7684;&#x6570;&#x91CF;</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">workerCountOf</span><span class="params">(<span class="keyword">int</span> c)</span>  </span>{ <span class="keyword">return</span> c &amp; CAPACITY; }</span><br><span class="line"><span class="comment">// &#x5C06;&#x7EBF;&#x7A0B;&#x6C60;&#x72B6;&#x6001;&#x548C;&#x8FD0;&#x884C;&#x7684;&#x7EBF;&#x7A0B;&#x6570;&#x91CF;&#x8FDB;&#x884C;&#x6253;&#x5305;</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">ctlOf</span><span class="params">(<span class="keyword">int</span> rs, <span class="keyword">int</span> wc)</span> </span>{ <span class="keyword">return</span> rs | wc; }</span><br></pre></td></tr></tbody></table></figure>
+<p><img src="https://ws4.sinaimg.cn/large/006tNc79ly1g1refmrsaaj30yu0hatj2.jpg" alt="image-20190405072232285"></p>
+<p>&#x8FD9;&#x5F20;&#x56FE;&#x6211;&#x53EA;&#x505A;&#x4E86;&#x4E00;&#x4E2A;16&#x4F4D;&#x7684;&#x60C5;&#x51B5;&#xFF0C;&#x524D;&#x4E24;&#x4E2A;&#x662F;&#x8865;&#x7801;&#x548C;&#x975E;&#x8FD0;&#x7B97;&#x540E;&#x7684;&#x6570;&#x636E;&#xFF0C;&#x4E0B;&#x9762;&#x56DB;&#x4E2A;&#x662F;&#x4E00;&#x6B21;&#x7B80;&#x5355;&#x7684;&#x7EE9;&#x8FC7;&#x7A0B;&#x3002;</p>
+<div class="note info">&#x5173;&#x4E8E;&#x539F;&#x7801;&#x3001;&#x53CD;&#x7801;&#x3001;&#x8865;&#x7801;&#x5F3A;&#x70C8;&#x5EFA;&#x8BAE;&#x4E0B;&#x9762;&#x8FD9;&#x7247;&#x6587;&#x7AE0;&#xFF1A;<a href="https://www.cnblogs.com/zhangziqiu/archive/2011/03/30/ComputerCode.html" target="_blank" rel="noopener">&#x539F;&#x7801;, &#x53CD;&#x7801;, &#x8865;&#x7801; &#x8BE6;&#x89E3;</a></div>
+
+<h4 id="&#x6784;&#x9020;&#x65B9;&#x6CD5;"><a href="#&#x6784;&#x9020;&#x65B9;&#x6CD5;" class="headerlink" title="&#x6784;&#x9020;&#x65B9;&#x6CD5;"></a>&#x6784;&#x9020;&#x65B9;&#x6CD5;</h4><figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">ThreadPoolExecutor</span><span class="params">(<span class="keyword">int</span> corePoolSize,</span></span></span><br><span class="line"><span class="function"><span class="params">                          <span class="keyword">int</span> maximumPoolSize,</span></span></span><br><span class="line"><span class="function"><span class="params">                          <span class="keyword">long</span> keepAliveTime,</span></span></span><br><span class="line"><span class="function"><span class="params">                          TimeUnit unit,</span></span></span><br><span class="line"><span class="function"><span class="params">                          BlockingQueue&lt;Runnable&gt; workQueue,</span></span></span><br><span class="line"><span class="function"><span class="params">                          ThreadFactory threadFactory,</span></span></span><br><span class="line"><span class="function"><span class="params">                          RejectedExecutionHandler handler)</span> </span>{</span><br><span class="line">    <span class="comment">// &#x53C2;&#x6570;&#x51FA;&#x6821;&#x9A8C;&#xFF0C;&#x51FA;&#x73B0;&#x5F02;&#x5E38;&#x629B;&#x51FA;&#x53C2;&#x6570;&#x975E;&#x6CD5;&#x5F02;&#x5E38;</span></span><br><span class="line">    <span class="keyword">if</span> (corePoolSize &lt; <span class="number">0</span> ||</span><br><span class="line">        maximumPoolSize &lt;= <span class="number">0</span> ||</span><br><span class="line">        maximumPoolSize &lt; corePoolSize ||</span><br><span class="line">        keepAliveTime &lt; <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException();</span><br><span class="line">    <span class="comment">// &#x51E0;&#x4E2A;&#x5F15;&#x7528;&#x7C7B;&#x578B;&#x7684;&#x975E;&#x7A7A;&#x68C0;&#x9A8C;&#xFF0C;&#x7A7A;&#x4E86;&#x629B;&#x51FA;&#x7A7A;&#x6307;&#x9488;&#x5F02;&#x5E38;</span></span><br><span class="line">    <span class="keyword">if</span> (workQueue == <span class="keyword">null</span> || threadFactory == <span class="keyword">null</span> || handler == <span class="keyword">null</span>)</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> NullPointerException();</span><br><span class="line">    <span class="comment">// &#x5728;&#x6267;&#x884C;finalize()&#x65B9;&#x6CD5;&#x65F6;&#x4F7F;&#x7528;&#xFF0C;&#x5E76;&#x4E0D;&#x5F71;&#x54CD;&#x5BF9;&#x7EBF;&#x7A0B;&#x6C60;&#x7684;&#x7406;&#x89E3;</span></span><br><span class="line">    <span class="keyword">this</span>.acc = System.getSecurityManager() == <span class="keyword">null</span> ?</span><br><span class="line">            <span class="keyword">null</span> :</span><br><span class="line">            AccessController.getContext();</span><br><span class="line">    <span class="comment">// &#x5C06;&#x4F20;&#x9012;&#x7684;&#x53C2;&#x6570;&#x590D;&#x503C;&#x7ED9;&#x5B9E;&#x4F8B;&#x53D8;&#x91CF;</span></span><br><span class="line">    <span class="keyword">this</span>.corePoolSize = corePoolSize;</span><br><span class="line">    <span class="keyword">this</span>.maximumPoolSize = maximumPoolSize;</span><br><span class="line">    <span class="keyword">this</span>.workQueue = workQueue;</span><br><span class="line">    <span class="keyword">this</span>.keepAliveTime = unit.toNanos(keepAliveTime);</span><br><span class="line">    <span class="keyword">this</span>.threadFactory = threadFactory;</span><br><span class="line">    <span class="keyword">this</span>.handler = handler;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<h4 id="execute&#x65B9;&#x6CD5;"><a href="#execute&#x65B9;&#x6CD5;" class="headerlink" title="execute&#x65B9;&#x6CD5;"></a>execute&#x65B9;&#x6CD5;</h4><figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// &#x672C;&#x65B9;&#x6CD5;&#x5C31;&#x662F;&#x4E0A;&#x8FF0;&#x7EBF;&#x7A0B;&#x6C60;&#x6267;&#x884C;&#x6D41;&#x7A0B;&#x7684;&#x4EE3;&#x7801;&#x5F62;&#x5F0F;</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">execute</span><span class="params">(Runnable command)</span> </span>{</span><br><span class="line">    <span class="keyword">if</span> (command == <span class="keyword">null</span>)</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> NullPointerException();</span><br><span class="line">    <span class="comment">// &#x83B7;&#x53D6;&#x63A7;&#x5236;&#x53D8;&#x91CF;&#x7684;&#x503C;c</span></span><br><span class="line">    <span class="keyword">int</span> c = ctl.get();</span><br><span class="line">    <span class="comment">// &#x5982;&#x679C;&#x6D3B;&#x8DC3;&#x7EBF;&#x7A0B;&#x6570;&#x91CF;&#x5C0F;&#x4E8E;corePoolSize&#x6570;&#x91CF;&#xFF0C;&#x8C03;&#x7528;addWorker&#x65B9;&#x6CD5;&#xFF0C;&#x521B;&#x5EFA;&#x7EBF;&#x7A0B;&#x6267;&#x884C;&#x4EFB;&#x52A1;</span></span><br><span class="line">    <span class="keyword">if</span> (workerCountOf(c) &lt; corePoolSize) {</span><br><span class="line">        <span class="comment">// &#x5982;&#x679C;&#x6210;&#x529F;&#x4E86;&#xFF0C;&#x76F4;&#x63A5;&#x8FD4;&#x56DE;&#xFF0C;ture&#x662F;</span></span><br><span class="line">        <span class="keyword">if</span> (addWorker(command, <span class="keyword">true</span>))</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        <span class="comment">// &#x5426;&#x5219;&#x83B7;&#x53D6;&#x63A7;&#x5236;&#x53D8;&#x91CF;c,&#x8FDB;&#x884C;&#x4E0B;&#x4E00;&#x6B65;&#x64CD;&#x4F5C;&#xFF0C;&#x51E1;&#x662F;&#x9700;&#x8981;&#x4F7F;&#x7528;ctl&#x8FDB;&#x884C;&#x5224;&#x65AD;&#x90FD;&#x8981;&#x91CD;&#x65B0;&#x83B7;&#x53D6;c</span></span><br><span class="line">        c = ctl.get();</span><br><span class="line">    }</span><br><span class="line">    <span class="comment">// &#x5224;&#x65AD;&#x7EBF;&#x7A0B;&#x6C60;&#x662F;&#x5426;&#x5904;&#x4E8E;Running&#x72B6;&#x6001;&#x5E76;&#x4E14;&#x987A;&#x5229;&#x5C06;&#x4EFB;&#x52A1;&#x52A0;&#x5165;&#x5230;&#x963B;&#x585E;&#x961F;&#x5217;&#x4E2D;</span></span><br><span class="line">    <span class="comment">// &#x5982;&#x679C;&#x52A0;&#x5165;&#x987A;&#x5229;&#x4ECD;&#x8981;&#x8FDB;&#x884C;double-check&#x662F;&#x5426;&#x9700;&#x8981;&#x52A0;&#x5165;&#x4E00;&#x4E2A;&#x65B0;&#x7684;&#x7EBF;&#x7A0B;&#x6216;&#x4EFB;&#x52A1;&#x8FDB;&#x5165;&#x8FD9;&#x4E2A;&#x65B9;&#x5F0F;&#x65F6;&#x7EBF;&#x7A0B;&#x6C60;&#x5DF2;&#x7ECF;&#x5173;&#x95ED;</span></span><br><span class="line">    <span class="keyword">if</span> (isRunning(c) &amp;&amp; workQueue.offer(command)) {</span><br><span class="line">        <span class="keyword">int</span> recheck = ctl.get();</span><br><span class="line">        <span class="comment">/** </span></span><br><span class="line"><span class="comment">         * &#x5982;&#x679C;&#x7EBF;&#x7A0B;&#x6C60;&#x4E0D;&#x662F;&#x8FD0;&#x884C;&#x72B6;&#x6001;&#x5E76;&#x4E14;&#x5C06;&#x4EFB;&#x52A1;&#x79FB;&#x9664;&#x6210;&#x529F;&#xFF0C;&#x62D2;&#x7EDD;&#x4EFB;&#x52A1;</span></span><br><span class="line"><span class="comment">         * &#x5982;&#x679C;&#x7EBF;&#x7A0B;&#x6C60;&#x662F;&#x8FD0;&#x884C;&#x72B6;&#x6001;&#x6216;&#x4EFB;&#x52A1;&#x79FB;&#x9664;&#x5931;&#x8D25;&#xFF0C;&#x5224;&#x65AD;&#x662F;&#x5426;&#x6709;&#x6D3B;&#x8DC3;&#x7EBF;&#x7A0B;&#xFF0C;&#x5982;&#x679C;&#x6CA1;&#x6709;&#x5C31;&#x521B;&#x5EFA;&#x4E00;&#x4E2A;</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        <span class="keyword">if</span> (! isRunning(recheck) &amp;&amp; remove(command))</span><br><span class="line">            <span class="comment">// &#x62D2;&#x7EDD;&#x547D;&#x4EE4;</span></span><br><span class="line">            reject(command);</span><br><span class="line">       <span class="comment">//&#x8FD9;&#x91CC;&#x662F;&#x6DFB;&#x52A0;&#x4E86;&#x4E00;&#x4E2A;&#x4EFB;&#x52A1;&#x4E3A;null&#x7684;&#x7EBF;&#x7A0B;&#xFF0C;&#x53EA;&#x8981;&#x6709;&#x4E00;&#x4E2A;&#x7EBF;&#x7A0B;&#x5C31;&#x53EF;&#x51FA;&#x6267;&#x884C;workQueue&#x4E2D;&#x7684;&#x547D;&#x4EE4;</span></span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (workerCountOf(recheck) == <span class="number">0</span>)</span><br><span class="line">            addWorker(<span class="keyword">null</span>, <span class="keyword">false</span>);</span><br><span class="line">    }</span><br><span class="line">    <span class="comment">// &#x5982;&#x679C;&#x5411;&#x961F;&#x5217;&#x6DFB;&#x52A0;&#x5931;&#x8D25;&#xFF0C;&#x5C1D;&#x8BD5;&#x6269;&#x5145;&#x7EBF;&#x7A0B;&#x6C60;&#xFF0C;&#x5C06;&#x4EFB;&#x52A1;&#x5206;&#x914D;&#x7ED9;&#x65B0;&#x7684;&#x7EBF;&#x7A0B;&#xFF0C;&#x53EA;&#x8981;&#x4E0D;&#x5927;&#x4E8E;maximumPoolSize&#x5C31;&#x53EF;&#x4EE5;&#x3002;</span></span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (!addWorker(command, <span class="keyword">false</span>))</span><br><span class="line">        <span class="comment">// &#x62D2;&#x7EDD;&#x547D;&#x4EE4;</span></span><br><span class="line">        reject(command);</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<h4 id="addWorker&#x65B9;&#x6CD5;"><a href="#addWorker&#x65B9;&#x6CD5;" class="headerlink" title="addWorker&#x65B9;&#x6CD5;"></a>addWorker&#x65B9;&#x6CD5;</h4><figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">boolean</span> <span class="title">addWorker</span><span class="params">(Runnable firstTask, <span class="keyword">boolean</span> core)</span> </span>{</span><br><span class="line">    	<span class="comment">// &#x5916;&#x5C42;&#x5FAA;&#x73AF;&#x7528;&#x4E8E;&#x5224;&#x65AD;&#x7EBF;&#x7A0B;&#x6C60;&#x72B6;&#x6001;</span></span><br><span class="line">       retry:</span><br><span class="line">       <span class="keyword">for</span> (;;) {</span><br><span class="line">           <span class="keyword">int</span> c = ctl.get();</span><br><span class="line">           <span class="keyword">int</span> rs = runStateOf(c);</span><br><span class="line"></span><br><span class="line">           <span class="comment">// &#x8FD9;&#x4E2A;&#x5224;&#x65AD;&#x6761;&#x4EF6;&#x6BD4;&#x8F83;&#x590D;&#x6742;&#xFF0C;&#x770B;&#x4E0B;&#x9762;&#x7684;&#x5206;&#x6790;</span></span><br><span class="line">           <span class="comment">// &#x6982;&#x62EC;&#x4E00;&#x4E0B;&#x5C31;&#x662F;&#x5F53;&#x524D;&#x7EBF;&#x7A0B;&#x6C60;&#x662F;&#x5426;&#x662F;&#x53EF;&#x6DFB;&#x52A0;&#x65B0;&#x7EBF;&#x7A0B;&#x7684;&#x72B6;&#x6001;</span></span><br><span class="line">           <span class="keyword">if</span> (rs &gt;= SHUTDOWN &amp;&amp;</span><br><span class="line">               ! (rs == SHUTDOWN &amp;&amp;</span><br><span class="line">                  firstTask == <span class="keyword">null</span> &amp;&amp;</span><br><span class="line">                  ! workQueue.isEmpty()))</span><br><span class="line">               <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">		<span class="comment">// &#x5185;&#x5B58;&#x5FAA;&#x73AF;&#x5BF9;&#x7EBF;&#x7A0B;&#x6570;&#x91CF;&#x8FDB;&#x884C;cas+1&#x5904;&#x7406;</span></span><br><span class="line">           <span class="keyword">for</span> (;;) {</span><br><span class="line">               <span class="keyword">int</span> wc = workerCountOf(c);</span><br><span class="line">               <span class="comment">// &#x8FD9;&#x91CC;&#x662F;&#x5224;&#x65AD;&#x4E00;&#x4E0B;&#x5DE5;&#x4F5C;&#x7EBF;&#x7A0B;&#x6570;&#x91CF;&#x662F;&#x4E0D;&#x662F;&#x5DF2;&#x7ECF;&#x5927;&#x4E8E;&#x7B49;&#x4E8E;corePoolSize/maximumPoolSize</span></span><br><span class="line">               <span class="comment">// addWorked&#x53C2;&#x6570;&#x91CC;&#x7684;true/false&#x5C31;&#x662F;&#x51B3;&#x5B9A;&#x6BD4;corePoolSize&#x8FD8;&#x662F;maximumPoolSize</span></span><br><span class="line">               <span class="keyword">if</span> (wc &gt;= CAPACITY ||</span><br><span class="line">                   wc &gt;= (core ? corePoolSize : maximumPoolSize))</span><br><span class="line">                   <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">               <span class="comment">// &#x8FD9;&#x91CC;&#x6DFB;&#x52A0;&#x4E00;&#x4E2A;&#x7EBF;&#x7A0B;&#xFF0C;&#x6210;&#x529F;&#x5C31;&#x8DF3;&#x51FA;&#x5FAA;&#x73AF;</span></span><br><span class="line">               <span class="keyword">if</span> (compareAndIncrementWorkerCount(c))</span><br><span class="line">                   <span class="keyword">break</span> retry;</span><br><span class="line">               c = ctl.get();  <span class="comment">// Re-read ctl</span></span><br><span class="line">               <span class="comment">// &#x6DFB;&#x52A0;&#x5931;&#x8D25;&#x5C31;&#x91CD;&#x8BD5;</span></span><br><span class="line">               <span class="keyword">if</span> (runStateOf(c) != rs)</span><br><span class="line">                   <span class="keyword">continue</span> retry;</span><br><span class="line">               <span class="comment">// else CAS failed due to workerCount change; retry inner loop</span></span><br><span class="line">           }</span><br><span class="line">       }</span><br><span class="line">    </span><br><span class="line"><span class="comment">// ------&#x4E0A;&#x9762;&#x7684;&#x5FAA;&#x73AF;&#x662F;&#x8C03;&#x6574;&#x7EBF;&#x7A0B;&#x6C60;&#x72B6;&#x6001;&#xFF0C;&#x4E0B;&#x9762;&#x662F;&#x771F;&#x6B63;&#x7684;&#x6DFB;&#x52A0;&#x7EBF;&#x7A0B;--------</span></span><br><span class="line">    	<span class="comment">// work&#x542F;&#x52A8;&#x6807;&#x5FD7;</span></span><br><span class="line">       <span class="keyword">boolean</span> workerStarted = <span class="keyword">false</span>;</span><br><span class="line">    	<span class="comment">// work&#x662F;&#x5426;&#x88AB;&#x6DFB;&#x52A0;&#x5230;&#x7EBF;&#x7A0B;&#x6C60;&#x4E2D;&#x7684;&#x6807;&#x5FD7;</span></span><br><span class="line">       <span class="keyword">boolean</span> workerAdded = <span class="keyword">false</span>;</span><br><span class="line">       Worker w = <span class="keyword">null</span>;</span><br><span class="line">       <span class="keyword">try</span> {</span><br><span class="line">           <span class="comment">// &#x65B0;&#x5EFA;worker&#x5C06;&#x4F20;&#x5165;&#x7684;&#x4EFB;&#x52A1;&#x8D4B;&#x503C;&#x7ED9;worker&#x7684;</span></span><br><span class="line">           w = <span class="keyword">new</span> Worker(firstTask);</span><br><span class="line">           <span class="keyword">final</span> Thread t = w.thread;</span><br><span class="line">           <span class="comment">// &#x5982;&#x679C;&#x7EBF;&#x7A0B;&#x521B;&#x5EFA;&#x6210;&#x529F;</span></span><br><span class="line">           <span class="keyword">if</span> (t != <span class="keyword">null</span>) {</span><br><span class="line">               <span class="comment">// &#x83B7;&#x53D6;&#x9501;</span></span><br><span class="line">               <span class="keyword">final</span> ReentrantLock mainLock = <span class="keyword">this</span>.mainLock;</span><br><span class="line">               mainLock.lock();</span><br><span class="line">               <span class="keyword">try</span> {</span><br><span class="line">                   <span class="comment">// &#x68C0;&#x67E5;&#x662F;&#x5426;&#x4E3A;&#x53EF;&#x4EE5;&#x6DFB;&#x52A0;&#x7EBF;&#x7A0B;&#x7684;&#x72B6;&#x6001;&#xFF0C;&#x5982;&#x679C;&#x662F;&#x8FD0;&#x884C;&#x72B6;&#x6001;</span></span><br><span class="line">                   <span class="comment">// &#x6216;&#x8005;shutdown&#xFF0C;&#x4F46;&#x961F;&#x5217;&#x4E2D;&#x6709;&#x4EFB;&#x52A1;(&#x6CE8;&#x610F;&#x8FD9;&#x91CC;&#x662F;&#x521B;&#x5EFA;&#x7EBF;&#x7A0B;&#xFF0C;&#x4E0D;&#x662F;&#x6DFB;&#x52A0;&#x4EFB;&#x52A1;)</span></span><br><span class="line">                   <span class="keyword">int</span> rs = runStateOf(ctl.get());</span><br><span class="line">                   <span class="keyword">if</span> (rs &lt; SHUTDOWN ||</span><br><span class="line">                       (rs == SHUTDOWN &amp;&amp; firstTask == <span class="keyword">null</span>)) {</span><br><span class="line">                       <span class="comment">// &#x5982;&#x679C;&#x7EBF;&#x7A0B;&#x5DF2;&#x8FD0;&#x884C;&#xFF0C;&#x629B;&#x51FA;&#x5F02;&#x5E38;&#x5E76;&#x6267;&#x884C;addWorkerFailed</span></span><br><span class="line">                       <span class="keyword">if</span> (t.isAlive()) </span><br><span class="line">                           <span class="keyword">throw</span> <span class="keyword">new</span> IllegalThreadStateException();</span><br><span class="line">                       <span class="comment">// &#x8FD9;&#x91CC;&#x5C06;&#x65B0;&#x5EFA;&#x7684;work&#x52A0;&#x5165;&#x5230;set&#x4E2D;&#xFF0C;workers&#x662F;&#x7EF4;&#x62A4;&#x7EBF;&#x7A0B;&#x6C60;&#x4E2D;&#x6240;&#x6709;&#x7EBF;&#x7A0B;&#x7684;hashSet</span></span><br><span class="line">                       <span class="comment">// &#x5E76;&#x66F4;&#x65B0;&#x76F8;&#x5173;&#x72B6;&#x6001;</span></span><br><span class="line">                       workers.add(w);</span><br><span class="line">                       <span class="keyword">int</span> s = workers.size();</span><br><span class="line">                       <span class="keyword">if</span> (s &gt; largestPoolSize)</span><br><span class="line">                           largestPoolSize = s;</span><br><span class="line">                       workerAdded = <span class="keyword">true</span>;</span><br><span class="line">                   }</span><br><span class="line">               } <span class="keyword">finally</span> {</span><br><span class="line">                   <span class="comment">// &#x5904;&#x7406;&#x5B8C;&#x6210;&#x540E;&#x91CA;&#x653E;&#x9501;</span></span><br><span class="line">                   mainLock.unlock();</span><br><span class="line">               }</span><br><span class="line">               <span class="comment">// &#x6DFB;&#x52A0;&#x6210;&#x529F;&#x7EBF;&#x7A0B;</span></span><br><span class="line">               <span class="keyword">if</span> (workerAdded) {</span><br><span class="line">                   t.start();</span><br><span class="line">                   workerStarted = <span class="keyword">true</span>;</span><br><span class="line">               }</span><br><span class="line">           }</span><br><span class="line">       } <span class="keyword">finally</span> {</span><br><span class="line">           <span class="comment">// &#x5982;&#x679C;&#x5904;&#x7406;&#x542F;&#x52A8;&#x5931;&#x8D25;&#x5C31;&#x4F1A;&#x5C06;&#x5931;&#x8D25;&#x7684;&#x7EBF;&#x7A0B;&#x4ECE;worker&#x4E2D;&#x79FB;&#x9664;</span></span><br><span class="line">           <span class="keyword">if</span> (! workerStarted)</span><br><span class="line">               addWorkerFailed(w);</span><br><span class="line">       }</span><br><span class="line">       <span class="keyword">return</span> workerStarted;</span><br><span class="line">   }</span><br></pre></td></tr></tbody></table></figure>
+<p>return false&#x7684;&#x6761;&#x4EF6;&#x5206;&#x6790;</p>
+<hr>
+<p><code>rs &gt;= SHUTDOWN &amp;&amp;! (rs == SHUTDOWN &amp;&amp;firstTask == null &amp;&amp;! workQueue.isEmpty())</code>&#x5982;&#x4F55;&#x6210;&#x7ACB;</p>
+<ol>
+<li>&#x7EBF;&#x7A0B;&#x6C60;&#x81F3;&#x5C11;&#x662F;<code>SHUTDOWN</code>&#x72B6;&#x6001;,<code>rs&gt;=SHUTDOWN</code></li>
+<li><p>&#x4E0B;&#x9762;&#x4E09;&#x4E2A;&#x6761;&#x4EF6;&#x81F3;&#x5C11;&#x6709;&#x4E00;&#x4E2A;&#x662F;&#x4E0D;&#x6210;&#x7ACB;&#x7684;<br> <code>rs == SHUTDOWN &amp;&amp;firstTask == null &amp;&amp;! workQueue.isEmpty()</code></p>
+<ul>
+<li><p><code>rs == SHUTDOWN</code> &#x524D;&#x63D0;&#x6761;&#x4EF6;<code>&#xFF08;rs&gt;=SHUTDOWN&#xFF09;</code>    &#x2013;&gt; false   <code>rs&gt;SHUTDOWN</code><br>&#x200B;    &#x8FD9;&#x79CD;&#x60C5;&#x51B5;&#x662F;&#x7EBF;&#x7A0B;&#x6C60;&#x5DF2;&#x7ECF;&#x5904;&#x4E8E;<code>STOP&#x3001;TYDING&#x3001;TERMINATED</code>&#x72B6;&#x6001;</p>
+</li>
+<li><p><code>firstTask == null</code> &#x524D;&#x63D0;&#x6761;&#x4EF6; <code>rs== SHUTDOWN</code> &#x2013;&gt;false     <code>firstTask!=null</code></p>
+<p>&#x200B;    &#x8FD9;&#x79CD;&#x60C5;&#x51B5;&#x662F;&#x7EBF;&#x7A0B;&#x6C60;&#x5904;&#x4E8E;<code>SHUTDOWN</code>&#x72B6;&#x6001;&#xFF0C;&#x7EBF;&#x7A0B;&#x6C60;&#x5DF2;&#x7ECF;&#x4E0D;&#x63A5;&#x6536;&#x65B0;&#x7684;&#x4EFB;&#x52A1;&#x4E86;</p>
+</li>
+<li><p><code>! workQueue.isEmpty()</code> &#x524D;&#x63D0;&#x6761;&#x4EF6; <code>rs==SHUTDOWN &amp;&amp; firstTask==null</code> &#x2013;&gt;false</p>
+<p>&#x200B;    &#x8FD9;&#x79CD;&#x60C5;&#x51B5;&#x662F;&#x7EBF;&#x7A0B;&#x6C60;&#x5904;&#x4E8E;<code>SHUTDWON</code>&#x72B6;&#x6001;&#xFF0C;&#x5E76;&#x4E14;&#x65B0;&#x6765;&#x7684;&#x4EFB;&#x52A1;&#x4E3A;null&#xFF0C;&#x6CA1;&#x5FC5;&#x8981;&#x65B0;&#x5F00;&#x7EBF;&#x7A0B;</p>
+</li>
+</ul>
+</li>
+</ol>
+<hr>
+<p><strong>&#x672C;&#x65B9;&#x6CD5;&#x7684;&#x51E0;&#x79CD;&#x5F62;&#x5F0F;</strong></p>
+<p>1&#x3001;addWorker(command, true)</p>
+<p> 2&#x3001;addWorker(command, false)</p>
+<p> 3&#x3001;addWorker(null, false)</p>
+<p> 4&#x3001;addWorker(null, true)</p>
+<p> &#x5728;execute&#x65B9;&#x6CD5;&#x4E2D;&#x5C31;&#x4F7F;&#x7528;&#x4E86;&#x524D;3&#x79CD;<br> &#x200B;    &#x7B2C;&#x4E00;&#x4E2A;&#xFF1A;&#x7EBF;&#x7A0B;&#x6570;&#x5C0F;&#x4E8E;corePoolSize&#x65F6;&#xFF0C;&#x653E;&#x4E00;&#x4E2A;&#x9700;&#x8981;&#x5904;&#x7406;&#x7684;task&#x8FDB;Workers Set&#x3002;&#x5982;&#x679C;Workers Set&#x957F;&#x5EA6;&#x8D85;&#x8FC7;corePoolSize&#xFF0C;&#x5C31;&#x8FD4;&#x56DE;false<br> &#x200B;    &#x7B2C;&#x4E8C;&#x4E2A;&#xFF1A;&#x5F53;&#x961F;&#x5217;&#x88AB;&#x653E;&#x6EE1;&#x65F6;&#xFF0C;&#x5C31;&#x5C1D;&#x8BD5;&#x5C06;&#x8FD9;&#x4E2A;&#x65B0;&#x6765;&#x7684;task&#x76F4;&#x63A5;&#x653E;&#x5165;Workers Set&#xFF0C;&#x800C;&#x6B64;&#x65F6;Workers Set&#x7684;&#x957F;&#x5EA6;&#x9650;&#x5236;&#x662F;maximumPoolSize&#x3002;&#x5982;&#x679C;&#x7EBF;&#x7A0B;&#x6C60;&#x4E5F;&#x6EE1;&#x4E86;&#x7684;&#x8BDD;&#x5C31;&#x8FD4;&#x56DE;false<br> &#x200B;    &#x7B2C;&#x4E09;&#x4E2A;&#xFF1A;&#x653E;&#x5165;&#x4E00;&#x4E2A;&#x7A7A;&#x7684;task&#x8FDB;workers Set&#xFF0C;&#x957F;&#x5EA6;&#x9650;&#x5236;&#x662F;maximumPoolSize&#x3002;&#x8FD9;&#x6837;&#x4E00;&#x4E2A;task&#x4E3A;&#x7A7A;&#x7684;worker&#x5728;&#x7EBF;&#x7A0B;&#x6267;&#x884C;&#x7684;&#x65F6;&#x5019;&#x4F1A;&#x53BB;&#x4EFB;&#x52A1;&#x961F;&#x5217;&#x91CC;&#x62FF;&#x4EFB;&#x52A1;&#xFF0C;&#x8FD9;&#x6837;&#x5C31;&#x76F8;&#x5F53;&#x4E8E;&#x521B;&#x5EFA;&#x4E86;&#x4E00;&#x4E2A;&#x65B0;&#x7684;&#x7EBF;&#x7A0B;&#xFF0C;&#x53EA;&#x662F;&#x6CA1;&#x6709;&#x9A6C;&#x4E0A;&#x5206;&#x914D;&#x4EFB;&#x52A1;<br> &#x200B;    &#x7B2C;&#x56DB;&#x4E2A;&#xFF1A;&#x8FD9;&#x4E2A;&#x65B9;&#x6CD5;&#x5C31;&#x662F;&#x653E;&#x4E00;&#x4E2A;null&#x7684;task&#x8FDB;Workers Set&#xFF0C;&#x800C;&#x4E14;&#x662F;&#x5728;&#x5C0F;&#x4E8E;corePoolSize&#x65F6;&#xFF0C;&#x5982;&#x679C;&#x6B64;&#x65F6;Set&#x4E2D;&#x7684;&#x6570;&#x91CF;&#x5DF2;&#x7ECF;&#x8FBE;&#x5230;corePoolSize&#x90A3;&#x5C31;&#x8FD4;&#x56DE;false&#xFF0C;&#x4EC0;&#x4E48;&#x4E5F;&#x4E0D;&#x5E72;&#x3002;&#x5B9E;&#x9645;&#x4F7F;&#x7528;&#x4E2D;&#x662F;&#x5728;prestartAllCoreThreads()&#x65B9;&#x6CD5;&#xFF0C;&#x8FD9;&#x4E2A;&#x65B9;&#x6CD5;&#x7528;&#x6765;&#x4E3A;&#x7EBF;&#x7A0B;&#x6C60;&#x9884;&#x5148;&#x542F;&#x52A8;corePoolSize&#x4E2A;worker&#x7B49;&#x5F85;&#x4ECE;workQueue&#x4E2D;&#x83B7;&#x53D6;&#x4EFB;&#x52A1;&#x6267;&#x884C;</p>
+<h4 id="Worker&#x7C7B;"><a href="#Worker&#x7C7B;" class="headerlink" title="Worker&#x7C7B;"></a>Worker&#x7C7B;</h4><figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Worker&#x7C7B;&#x4E3B;&#x8981;&#x662F;&#x6709;&#x4E24;&#x4E2A;&#x4F5C;&#x7528;&#xFF0C;&#x542F;&#x52A8;&#x7EBF;&#x7A0B;&#x3001;&#x7BA1;&#x7406;&#x7EBF;&#x7A0B;&#x7684;&#x4E2D;&#x65AD;&#x72B6;&#x6001;</span></span><br><span class="line"><span class="comment"> * Worker&#x7C7B;&#x901A;&#x8FC7;&#x7EE7;&#x627F;AQS&#x6765;&#x5B9E;&#x73B0;&#x4E86;&#x4E00;&#x4E2A;&#x4E0D;&#x53EF;&#x91CD;&#x5165;&#x7684;&#x9501;&#xFF0C;&#x4E3A;&#x4E86;&#x786E;&#x4FDD;Worker&#x5728;&#x6267;&#x884C;&#x540E;&#x5728;&#x88AB;&#x4E2D;&#x65AD;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">Worker</span></span></span><br><span class="line"><span class="class">    <span class="keyword">extends</span> <span class="title">AbstractQueuedSynchronizer</span></span></span><br><span class="line"><span class="class">    <span class="keyword">implements</span> <span class="title">Runnable</span></span></span><br><span class="line"><span class="class"></span>{</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> serialVersionUID = <span class="number">6138294804551838833L</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">final</span> Thread thread;</span><br><span class="line">    Runnable firstTask;</span><br><span class="line">    <span class="comment">// &#x4E4B;&#x524D;&#x5B8C;&#x6210;&#x7684;Task&#x6570;&#x91CF;</span></span><br><span class="line">    <span class="keyword">volatile</span> <span class="keyword">long</span> completedTasks;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// &#x6784;&#x9020;&#x65B9;&#x6CD5;&#xFF0C;&#x91CD;&#x70B9;&#x662F;&#x5C06;state&#x8BBE;&#x7F6E;&#x4E3A;-1&#xFF0C;&#x907F;&#x514D;&#x4E86;&#x5728;runWorker&#x6267;&#x884C;&#x4E4B;&#x524D;&#x7EBF;&#x7A0B;&#x88AB;interrupt</span></span><br><span class="line">    Worker(Runnable firstTask) {</span><br><span class="line">        setState(-<span class="number">1</span>); <span class="comment">// inhibit interrupts until runWorker</span></span><br><span class="line">        <span class="keyword">this</span>.firstTask = firstTask;</span><br><span class="line">        <span class="keyword">this</span>.thread = getThreadFactory().newThread(<span class="keyword">this</span>);</span><br><span class="line">    }</span><br><span class="line">    <span class="comment">// &#x542F;&#x52A8;&#x7EBF;&#x7A0B;&#x6267;&#x884C;&#x4EFB;&#x52A1;&#x4F7F;&#x7528;</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>{</span><br><span class="line">        runWorker(<span class="keyword">this</span>);</span><br><span class="line">    }</span><br><span class="line">	<span class="comment">// &#x662F;&#x5426;&#x6301;&#x6709;&#x72EC;&#x5360;&#x9501;&#xFF0C;&#x5982;&#x679C;state=0&#x662F;&#x672A;&#x52A0;&#x9501;&#x72B6;&#x6001;&#xFF0C;&#x5176;&#x4ED6;&#x4E3A;&#x52A0;&#x9501;&#x72B6;&#x6001;</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">boolean</span> <span class="title">isHeldExclusively</span><span class="params">()</span> </span>{</span><br><span class="line">        <span class="keyword">return</span> getState() != <span class="number">0</span>;</span><br><span class="line">    }</span><br><span class="line">	<span class="comment">// &#x5C1D;&#x8BD5;&#x83B7;&#x53D6;&#x9501;&#xFF0C;&#x662F;&#x5BF9;AQS&#x4E2D;&#x7684;&#x65B9;&#x6CD5;&#x7684;&#x5B9E;&#x73B0;,&#x8FD9;&#x91CC;&#x5728;&#x83B7;&#x53D6;&#x9501;&#x65F6;&#x4E0E;0&#x5BF9;&#x6BD4;&#xFF0C;&#x6240;&#x4EE5;&#x5728;runWorker&#x4E4B;&#x524D;&#x662F;&#x65E0;&#x6CD5;&#x83B7;&#x53D6;&#x9501;&#x7684;</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">boolean</span> <span class="title">tryAcquire</span><span class="params">(<span class="keyword">int</span> unused)</span> </span>{</span><br><span class="line">        <span class="keyword">if</span> (compareAndSetState(<span class="number">0</span>, <span class="number">1</span>)) {</span><br><span class="line">            setExclusiveOwnerThread(Thread.currentThread());</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    }</span><br><span class="line">	<span class="comment">// &#x5C1D;&#x8BD5;&#x91CA;&#x653E;&#x9501;&#xFF0C;&#x5BF9;AQS&#x4E2D;&#x65B9;&#x6CD5;&#x7684;&#x5B9E;&#x73B0;</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">boolean</span> <span class="title">tryRelease</span><span class="params">(<span class="keyword">int</span> unused)</span> </span>{</span><br><span class="line">        setExclusiveOwnerThread(<span class="keyword">null</span>);</span><br><span class="line">        setState(<span class="number">0</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">lock</span><span class="params">()</span>        </span>{ acquire(<span class="number">1</span>); }</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">tryLock</span><span class="params">()</span>  </span>{ <span class="keyword">return</span> tryAcquire(<span class="number">1</span>); }</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">unlock</span><span class="params">()</span>      </span>{ release(<span class="number">1</span>); }</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isLocked</span><span class="params">()</span> </span>{ <span class="keyword">return</span> isHeldExclusively(); }</span><br><span class="line">	<span class="comment">// &#x8FD9;&#x91CC;&#x5C31;&#x80FD;&#x770B;&#x51FA;&#x5728;state=-1&#x7684;&#x72B6;&#x6001;&#x662F;&#x4E0D;&#x80FD;interrput,&#x53EA;&#x6709;&#x8C03;&#x7528;runWorker&#x65B9;&#x6CD5;&#x540E;&#x4F1A;&#x5C06;&#x72B6;&#x6001;&#x7F6E;&#x4E3A;1</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">interruptIfStarted</span><span class="params">()</span> </span>{</span><br><span class="line">        Thread t;</span><br><span class="line">        <span class="keyword">if</span> (getState() &gt;= <span class="number">0</span> &amp;&amp; (t = thread) != <span class="keyword">null</span> &amp;&amp; !t.isInterrupted()) {</span><br><span class="line">            <span class="keyword">try</span> {</span><br><span class="line">                t.interrupt();</span><br><span class="line">            } <span class="keyword">catch</span> (SecurityException ignore) {</span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<p>&#x4E4B;&#x6240;&#x4EE5;&#x8981;&#x5728;Runnable&#x5916;&#x9762;&#x5305;&#x4E00;&#x5C42;Worker&#x662F;&#x4E3A;&#x4E86;&#x901A;&#x8FC7;Worker&#x6765;&#x63A7;&#x5236;&#x4E2D;&#x65AD;&#xFF0C;&#x800C;Runnable&#x53EA;&#x9700;&#x8981;&#x6267;&#x884C;&#x4E1A;&#x52A1;&#x903B;&#x8F91;&#x5C31;&#x53EF;&#x4EE5;&#x4E86;&#x3002;</p>
+<font color="red">&#x8FD9;&#x91CC;&#x6211;&#x4E5F;&#x6709;&#x4E00;&#x7591;&#x95EE;&#xFF0C;&#x4E3A;&#x4EC0;&#x4E48;&#x4E0D;&#x5141;&#x8BB8;Worker&#x5728;runWorker&#x524D;&#x5C31;&#x88AB;&#x4E2D;&#x6B62;&#x5462;&#xFF1F;&#x4E3A;&#x4EC0;&#x4E48;&#x5462;&#xFF1F;</font>
+
+<h4 id="runWorker&#x65B9;&#x6CD5;"><a href="#runWorker&#x65B9;&#x6CD5;" class="headerlink" title="runWorker&#x65B9;&#x6CD5;"></a>runWorker&#x65B9;&#x6CD5;</h4><figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">final</span> <span class="keyword">void</span> <span class="title">runWorker</span><span class="params">(Worker w)</span> </span>{</span><br><span class="line">    Thread wt = Thread.currentThread();</span><br><span class="line">    Runnable task = w.firstTask;</span><br><span class="line">    w.firstTask = <span class="keyword">null</span>;</span><br><span class="line">    w.unlock(); <span class="comment">// allow interrupts</span></span><br><span class="line">    <span class="keyword">boolean</span> completedAbruptly = <span class="keyword">true</span>;</span><br><span class="line">    <span class="keyword">try</span> {</span><br><span class="line">        <span class="keyword">while</span> (task != <span class="keyword">null</span> || (task = getTask()) != <span class="keyword">null</span>) {</span><br><span class="line">            w.lock();</span><br><span class="line">            <span class="comment">// &#x786E;&#x4FDD;&#x7EBF;&#x7A0B;&#x5728;stopping&#x65F6;&#x88AB;&#x8BBE;&#x7F6E;&#x4E2D;&#x65AD;&#x6807;&#x5FD7;&#xFF0C;&#x5426;&#x5219;&#x6E05;&#x9664;&#x4E2D;&#x65AD;&#x6807;&#x5FD7;</span></span><br><span class="line">            <span class="comment">// 1.&#x5982;&#x679C;&#x7EBF;&#x7A0B;&#x6C60;&#x5904;&#x4E8E;STOP&#x72B6;&#x6001;&#xFF0C;&#x5E76;&#x4E14;&#x5F53;&#x524D;&#x7EBF;&#x7A0B;&#x5E76;&#x4E0D;&#x662F;&#x4E2D;&#x65AD;&#x72B6;&#x6001;&#xFF0C;&#x8C03;&#x7528;wt.interrupt&#x786E;&#x4FDD;&#x7EBF;&#x7A0B;&#x4E2D;&#x65AD;</span></span><br><span class="line">            <span class="comment">// 2.&#x5982;&#x679C;&#x7EBF;&#x7A0B;&#x6C60;&#x4E0D;&#x662F;STOP&#x72B6;&#x6001;&#xFF0C;&#x4F46;Thread.interrupted()&#x8FD4;&#x56DE;&#x662F;true</span></span><br><span class="line">            <span class="comment">// [&#x8868;&#x793A;&#x5F53;&#x524D;&#x7EBF;&#x7A0B;&#x662F;&#x4E2D;&#x65AD;&#x72B6;&#x6001;&#xFF0C;&#x5E76;&#x4E14;&#x6E05;&#x9664;&#x4E86;&#x4E2D;&#x65AD;&#x6807;&#x5FD7;] &#x7136;&#x540E;&#x518D;&#x6B21;&#x5224;&#x65AD;&#x7EBF;&#x7A0B;&#x6C60;&#x72B6;&#x6001;&#x662F;&#x5426;&#x662F;STOP&#x72B6;&#x6001;</span></span><br><span class="line">            <span class="comment">// &#x5982;&#x679C;&#x662F;&#x5C31;&#x518D;&#x6B21;&#x8C03;&#x7528;wt.interrupt&#x786E;&#x4FDD;&#x7EBF;&#x7A0B;&#x4E2D;&#x65AD;</span></span><br><span class="line">            <span class="keyword">if</span> ((runStateAtLeast(ctl.get(), STOP) ||</span><br><span class="line">                 (Thread.interrupted() &amp;&amp;</span><br><span class="line">                  runStateAtLeast(ctl.get(), STOP))) &amp;&amp;</span><br><span class="line">                !wt.isInterrupted())</span><br><span class="line">                wt.interrupt();</span><br><span class="line">            <span class="keyword">try</span> {</span><br><span class="line">                <span class="comment">// &#x672C;&#x7C7B;&#x4E2D;&#x662F;&#x7A7A;&#x5B9E;&#x73B0;&#xFF0C;&#x5B50;&#x7C7B;&#x6709;&#x9700;&#x8981;&#x53EF;&#x4F9D;&#x636E;&#x60C5;&#x51B5;&#x5B9E;&#x73B0;&#xFF0C;Tomcat&#x4E2D;&#x7684;&#x7EBF;&#x7A0B;&#x6C60;&#x5C31;&#x91CD;&#x5199;&#x4E86;&#x8BE5;&#x65B9;&#x6CD5;</span></span><br><span class="line">                beforeExecute(wt, task);</span><br><span class="line">                Throwable thrown = <span class="keyword">null</span>;</span><br><span class="line">                <span class="keyword">try</span> {</span><br><span class="line">                    <span class="comment">// &#x6267;&#x884C;&#x4EFB;&#x52A1;</span></span><br><span class="line">                    task.run();</span><br><span class="line">                } <span class="keyword">catch</span> (RuntimeException x) {</span><br><span class="line">                    thrown = x; <span class="keyword">throw</span> x;</span><br><span class="line">                } <span class="keyword">catch</span> (Error x) {</span><br><span class="line">                    thrown = x; <span class="keyword">throw</span> x;</span><br><span class="line">                } <span class="keyword">catch</span> (Throwable x) {</span><br><span class="line">                    thrown = x; <span class="keyword">throw</span> <span class="keyword">new</span> Error(x);</span><br><span class="line">                } <span class="keyword">finally</span> {</span><br><span class="line">                    afterExecute(task, thrown);</span><br><span class="line">                }</span><br><span class="line">            } <span class="keyword">finally</span> {</span><br><span class="line">                task = <span class="keyword">null</span>;</span><br><span class="line">                <span class="comment">// &#x5B8C;&#x6210;&#x4EFB;&#x52A1;+1</span></span><br><span class="line">                w.completedTasks++;</span><br><span class="line">                <span class="comment">// &#x91CA;&#x653E;&#x9501;</span></span><br><span class="line">                w.unlock();</span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line">        completedAbruptly = <span class="keyword">false</span>;</span><br><span class="line">    } <span class="keyword">finally</span> {</span><br><span class="line">        processWorkerExit(w, completedAbruptly);</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<p>&#x672C;&#x65B9;&#x6CD5;&#x5148;&#x662F;&#x4F7F;&#x7EBF;&#x7A0B;&#x8FDB;&#x5165;&#x6267;&#x884C;&#x72B6;&#x6001;&#xFF0C;&#x5E76;&#x4E14;&#x53EF;&#x4EE5;&#x8FDB;&#x884C;&#x4E2D;&#x65AD;&#xFF0C;&#x7136;&#x540E;&#x5FAA;&#x73AF;&#x6267;&#x884C;&#x4EFB;&#x52A1;&#xFF0C;&#x76F4;&#x5230;getTask()&#x83B7;&#x53D6;&#x4E0D;&#x5230;&#x4EFB;&#x52A1;&#x5219;&#x8FDB;&#x884C;&#x9000;&#x51FA;&#x3002;</p>
+<h4 id="getTask&#x65B9;&#x6CD5;"><a href="#getTask&#x65B9;&#x6CD5;" class="headerlink" title="getTask&#x65B9;&#x6CD5;"></a>getTask&#x65B9;&#x6CD5;</h4><figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> Runnable <span class="title">getTask</span><span class="params">()</span> </span>{</span><br><span class="line">    <span class="keyword">boolean</span> timedOut = <span class="keyword">false</span>; <span class="comment">// Did the last poll() time out?</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (;;) {</span><br><span class="line">        <span class="keyword">int</span> c = ctl.get();</span><br><span class="line">        <span class="keyword">int</span> rs = runStateOf(c);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// &#x4E24;&#x79CD;&#x53EF;&#x80FD;&#x51CF;&#x5C11;&#x5DE5;&#x4F5C;&#x7EBF;&#x7A0B;&#x7684;&#x6570;&#x91CF;</span></span><br><span class="line">        <span class="comment">// 1.&#x7EBF;&#x7A0B;&#x6C60;&#x5904;&#x4E8E;STOP&#x4EE5;&#x4E0A;&#x7684;&#x72B6;&#x6001;</span></span><br><span class="line">        <span class="comment">// 2.&#x7EBF;&#x7A0B;&#x6C60;&#x5904;&#x4E8E;SHUTDOWN&#x72B6;&#x6001;&#xFF0C;&#x4F46;&#x65F6;&#x963B;&#x585E;&#x961F;&#x5217;&#x4E3A;&#x7A7A;</span></span><br><span class="line">        <span class="keyword">if</span> (rs &gt;= SHUTDOWN &amp;&amp; (rs &gt;= STOP || workQueue.isEmpty())) {</span><br><span class="line">            decrementWorkerCount();</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        }</span><br><span class="line"></span><br><span class="line">        <span class="keyword">int</span> wc = workerCountOf(c);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// allowCoreThreadTimeOut&#x9ED8;&#x8BA4;&#x4E3A;false</span></span><br><span class="line">        <span class="comment">// &#x5982;&#x679C;allowCoreThreadTimeOut&#x4E3A;true&#xFF0C;&#x8BF4;&#x660E;&#x540E;&#x9762;&#x7684;&#x6267;&#x884C;&#x7684;&#x4EFB;&#x52A1;&#x4E00;&#x5B9A;&#x8981;&#x9700;&#x8981;&#x5B9A;&#x65F6;</span></span><br><span class="line">        <span class="comment">// &#x6D3B;&#x8DC3;&#x7EBF;&#x7A0B;&#x6570;&#x91CF;&#x662F;&#x5426;&#x5DF2;&#x7ECF;&#x5927;&#x4E8E;corePoolSize&#xFF0C;&#x4E5F;&#x9700;&#x8981;&#x5B9A;&#x65F6;</span></span><br><span class="line">        <span class="keyword">boolean</span> timed = allowCoreThreadTimeOut || wc &gt; corePoolSize;</span><br><span class="line">		<span class="comment">// 1. &#x6D3B;&#x8DC3;&#x7EBF;&#x7A0B;&gt;&#x7EBF;&#x7A0B;&#x6C60;&#x6700;&#x5927;&#x7EBF;&#x7A0B;&#x7684;&#x60C5;&#x51B5;&#x4E0B;</span></span><br><span class="line">        <span class="comment">//    &#x6216;&#x8005;&#x4E0A;&#x4E00;&#x6B21;&#x63D0;&#x4EA4;&#x4EFB;&#x52A1;&#x8D85;&#x65F6;&#x5E76;&#x4E14;timed&#x4E3A;true&#x65F6;</span></span><br><span class="line">        <span class="comment">// 2. wc&gt;1&#x6216;&#x963B;&#x585E;&#x961F;&#x5217;&#x4E3A;&#x7A7A;&#xFF0C;&#x51CF;&#x5C11;&#x7EBF;&#x7A0B;&#xFF0C;&#x8FD4;&#x56DE;null</span></span><br><span class="line">        <span class="keyword">if</span> ((wc &gt; maximumPoolSize || (timed &amp;&amp; timedOut))</span><br><span class="line">            &amp;&amp; (wc &gt; <span class="number">1</span> || workQueue.isEmpty())) {</span><br><span class="line">            <span class="keyword">if</span> (compareAndDecrementWorkerCount(c))</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">            <span class="comment">// &#x51CF;&#x5C11;&#x7EBF;&#x7A0B;&#x5931;&#x8D25;</span></span><br><span class="line">            <span class="keyword">continue</span>;</span><br><span class="line">        }</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span> {</span><br><span class="line">            <span class="comment">// &#x83B7;&#x53D6;&#x963B;&#x585E;&#x961F;&#x5217;&#x4E2D;&#x7684;&#x4EFB;&#x52A1;</span></span><br><span class="line">            Runnable r = timed ?</span><br><span class="line">                workQueue.poll(keepAliveTime, TimeUnit.NANOSECONDS) :</span><br><span class="line">                workQueue.take();</span><br><span class="line">            <span class="keyword">if</span> (r != <span class="keyword">null</span>)</span><br><span class="line">                <span class="keyword">return</span> r;</span><br><span class="line">            timedOut = <span class="keyword">true</span>;</span><br><span class="line">        } <span class="keyword">catch</span> (InterruptedException retry) {</span><br><span class="line">            timedOut = <span class="keyword">false</span>;</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<p>&#x672C;&#x65B9;&#x6CD5;&#x4E3B;&#x8981;&#x662F;&#x4ECE;&#x963B;&#x585E;&#x961F;&#x5217;&#x4E2D;&#x83B7;&#x53D6;&#x4EFB;&#x52A1;&#xFF0C;&#x5728;&#x4EE5;&#x4E0B;&#x72B6;&#x6001;&#x65F6;&#x4F1A;&#x8FD4;&#x56DE;null:</p>
+<ol>
+<li>&#x8D85;&#x8FC7;&#x4E86;maximumPoolSize&#x8BBE;&#x7F6E;&#x7684;&#x7EBF;&#x7A0B;&#x6570;&#x91CF;;</li>
+<li>&#x7EBF;&#x7A0B;&#x6C60;&#x88AB;stop</li>
+<li>&#x7EBF;&#x7A0B;&#x6C60;&#x88AB;shutdown&#xFF0C;&#x5E76;&#x4E14;workQueue&#x7A7A;&#x4E86;</li>
+<li>&#x7EBF;&#x7A0B;&#x7B49;&#x5F85;&#x4EFB;&#x52A1;&#x8D85;&#x65F6;</li>
+</ol>
+<h4 id="processWorkerExit"><a href="#processWorkerExit" class="headerlink" title="processWorkerExit"></a>processWorkerExit</h4><figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">processWorkerExit</span><span class="params">(Worker w, <span class="keyword">boolean</span> completedAbruptly)</span> </span>{</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 1&#x3001;worker&#x6570;&#x91CF;-1</span></span><br><span class="line"><span class="comment">     * &#x5982;&#x679C;&#x662F;&#x7A81;&#x7136;&#x7EC8;&#x6B62;&#xFF0C;&#x8BF4;&#x660E;&#x662F;task&#x6267;&#x884C;&#x65F6;&#x5F02;&#x5E38;&#x60C5;&#x51B5;&#x5BFC;&#x81F4;</span></span><br><span class="line"><span class="comment">     * &#x5373;run()&#x65B9;&#x6CD5;&#x6267;&#x884C;&#x65F6;&#x53D1;&#x751F;&#x4E86;&#x5F02;&#x5E38;&#xFF0C;&#x90A3;&#x4E48;&#x6B63;&#x5728;&#x5DE5;&#x4F5C;&#x7684;worker&#x7EBF;&#x7A0B;&#x6570;&#x91CF;&#x9700;&#x8981;-1</span></span><br><span class="line"><span class="comment">     * &#x5982;&#x679C;&#x4E0D;&#x662F;&#x7A81;&#x7136;&#x7EC8;&#x6B62;&#xFF0C;&#x8BF4;&#x660E;&#x662F;worker&#x7EBF;&#x7A0B;&#x6CA1;&#x6709;task&#x53EF;&#x6267;&#x884C;&#x4E86;</span></span><br><span class="line"><span class="comment">     * &#x4E0D;&#x7528;-1&#xFF0C;&#x56E0;&#x4E3A;&#x5DF2;&#x7ECF;&#x5728;getTask()&#x65B9;&#x6CD5;&#x4E2D;-1&#x4E86;</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">if</span> (completedAbruptly) </span><br><span class="line">        decrementWorkerCount();</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 2&#x3001;&#x4ECE;Workers Set&#x4E2D;&#x79FB;&#x9664;worker</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">final</span> ReentrantLock mainLock = <span class="keyword">this</span>.mainLock;</span><br><span class="line">    mainLock.lock();</span><br><span class="line">    <span class="keyword">try</span> {</span><br><span class="line">        completedTaskCount += w.completedTasks; <span class="comment">//&#x628A;worker&#x7684;&#x5B8C;&#x6210;&#x4EFB;&#x52A1;&#x6570;&#x52A0;&#x5230;&#x7EBF;&#x7A0B;&#x6C60;&#x7684;&#x5B8C;&#x6210;&#x4EFB;&#x52A1;&#x6570;</span></span><br><span class="line">        workers.remove(w); <span class="comment">//&#x4ECE;HashSet&lt;Worker&gt;&#x4E2D;&#x79FB;&#x9664;</span></span><br><span class="line">    } <span class="keyword">finally</span> {</span><br><span class="line">        mainLock.unlock();</span><br><span class="line">    }</span><br><span class="line"> </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 3&#x3001;&#x5728;&#x5BF9;&#x7EBF;&#x7A0B;&#x6C60;&#x6709;&#x8D1F;&#x6548;&#x76CA;&#x7684;&#x64CD;&#x4F5C;&#x65F6;&#xFF0C;&#x90FD;&#x9700;&#x8981;&#x201C;&#x5C1D;&#x8BD5;&#x7EC8;&#x6B62;&#x201D;&#x7EBF;&#x7A0B;&#x6C60;</span></span><br><span class="line"><span class="comment">     * &#x4E3B;&#x8981;&#x662F;&#x5224;&#x65AD;&#x7EBF;&#x7A0B;&#x6C60;&#x662F;&#x5426;&#x6EE1;&#x8DB3;&#x7EC8;&#x6B62;&#x7684;&#x72B6;&#x6001;</span></span><br><span class="line"><span class="comment">     * &#x5982;&#x679C;&#x72B6;&#x6001;&#x6EE1;&#x8DB3;&#xFF0C;&#x4F46;&#x8FD8;&#x6709;&#x7EBF;&#x7A0B;&#x6C60;&#x8FD8;&#x6709;&#x7EBF;&#x7A0B;&#xFF0C;&#x5C1D;&#x8BD5;&#x5BF9;&#x5176;&#x53D1;&#x51FA;&#x4E2D;&#x65AD;&#x54CD;&#x5E94;&#xFF0C;&#x4F7F;&#x5176;&#x80FD;&#x8FDB;&#x5165;&#x9000;&#x51FA;&#x6D41;&#x7A0B;</span></span><br><span class="line"><span class="comment">     * &#x6CA1;&#x6709;&#x7EBF;&#x7A0B;&#x4E86;&#xFF0C;&#x66F4;&#x65B0;&#x72B6;&#x6001;&#x4E3A;tidying-&gt;terminated</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    tryTerminate();</span><br><span class="line"> </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 4&#x3001;&#x662F;&#x5426;&#x9700;&#x8981;&#x589E;&#x52A0;worker&#x7EBF;&#x7A0B;</span></span><br><span class="line"><span class="comment">     * &#x7EBF;&#x7A0B;&#x6C60;&#x72B6;&#x6001;&#x662F;running &#x6216; shutdown</span></span><br><span class="line"><span class="comment">     * &#x5982;&#x679C;&#x5F53;&#x524D;&#x7EBF;&#x7A0B;&#x662F;&#x7A81;&#x7136;&#x7EC8;&#x6B62;&#x7684;&#xFF0C;addWorker()</span></span><br><span class="line"><span class="comment">     * &#x5982;&#x679C;&#x5F53;&#x524D;&#x7EBF;&#x7A0B;&#x4E0D;&#x662F;&#x7A81;&#x7136;&#x7EC8;&#x6B62;&#x7684;&#xFF0C;&#x4F46;&#x5F53;&#x524D;&#x7EBF;&#x7A0B;&#x6570;&#x91CF; &lt; &#x8981;&#x7EF4;&#x62A4;&#x7684;&#x7EBF;&#x7A0B;&#x6570;&#x91CF;&#xFF0C;addWorker()</span></span><br><span class="line"><span class="comment">     * &#x6545;&#x5982;&#x679C;&#x8C03;&#x7528;&#x7EBF;&#x7A0B;&#x6C60;shutdown()&#xFF0C;&#x76F4;&#x5230;workQueue&#x4E3A;&#x7A7A;&#x524D;&#xFF0C;</span></span><br><span class="line"><span class="comment">     * &#x7EBF;&#x7A0B;&#x6C60;&#x90FD;&#x4F1A;&#x7EF4;&#x6301;corePoolSize&#x4E2A;&#x7EBF;&#x7A0B;&#xFF0C;&#x7136;&#x540E;&#x518D;&#x9010;&#x6E10;&#x9500;&#x6BC1;&#x8FD9;corePoolSize&#x4E2A;&#x7EBF;&#x7A0B;</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">int</span> c = ctl.get();</span><br><span class="line">    <span class="comment">// &#x5982;&#x679C;&#x72B6;&#x6001;&#x662F;running&#x3001;shutdown</span></span><br><span class="line">    <span class="comment">// &#x5373;tryTerminate()&#x6CA1;&#x6709;&#x6210;&#x529F;&#x7EC8;&#x6B62;&#x7EBF;&#x7A0B;&#x6C60;&#xFF0C;&#x5C1D;&#x8BD5;&#x518D;&#x6DFB;&#x52A0;&#x4E00;&#x4E2A;worker</span></span><br><span class="line">    <span class="keyword">if</span> (runStateLessThan(c, STOP)) {</span><br><span class="line">        <span class="comment">// &#x4E0D;&#x662F;&#x7A81;&#x7136;&#x5B8C;&#x6210;&#x7684;&#xFF0C;&#x5373;&#x6CA1;&#x6709;task&#x4EFB;&#x52A1;&#x53EF;&#x4EE5;&#x83B7;&#x53D6;&#x800C;&#x5B8C;&#x6210;&#x7684;&#xFF0C;</span></span><br><span class="line">        <span class="comment">// &#x8BA1;&#x7B97;min&#xFF0C;&#x5E76;&#x6839;&#x636E;&#x5F53;&#x524D;worker&#x6570;&#x91CF;&#x5224;&#x65AD;&#x662F;&#x5426;&#x9700;&#x8981;addWorker()</span></span><br><span class="line">        <span class="keyword">if</span> (!completedAbruptly) {</span><br><span class="line">            <span class="comment">//allowCoreThreadTimeOut&#x9ED8;&#x8BA4;&#x4E3A;false&#xFF0C;&#x5373;min&#x9ED8;&#x8BA4;&#x4E3A;corePoolSize</span></span><br><span class="line">            <span class="keyword">int</span> min = allowCoreThreadTimeOut ? <span class="number">0</span> : corePoolSize; </span><br><span class="line">            </span><br><span class="line">             </span><br><span class="line">            <span class="comment">//&#x5982;&#x679C;min&#x4E3A;0&#xFF0C;&#x5373;&#x4E0D;&#x9700;&#x8981;&#x7EF4;&#x6301;&#x6838;&#x5FC3;&#x7EBF;&#x7A0B;&#x6570;&#x91CF;&#xFF0C;&#x4E14;workQueue&#x4E0D;&#x4E3A;&#x7A7A;&#xFF0C;&#x81F3;&#x5C11;&#x4FDD;&#x6301;&#x4E00;&#x4E2A;&#x7EBF;&#x7A0B;</span></span><br><span class="line">            <span class="keyword">if</span> (min == <span class="number">0</span> &amp;&amp; ! workQueue.isEmpty())</span><br><span class="line">                min = <span class="number">1</span>;</span><br><span class="line">             </span><br><span class="line">            <span class="comment">//&#x5982;&#x679C;&#x7EBF;&#x7A0B;&#x6570;&#x91CF;&#x5927;&#x4E8E;&#x6700;&#x5C11;&#x6570;&#x91CF;&#xFF0C;&#x76F4;&#x63A5;&#x8FD4;&#x56DE;&#xFF0C;&#x5426;&#x5219;&#x4E0B;&#x9762;&#x81F3;&#x5C11;&#x8981;addWorker&#x4E00;&#x4E2A;</span></span><br><span class="line">            <span class="keyword">if</span> (workerCountOf(c) &gt;= min)</span><br><span class="line">                <span class="keyword">return</span>; <span class="comment">// replacement not needed</span></span><br><span class="line">        }</span><br><span class="line">         </span><br><span class="line">        <span class="comment">// &#x6DFB;&#x52A0;&#x4E00;&#x4E2A;&#x6CA1;&#x6709;firstTask&#x7684;worker</span></span><br><span class="line">        <span class="comment">// &#x53EA;&#x8981;worker&#x662F;completedAbruptly&#x7A81;&#x7136;&#x7EC8;&#x6B62;&#x7684;</span></span><br><span class="line">        <span class="comment">// &#x6216;&#x8005;&#x7EBF;&#x7A0B;&#x6570;&#x91CF;&#x5C0F;&#x4E8E;&#x8981;&#x7EF4;&#x62A4;&#x7684;&#x6570;&#x91CF;&#xFF0C;&#x5C31;&#x65B0;&#x6DFB;&#x4E00;&#x4E2A;worker&#x7EBF;&#x7A0B;&#xFF0C;&#x5373;&#x4F7F;&#x662F;shutdown&#x72B6;&#x6001;</span></span><br><span class="line">        addWorker(<span class="keyword">null</span>, <span class="keyword">false</span>);</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<h2 id="&#x4E09;&#x3001;&#x603B;&#x7ED3;"><a href="#&#x4E09;&#x3001;&#x603B;&#x7ED3;" class="headerlink" title="&#x4E09;&#x3001;&#x603B;&#x7ED3;"></a>&#x4E09;&#x3001;&#x603B;&#x7ED3;</h2><p>&#x7EBF;&#x7A0B;&#x6C60;&#x9700;&#x8981;&#x8BF4;&#x7684;&#x4E1C;&#x897F;&#x5F88;&#x591A;&#xFF0C;&#x672C;&#x6587;&#x5206;&#x4E3A;&#x4E24;&#x4E2A;&#x90E8;&#x5206;&#xFF0C;&#x7B2C;&#x4E00;&#x90E8;&#x5206;&#x662F;&#x63CF;&#x8FF0;&#x7EBF;&#x7A0B;&#x6C60;&#x7684;&#x7EE7;&#x627F;&#x5173;&#x7CFB;&#xFF0C;&#x7B2C;&#x4E8C;&#x90E8;&#x5206;ThreadPoolExecutor&#x6E90;&#x7801;&#x5206;&#x6790;&#xFF0C;&#x539F;&#x7406;&#x4E0A;&#x7EBF;&#x7A0B;&#x6C60;&#x5E76;&#x6CA1;&#x6709;&#x50CF;HashMap&#x6E90;&#x7801;&#x90A3;&#x4E48;&#x590D;&#x6742;&#xFF0C;&#x91CD;&#x8981;&#x7684;&#x662F;&#x5728;&#x65B9;&#x6CD5;&#x4E2D;&#x4E0D;&#x65AD;&#x7684;&#x8FDB;&#x884C;&#x5224;&#x65AD;&#x7EBF;&#x6C60;&#x72B6;&#x6001;&#x5BB9;&#x6613;&#x8BA9;&#x4EBA;&#x4EA7;&#x751F;&#x7591;&#x60D1;&#xFF0C;&#x672C;&#x6587;&#x6839;&#x636E;&#x60C5;&#x51B5;&#x9009;&#x62E9;&#x9700;&#x8981;&#x7684;&#x9605;&#x8BFB;&#x90E8;&#x5206;~</p>
+<hr>
+<p>&#x53C2;&#x8003;&#x8D44;&#x6599;&#xFF1A;</p>
+<ol>
+<li><a href="https://www.cnblogs.com/keeya/p/9361316.html" target="_blank" rel="noopener">&#x5403;&#x900F;&#x7EBF;&#x7A0B;&#x6C60;&#x6E90;&#x7801;</a></li>
+<li><a href="https://www.cnblogs.com/qingquanzi/p/8146638.html" target="_blank" rel="noopener">&#x7EBF;&#x7A0B;&#x6C60;&#x7684;&#x5DE5;&#x4F5C;&#x539F;&#x7406;&#x4E0E;&#x6E90;&#x7801;&#x89E3;&#x8BFB;</a></li>
+<li><a href="https://www.cnblogs.com/trust-freedom/p/6594270.html" target="_blank" rel="noopener">Java&#x7EBF;&#x7A0B;&#x6C60;ThreadPoolExecutor&#x4F7F;&#x7528;&#x548C;&#x5206;&#x6790;(&#x4E00;)</a></li>
+</ol>
+<p><em>&#x6CE8;&#xFF1A;&#x8FD9;&#x91CC;&#x5F3A;&#x70C8;&#x63A8;&#x8350;&#x53C2;&#x8003;&#x8D44;&#x6599;3&#xFF0C;&#x975E;&#x5E38;&#x5B8C;&#x6210;&#x7684;&#x7EBF;&#x7A0B;&#x6C60;&#x5206;&#x6790;</em></p>
+<script>
+        document.querySelectorAll('.github-emoji')
+          .forEach(el => {
+            if (!el.dataset.src) { return; }
+            const img = document.createElement('img');
+            img.style = 'display:none !important;';
+            img.src = el.dataset.src;
+            img.addEventListener('error', () => {
+              img.remove();
+              el.style.color = 'inherit';
+              el.style.backgroundImage = 'none';
+              el.style.background = 'none';
+            });
+            img.addEventListener('load', () => {
+              img.remove();
+            });
+            document.body.appendChild(img);
+          });
+      </script>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java多线程/" rel="tag"># java多线程</a>
+          
+        </div>
+      
+
+      
+      
+        <div class="post-widgets">
+        
+          <div class="wp_rating">
+            <div id="wpac-rating"></div>
+          </div>
+        
+
+        
+
+        
+        </div>
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/03/23/distributed_system02/" rel="next" title="分布式系统——Paxos算法推导">
+                <i class="fa fa-chevron-left"></i> 分布式系统——Paxos算法推导
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+      <div id="sidebar-dimmer"></div>
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/uploads/avatar.png" alt="cdream">
+            
+              <p class="site-author-name" itemprop="name">cdream</p>
+              <p class="site-description motion-element" itemprop="description">屠龙勇士、持剑少年、中二病晚期</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">22</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                一些有趣的地方
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://www.cnblogs.com/cdream-zs/" title="💜❤️🧡 博客园 🧡❤️💜" target="_blank">💜❤️🧡 博客园 🧡❤️💜</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://music.163.com/#/playlist?id=2605896400" title="他说，我要成为一个很厉害的人！" target="_blank">他说，我要成为一个很厉害的人！</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://www.bilibili.com/video/av41032763/" title="Something Just Like This" target="_blank">Something Just Like This</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一、线程池的继承关系及接口方法"><span class="nav-number">1.</span> <span class="nav-text">一、线程池的继承关系及接口方法</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Executor：是最基础的执行接口；"><span class="nav-number">1.0.0.1.</span> <span class="nav-text">Executor：是最基础的执行接口；</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#ExecutorService：继承了Executor，并提供了shutdown-、submit-等方法，可以说是真正的线程池接口；"><span class="nav-number">1.0.0.2.</span> <span class="nav-text">ExecutorService：继承了Executor，并提供了shutdown()、submit()等方法，可以说是真正的线程池接口；</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#AbstractExecutorService：对ExcutorService中的大多数方法做了基本实现；"><span class="nav-number">1.0.0.3.</span> <span class="nav-text">AbstractExecutorService：对ExcutorService中的大多数方法做了基本实现；</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#TheadPoolExecutor：这个是线程池的具体实现，也是我们代码分析的主要部分；"><span class="nav-number">1.0.0.4.</span> <span class="nav-text">TheadPoolExecutor：这个是线程池的具体实现，也是我们代码分析的主要部分；</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#ScheduledExecutorService：继承了ExecutorService接口，提供与执行周期性任务相关的功能；"><span class="nav-number">1.0.0.5.</span> <span class="nav-text">ScheduledExecutorService：继承了ExecutorService接口，提供与执行周期性任务相关的功能；</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#ScheduledThreadPoolExecutor：是可以执行周期性任务的线程池的具体实现"><span class="nav-number">1.0.0.6.</span> <span class="nav-text">ScheduledThreadPoolExecutor：是可以执行周期性任务的线程池的具体实现;</span></a></li></ol></li></ol><li class="nav-item nav-level-2"><a class="nav-link" href="#二、ThreadPoolExecutor分析"><span class="nav-number">2.</span> <span class="nav-text">二、ThreadPoolExecutor分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#构造函数及参数含义"><span class="nav-number">2.1.</span> <span class="nav-text">构造函数及参数含义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#线程池的执行流程"><span class="nav-number">2.2.</span> <span class="nav-text">线程池的执行流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#源码分析"><span class="nav-number">2.3.</span> <span class="nav-text">源码分析</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#线程池的状态"><span class="nav-number">2.3.1.</span> <span class="nav-text">线程池的状态</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#构造方法"><span class="nav-number">2.3.2.</span> <span class="nav-text">构造方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#execute方法"><span class="nav-number">2.3.3.</span> <span class="nav-text">execute方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#addWorker方法"><span class="nav-number">2.3.4.</span> <span class="nav-text">addWorker方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Worker类"><span class="nav-number">2.3.5.</span> <span class="nav-text">Worker类</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#runWorker方法"><span class="nav-number">2.3.6.</span> <span class="nav-text">runWorker方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#getTask方法"><span class="nav-number">2.3.7.</span> <span class="nav-text">getTask方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#processWorkerExit"><span class="nav-number">2.3.8.</span> <span class="nav-text">processWorkerExit</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三、总结"><span class="nav-number">3.</span> <span class="nav-text">三、总结</span></a></li></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="heart">
+    <i class="fa fa-flash"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">cdream</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'XDDhAc8BrNAiwD3HykmqX1Fz-gzGzoHsz',
+        appKey: 'pSfqMJiGnPB5sbPhGzCL6kkW',
+        placeholder: 'Everything that kills me makes me feel alive.',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+
+    //新增以下代码即可，可以移除.info下所有子节点。
+var infoEle = document.querySelector('#comments .info');
+if (infoEle && infoEle.childNodes && infoEle.childNodes.length > 0){
+  infoEle.childNodes.forEach(function(item) {
+    item.parentNode.removeChild(item);
+  });
+}
+
+  </script>
+  
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+  <script type="text/javascript">
+  wpac_init = window.wpac_init || [];
+  wpac_init.push({widget: 'Rating', id: 15062,
+    el: 'wpac-rating',
+    color: 'fc6423'
+  });
+  (function() {
+    if ('WIDGETPACK_LOADED' in window) return;
+    WIDGETPACK_LOADED = true;
+    var mc = document.createElement('script');
+    mc.type = 'text/javascript';
+    mc.async = true;
+    mc.src = '//embed.widgetpack.com/widget.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(mc, s.nextSibling);
+  })();
+  </script>
+
+
+  
+
+  
+  <script type="text/javascript" src="/js/src/js.cookie.js?v=5.1.4"></script>
+  <script type="text/javascript" src="/js/src/scroll-cookie.js?v=5.1.4"></script>
+
+
+  
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-backstretch/2.0.4/jquery.backstretch.min.js"></script>
+<script>
++  $("body").backstretch("https://ws2.sinaimg.cn/large/006tNbRwly1fxb2gj33nhj319t0u0qv5.jpg")
+ </script>
+</body>
+</html>
