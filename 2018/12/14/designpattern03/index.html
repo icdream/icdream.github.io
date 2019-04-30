@@ -136,14 +136,14 @@
 <meta property="og:site_name" content="cdream">
 <meta property="og:description" content="本文简述适配器模式，考虑到java中没有多继承就只写了对象适配器模式，然后例子是怎么用转接口把3.5mm耳机插在小米8上面。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tNbRwly1fy6kyjux7nj316i0am75r.jpg">
-<meta property="og:image" content="https://ws4.sinaimg.cn/large/006tNbRwly1fy6h3dhi2rj30jw0kqq3e.jpg">
-<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tNbRwly1fy5xwwob9bj30qo0egwfa.jpg">
-<meta property="og:updated_time" content="2018-12-19T14:09:58.331Z">
+<meta property="og:image" content="http://pqre7ktqk.bkt.clouddn.com/blog/2019-04-30-54714.jpg">
+<meta property="og:image" content="http://pqre7ktqk.bkt.clouddn.com/blog/2019-04-30-054714.jpg">
+<meta property="og:image" content="http://pqre7ktqk.bkt.clouddn.com/blog/2019-04-30-054715.jpg">
+<meta property="og:updated_time" content="2019-04-30T05:48:04.481Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="设计模式——适配器模式（type-c转3.5mm耳机口）">
 <meta name="twitter:description" content="本文简述适配器模式，考虑到java中没有多继承就只写了对象适配器模式，然后例子是怎么用转接口把3.5mm耳机插在小米8上面。">
-<meta name="twitter:image" content="https://ws1.sinaimg.cn/large/006tNbRwly1fy6kyjux7nj316i0am75r.jpg">
+<meta name="twitter:image" content="http://pqre7ktqk.bkt.clouddn.com/blog/2019-04-30-54714.jpg">
 
 
 
@@ -472,17 +472,17 @@
 
       
         <p>&#x672C;&#x6587;&#x7B80;&#x8FF0;&#x9002;&#x914D;&#x5668;&#x6A21;&#x5F0F;&#xFF0C;&#x8003;&#x8651;&#x5230;java&#x4E2D;&#x6CA1;&#x6709;&#x591A;&#x7EE7;&#x627F;&#x5C31;&#x53EA;&#x5199;&#x4E86;&#x5BF9;&#x8C61;&#x9002;&#x914D;&#x5668;&#x6A21;&#x5F0F;&#xFF0C;&#x7136;&#x540E;&#x4F8B;&#x5B50;&#x662F;&#x600E;&#x4E48;&#x7528;&#x8F6C;&#x63A5;&#x53E3;&#x628A;3.5mm&#x8033;&#x673A;&#x63D2;&#x5728;&#x5C0F;&#x7C73;8&#x4E0A;&#x9762;&#x3002;</p>
-<p><img src="https://ws1.sinaimg.cn/large/006tNbRwly1fy6kyjux7nj316i0am75r.jpg" alt="image-20181214211029904"></p>
+<p><img src="http://pqre7ktqk.bkt.clouddn.com/blog/2019-04-30-54714.jpg" alt="image-20181214211029904"></p>
 <a id="more"></a>
 <h2 id="&#x4E00;&#x3001;&#x6982;&#x5FF5;"><a href="#&#x4E00;&#x3001;&#x6982;&#x5FF5;" class="headerlink" title="&#x4E00;&#x3001;&#x6982;&#x5FF5;"></a>&#x4E00;&#x3001;&#x6982;&#x5FF5;</h2><p><strong>&#x9002;&#x914D;&#x5668;&#x6A21;&#x5F0F;</strong>&#xFF08;&#x82F1;&#x8BED;&#xFF1A;adapter pattern&#xFF09;&#x6709;&#x65F6;&#x5019;&#x4E5F;&#x79F0;&#x5305;&#x88C5;&#x6837;&#x5F0F;&#x6216;&#x8005;&#x5305;&#x88C5;(wrapper)&#x3002;&#x5C06;&#x4E00;&#x4E2A;&#x7C7B;&#x7684;&#x63A5;&#x53E3;&#x8F6C;&#x63A5;&#x6210;&#x7528;&#x6237;&#x6240;&#x671F;&#x5F85;&#x7684;&#x3002;&#x4E00;&#x4E2A;&#x9002;&#x914D;&#x5668;&#x4F7F;&#x5F97;&#x56E0;&#x63A5;&#x53E3;&#x4E0D;&#x517C;&#x5BB9;&#x800C;&#x4E0D;&#x80FD;&#x5728;&#x4E00;&#x8D77;&#x5DE5;&#x4F5C;&#x7684;&#x7C7B;&#x80FD;&#x5728;&#x4E00;&#x8D77;&#x5DE5;&#x4F5C;&#xFF0C;&#x505A;&#x6CD5;&#x662F;&#x5C06;&#x7C7B;&#x81EA;&#x5DF1;&#x7684;&#x63A5;&#x53E3;&#x5305;&#x88F9;&#x5728;&#x4E00;&#x4E2A;&#x5DF2;&#x5B58;&#x5728;&#x7684;&#x7C7B;&#x4E2D;&#x3002;</p>
 <p>&#x9002;&#x914D;&#x5668;&#x6A21;&#x5F0F;&#x5141;&#x8BB8;&#x4E00;&#x4E2A;&#x5DF2;&#x5B58;&#x5728;&#x7684;&#x7C7B;&#x7684;&#x63A5;&#x53E3;&#x88AB;&#x7528;&#x4F5C;&#x53E6;&#x4E00;&#x4E2A;&#x63A5;&#x53E3;&#x3002;&#x901A;&#x5E38;&#x53EF;&#x4EE5;&#x5728;&#x4E0D;&#x9700;&#x8981;&#x4FEE;&#x6539;&#x6E90;&#x4EE3;&#x7801;&#x7684;&#x60C5;&#x51B5;&#x4E0B;&#x4F7F;&#x7528;&#x5DF2;&#x5B58;&#x5728;&#x7684;&#x7C7B;&#x3002;</p>
 <p>&#x5176;&#x5B9E;&#x5728;&#x751F;&#x6D3B;&#x4E2D;&#xFF0C;&#x9002;&#x914D;&#x5668;&#x968F;&#x5904;&#x770B;&#x89C1;&#xFF0C;&#x4F8B;&#x5982;&#x4E0B;&#x56FE;&#xFF0C;&#x4E00;&#x4E2A;type-c&#x8F6C;&#x8033;&#x673A;&#x53E3;&#x7684;&#x9002;&#x914D;&#x5668;&#x3002;&#x63A5;&#x4E0B;&#x6765;&#x8BA9;&#x6211;&#x770B;&#x770B;&#x9002;&#x914D;&#x5668;&#x6A21;&#x5F0F;&#x7684;&#x7ED3;&#x6784;&#xFF0C;&#x5E76;&#x7528;java&#x4EE3;&#x7801;&#x6765;&#x5B9E;&#x73B0;&#x4E00;&#x4E2A;type-c&#x63A5;&#x53E3;&#x7684;&#x624B;&#x673A;&#x4E0E;3.5mm&#x7684;&#x8033;&#x673A;&#x901A;&#x8FC7;&#x9002;&#x914D;&#x5668;&#x8FDE;&#x63A5;&#x3002;</p>
-<p><img src="https://ws4.sinaimg.cn/large/006tNbRwly1fy6h3dhi2rj30jw0kqq3e.jpg" alt="image-20181214184815532"></p>
+<p><img src="http://pqre7ktqk.bkt.clouddn.com/blog/2019-04-30-054714.jpg" alt="image-20181214184815532"></p>
 <div class="note info"><strong>&#x9002;&#x914D;&#x5668;&#x6A21;&#x5F0F;&#x4E3B;&#x8981;&#x89E3;&#x51B3;&#x4E24;&#x4E2A;&#x95EE;&#x9898;</strong>&#xFF1A;<br>1.&#x8F6C;&#x6362;&#x5F53;&#x524D;&#x63A5;&#x53E3;&#x4E3A;&#x5BA2;&#x6237;&#x7AEF;&#x9700;&#x8981;&#x7684;&#x63A5;&#x53E3;<br>2.&#x901A;&#x8FC7;&#x9002;&#x914D;&#x5668;&#x4F7F;&#x7528;&#x6CA1;&#x6709;&#x6211;&#x4EEC;&#x9700;&#x8981;&#x7684;&#x63A5;&#x53E3;&#x7684;&#x7C7B;</div>
 
 <p>&#x63CF;&#x8FF0;&#x770B;&#x4F3C;&#x76F8;&#x540C;&#xFF0C;&#x5B9E;&#x9645;&#x4E0A;&#x51FA;&#x53D1;&#x70B9;&#x4E0D;&#x540C;~&#x563F;&#x563F;&#xFF0C;&#x610F;&#x4F1A;&#x610F;&#x4F1A;</p>
 <h2 id="&#x4E8C;&#x3001;&#x7ED3;&#x6784;"><a href="#&#x4E8C;&#x3001;&#x7ED3;&#x6784;" class="headerlink" title="&#x4E8C;&#x3001;&#x7ED3;&#x6784;"></a>&#x4E8C;&#x3001;&#x7ED3;&#x6784;</h2><p>&#x9002;&#x914D;&#x5668;&#x6A21;&#x5F0F;&#x6709;&#x4E24;&#x79CD;&#xFF0C;&#x4E00;&#x79CD;&#x662F;<strong>&#x7C7B;&#x9002;&#x914D;&#x5668;</strong>&#xFF0C;&#x4E0D;&#x8FC7;&#x9700;&#x8981;&#x652F;&#x6301;&#x591A;&#x7EE7;&#x627F;&#x7684;&#x8BED;&#x8A00;&#x624D;&#x80FD;&#x5B9E;&#x73B0;&#xFF0C;&#x672C;&#x6587;&#x4E3B;&#x8981;&#x8BB2;&#x89E3;&#x5355;&#x7EE7;&#x627F;&#x4E5F;&#x53EF;&#x4EE5;&#x5B9E;&#x73B0;&#x7684;<strong>&#x5BF9;&#x8C61;&#x9002;&#x914D;&#x5668;</strong>&#x3002;&#x4E0B;&#x56FE;&#x662F;&#x5BF9;&#x8C61;&#x9002;&#x914D;&#x5668;&#x6A21;&#x5F0F;&#x7684;&#x7C7B;&#x56FE;&#xFF0C;Client&#x9700;&#x8981;&#x4E00;&#x4E2A;&#x5B9E;&#x73B0;Target&#x63A5;&#x53E3;&#x7684;&#x7C7B;&#x6765;&#x5B8C;&#x6210;&#x5DE5;&#x4F5C;&#xFF0C;&#x800C;&#x5F53;&#x524D;&#x6211;&#x4EEC;&#x63D0;&#x4F9B;&#x7684;&#x53EA;&#x6709;Adaptee&#x7C7B;&#xFF0C;&#x8FD9;&#x65F6;&#x8BE5;&#x600E;&#x4E48;&#x529E;&#x5462;&#xFF1F;&#x6069;&#xFF0C;&#x6211;&#x4EEC;&#x5C31;&#x9020;&#x4E00;&#x4E2A;&#x9002;&#x914D;&#x5668;&#xFF08;adapter&#xFF09;&#x6765;&#x5B8C;&#x6210;&#x8FD9;&#x4E2A;&#x9700;&#x6C42;&#x3002;</p>
-<p><img src="https://ws2.sinaimg.cn/large/006tNbRwly1fy5xwwob9bj30qo0egwfa.jpg" alt="image-20181214075257986"></p>
+<p><img src="http://pqre7ktqk.bkt.clouddn.com/blog/2019-04-30-054715.jpg" alt="image-20181214075257986"></p>
 <p>&#x6D89;&#x53CA;&#x5230;&#x7684;&#x4E3B;&#x8981;&#x89D2;&#x8272;&#xFF1A;</p>
 <p>&#x200B;    <strong>Target</strong>&#xFF1A;&#x76EE;&#x6807;&#x63A5;&#x53E3;&#xFF0C;&#x4E5F;&#x5C31;&#x662F;&#x6211;&#x4EEC;&#x671F;&#x5F85;&#x5F97;&#x5230;&#x7684;&#x63A5;&#x53E3;&#x3002;</p>
 <p>&#x200B;    <strong>Adaptee</strong>&#xFF1A;&#x5F53;&#x524D;&#x62E5;&#x6709;&#x7684;&#x63A5;&#x53E3;&#xFF0C;&#x9700;&#x8981;&#x9002;&#x914D;&#xFF0C;&#x5DF2;&#x6EE1;&#x8DB3;&#x5BA2;&#x6237;&#x7AEF;&#x7684;&#x8981;&#x6C42;&#x3002;</p>
@@ -1355,7 +1355,7 @@ if (infoEle && infoEle.childNodes && infoEle.childNodes.length > 0){
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-backstretch/2.0.4/jquery.backstretch.min.js"></script>
 <script>
-+  $("body").backstretch("https://ws2.sinaimg.cn/large/006tNbRwly1fxb2gj33nhj319t0u0qv5.jpg")
++  $("body").backstretch("http://pqre7ktqk.bkt.clouddn.com/blog/2019-04-30-b8513327d8754074ee30980fd0029e5f4f1dd2f9.jpg")
  </script>
 </body>
 </html>

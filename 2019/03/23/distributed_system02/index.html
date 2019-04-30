@@ -136,15 +136,15 @@
 <meta property="og:site_name" content="cdream">
 <meta property="og:description" content="Paxos算法是Leslie Lamport于1990年提出的一种基于消息传递且具有高度容错特性的一致性算法，是目前公认的解决分布式一致性问题最有效的算法之一。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tKfTcly1g1dmoipsz6j319m0a2gmm.jpg">
-<meta property="og:image" content="https://ws4.sinaimg.cn/large/006tKfTcly1g1cmat3rj3j30o00fkdj7.jpg">
-<meta property="og:image" content="https://ws3.sinaimg.cn/large/006tKfTcly1g1cmebjmn9j30xk0eowje.jpg">
-<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tKfTcly1g1cnr1ju7pj30nm0dkwhp.jpg">
-<meta property="og:updated_time" content="2019-03-24T01:35:32.302Z">
+<meta property="og:image" content="http://pqre7ktqk.bkt.clouddn.com/blog/2019-04-30-54751.jpg">
+<meta property="og:image" content="http://pqre7ktqk.bkt.clouddn.com/blog/2019-04-30-054751.jpg">
+<meta property="og:image" content="http://pqre7ktqk.bkt.clouddn.com/blog/2019-04-30-054752.jpg">
+<meta property="og:image" content="http://pqre7ktqk.bkt.clouddn.com/blog/2019-04-30-054755.jpg">
+<meta property="og:updated_time" content="2019-04-30T05:48:04.488Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="分布式系统——Paxos算法推导">
 <meta name="twitter:description" content="Paxos算法是Leslie Lamport于1990年提出的一种基于消息传递且具有高度容错特性的一致性算法，是目前公认的解决分布式一致性问题最有效的算法之一。">
-<meta name="twitter:image" content="https://ws1.sinaimg.cn/large/006tKfTcly1g1dmoipsz6j319m0a2gmm.jpg">
+<meta name="twitter:image" content="http://pqre7ktqk.bkt.clouddn.com/blog/2019-04-30-54751.jpg">
 
 
 
@@ -473,7 +473,7 @@
 
       
         <p>Paxos&#x7B97;&#x6CD5;&#x662F;Leslie Lamport&#x4E8E;1990&#x5E74;&#x63D0;&#x51FA;&#x7684;&#x4E00;&#x79CD;&#x57FA;&#x4E8E;&#x6D88;&#x606F;&#x4F20;&#x9012;&#x4E14;&#x5177;&#x6709;&#x9AD8;&#x5EA6;&#x5BB9;&#x9519;&#x7279;&#x6027;&#x7684;&#x4E00;&#x81F4;&#x6027;&#x7B97;&#x6CD5;&#xFF0C;&#x662F;&#x76EE;&#x524D;&#x516C;&#x8BA4;&#x7684;&#x89E3;&#x51B3;&#x5206;&#x5E03;&#x5F0F;&#x4E00;&#x81F4;&#x6027;&#x95EE;&#x9898;&#x6700;&#x6709;&#x6548;&#x7684;&#x7B97;&#x6CD5;&#x4E4B;&#x4E00;&#x3002;</p>
-<p><img src="https://ws1.sinaimg.cn/large/006tKfTcly1g1dmoipsz6j319m0a2gmm.jpg" alt="image-20190324092958346"></p>
+<p><img src="http://pqre7ktqk.bkt.clouddn.com/blog/2019-04-30-54751.jpg" alt="image-20190324092958346"></p>
 <a id="more"></a>
 <h2 id="&#x4E00;&#x3001;&#x4E00;&#x5207;&#x7684;&#x6E90;&#x5934;"><a href="#&#x4E00;&#x3001;&#x4E00;&#x5207;&#x7684;&#x6E90;&#x5934;" class="headerlink" title="&#x4E00;&#x3001;&#x4E00;&#x5207;&#x7684;&#x6E90;&#x5934;"></a>&#x4E00;&#x3001;&#x4E00;&#x5207;&#x7684;&#x6E90;&#x5934;</h2><p>&#x4E0B;&#x9762;&#x5C31;&#x662F;&#x8457;&#x540D;&#x7684;<strong>&#x62DC;&#x5360;&#x5EAD;&#x5C06;&#x519B;</strong>&#x95EE;&#x9898;&#xFF0C;&#x7531;Lamport 1982&#x5E74;&#x63D0;&#x51FA;&#xFF1A;</p>
 <blockquote>
@@ -518,9 +518,9 @@
 <p>&#x5982;&#x679C;&#x6211;&#x4EEC;&#x5E0C;&#x671B;&#x53EA;&#x6709;&#x4E00;&#x4E2A;&#x63D0;&#x6848;&#x88AB;&#x63D0;&#x51FA;&#x7684;&#x60C5;&#x51B5;&#x4E0B;&#x4E5F;&#x5E94;&#x8BE5;&#x88AB;&#x9009;&#x5B9A;&#xFF08;Paxos&#x6700;&#x7EC8;&#x7684;&#x76EE;&#x6807;&#x5C31;&#x662F;&#x4FDD;&#x8BC1;&#x4E00;&#x4E2A;&#x63D0;&#x6848;&#x88AB;&#x9009;&#x5B9A;&#xFF09;&#xFF0C;&#x5C31;&#x6709;&#x4E0B;&#x9762;&#x7684;&#x8981;&#x6C42;&#xFF1A;</p>
 <figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">P1:&#x4E00;&#x4E2A;Acceptor&#x5FC5;&#x987B;&#x6279;&#x51C6;&#x5B83;&#x6536;&#x7684;&#x7684;&#x7B2C;&#x4E00;&#x4E2A;&#x63D0;&#x6848;&#x3002;</span><br><span class="line">An acceptor must accept the first proposal that it recevies.</span><br></pre></td></tr></tbody></table></figure>
 <p>&#x4F46;&#x8FD9;&#x4E2A;&#x7EA6;&#x675F;&#x7F3A;&#x9677;&#x660E;&#x663E;&#x3002;</p>
-<p><img src="https://ws4.sinaimg.cn/large/006tKfTcly1g1cmat3rj3j30o00fkdj7.jpg" alt="image-20190323123113999"></p>
+<p><img src="http://pqre7ktqk.bkt.clouddn.com/blog/2019-04-30-054751.jpg" alt="image-20190323123113999"></p>
 <p>&#x770B;&#x770B;&#xFF0C;&#x5373;&#x4F7F;&#x6BCF;&#x4E2A;Acceptor&#x90FD;&#x6279;&#x51C6;&#x4E86;&#x7B2C;&#x4E00;&#x4E2A;&#x63D0;&#x6848;&#xFF0C;&#x7ED3;&#x679C;&#x8FD8;&#x662F;&#x6CA1;&#x6709;&#x4E00;&#x4E2A;&#x63D0;&#x6848;&#x88AB;&#x8DB3;&#x591F;&#x591A;&#x7684;acceptor&#x6279;&#x51C6;&#x3002;</p>
-<p><img src="https://ws3.sinaimg.cn/large/006tKfTcly1g1cmebjmn9j30xk0eowje.jpg" alt="image-20190323123438248"></p>
+<p><img src="http://pqre7ktqk.bkt.clouddn.com/blog/2019-04-30-054752.jpg" alt="image-20190323123438248"></p>
 <p>&#x7136;&#x540E;&#x8FD8;&#x6709;&#x8FD9;&#x79CD;&#x60C5;&#x51B5;&#xFF0C;&#x53F3;&#x9762;&#x7684;&#x63D0;&#x6848;&#x88AB;&#x591A;&#x4E2A;acceptor&#x6279;&#x51C6;&#x4E86;&#x7ED3;&#x679C;&#xFF0C;&#x5BA1;&#x5224;&#x8005;5&#x88AB;&#x654C;&#x519B;&#x523A;&#x6740;&#xFF0C;&#x7ED3;&#x679C;&#x53C8;&#x6CA1;&#x6709;&#x63D0;&#x6848;&#x88AB;&#x8DB3;&#x591F;&#x591A;&#x7684;acceptor&#x6279;&#x51C6;&#x3002;</p>
 <p><strong>&#x9636;&#x6BB5;&#x4E8C;&#xFF1A;</strong></p>
 <p>&#x6211;&#x4EEC;&#x77E5;&#x9053;&#x4E00;&#x4E2A;&#x63D0;&#x6848;&#x5982;&#x679C;&#x8981;&#x88AB;&#x9009;&#x5B9A;&#xFF0C;&#x9700;&#x8981;&#x8DB3;&#x591F;&#x591A;&#x7684;acceptor&#x63A5;&#x53D7;&#xFF0C;&#x4E5F;&#x5C31;&#x662F;1&#x534A;&#x4EE5;&#x4E0A;&#xFF0C;&#x4F46;P1&#x53C8;&#x89C4;&#x5B9A;&#x4E86;&#x5FC5;&#x987B;&#x63A5;&#x53D7;&#x7B2C;&#x4E00;&#x63D0;&#x6848;&#xFF0C;&#x6240;&#x4EE5;&#x53EF;&#x4EE5;&#x63A8;&#x5BFC;&#x51FA;&#x4E00;&#x4E2A;acceptor&#x53EF;&#x4EE5;&#x6279;&#x51C6;&#x591A;&#x4E2A;&#x63D0;&#x6848;&#x3002;&#x5E76;&#x4E14;&#x7ED9;&#x4E0D;&#x540C;&#x7684;&#x63D0;&#x6848;&#x4E0D;&#x540C;&#x7684;&#x6709;&#x5E8F;&#x7F16;&#x53F7;&#xFF0C;&#x4E00;&#x4E2A;&#x63D0;&#x6848;&#x7531;&#x7F16;&#x53F7;&#x548C;&#x503C;&#x7EC4;&#x6210;&#xFF0C;&#x5E76;&#x4E14;&#x4EFB;&#x610F;&#x4E24;&#x4E2A;&#x63D0;&#x6848;&#x7684;&#x7F16;&#x53F7;&#x4E0D;&#x540C;&#x3002;</p>
@@ -529,7 +529,7 @@
 <figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">P2:&#x5982;&#x679C;&#x7F16;&#x53F7;&#x4E3A;M0&#x3001;Value&#x503C;&#x4E3A;V0&#x7684;&#x63D0;&#x6848;[M0,V0]&#x5DF2;&#x7ECF;&#x88AB;&#x9009;&#x5B9A;&#xFF0C;&#x90A3;&#x4E48;&#x6BD4;M0&#x7F16;&#x53F7;&#x66F4;&#x9AD8;&#x7684;&#xFF0C;&#x4E14;&#x88AB;&#x9009;&#x5B9A;&#x7684;&#x63D0;&#x6848;value&#x4E00;&#x5B9A;&#x662F;V0&#x3002;</span><br><span class="line">If a proposal wiht value v is chosen, then every higher-numbered proposal that is chosen has value v.</span><br></pre></td></tr></tbody></table></figure>
 <p>&#x6211;&#x4EEC;&#x77E5;&#x9053;&#xFF0C;&#x5982;&#x679C;&#x63D0;&#x6848;&#x60F3;&#x88AB;&#x9009;&#x5B9A;&#x90A3;&#x4E48;&#x5FC5;&#x987B;&#x88AB;&#x81F3;&#x5C11;&#x4E00;&#x4E2A;acceptor&#x6279;&#x51C6;&#x3002;&#x6240;&#x4EE5;&#x53EF;&#x4EE5;&#x5728;P2&#x7684;&#x57FA;&#x7840;&#x4E0A;&#x7EE7;&#x7EED;&#x5EF6;&#x4F38;&#x3002;</p>
 <figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">P2a:&#x5982;&#x679C;&#x7F16;&#x53F7;&#x4E3A;M0&#x3001;Value&#x503C;&#x4E3A;V0&#x7684;&#x63D0;&#x6848;[M0,V0]&#x5DF2;&#x7ECF;&#x88AB;&#x9009;&#x5B9A;&#xFF0C;&#x90A3;&#x4E48;&#x6BD4;M0&#x7F16;&#x53F7;&#x66F4;&#x9AD8;&#x7684;&#xFF0C;&#xFF0C;&#x4E14;&#x88AB;&#x6279;&#x51C6;&#x7684;&#x63D0;&#x6848;value&#x4E00;&#x5B9A;&#x662F;V0&#x3002;</span><br><span class="line">If a proposal whth value v is chosen, then every heigher-numbered proposal accepted by any acceptor has value v.</span><br></pre></td></tr></tbody></table></figure>
-<p><img src="https://ws1.sinaimg.cn/large/006tKfTcly1g1cnr1ju7pj30nm0dkwhp.jpg" alt="image-20190323132128231"></p>
+<p><img src="http://pqre7ktqk.bkt.clouddn.com/blog/2019-04-30-054755.jpg" alt="image-20190323132128231"></p>
 <p>&#x7531;&#x4E8E;&#x5206;&#x5E03;&#x5F0F;&#x7CFB;&#x7EDF;&#x662F;&#x5F02;&#x6B65;&#x7684;&#xFF0C;&#x800C;&#x4E14;&#x6B64;&#x65F6;P1&#x662F;&#x6210;&#x7ACB;&#xFF0C;&#x5982;&#x679C;&#x6709;&#x4E00;&#x4E2A;&#x63D0;&#x6848;[M1,V0]&#xFF08;&#x53F3;&#x4FA7;&#x63D0;&#x6848;&#xFF09;&#x5DF2;&#x7ECF;&#x88AB;&#x9009;&#x4E2D;&#xFF0C;&#x6B64;&#x65F6;&#x53E6;&#x4E00;&#x4E2A;proposer&#x88AB;&#x5524;&#x9192;&#xFF0C;&#x4EA7;&#x751F;&#x4E86;&#x4E00;&#x4E2A;&#x7F16;&#x53F7;&#x66F4;&#x5927;&#x7684;&#x63D0;&#x6848;&#xFF0C;&#x5E76;&#x4E14;&#x503C;&#x4E5F;&#x4E0D;&#x662F;V0&#xFF0C;&#x800C;acceptor1&#x8FD8;&#x6CA1;&#x6709;&#x63A5;&#x5230;&#x63D0;&#x6848;&#xFF0C;&#x8FD9;&#x4E2A;&#x88AB;&#x53D1;&#x8FC7;&#x53BB;&#x63D0;&#x6848;&#x4E00;&#x5B9A;&#x4F1A;&#x88AB;&#x63A5;&#x53D7;&#xFF0C;&#x6B64;&#x65F6;&#x4E0E;P2a&#x6211;&#x7EA6;&#x675F;&#x8FDD;&#x80CC;&#xFF0C;&#x6240;&#x4EE5;&#x6211;&#x4EEC;&#x8981;&#x5BF9;P2a&#x8FDB;&#x884C;&#x52A0;&#x5F3A;&#x3002;</p>
 <figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">P2b:&#x5982;&#x679C;[M0,V0]&#x88AB;&#x9009;&#x5B9A;&#x540E;&#xFF0C;&#x90A3;&#x4E48;&#x4E4B;&#x540E;Proposer&#x4EA7;&#x751F;&#x7684;&#x7F16;&#x53F7;&#x66F4;&#x9AD8;&#x7684;&#x63D0;&#x6848;&#xFF0C;&#x5176;&#x503C;&#x4E00;&#x5B9A;&#x662F;V0&#x3002;</span><br><span class="line">If a proposal with value v is chosen, then every higher-numbered proposal issued by any proposer has value v.</span><br></pre></td></tr></tbody></table></figure>
 <p>P2b&#x662F;&#x5305;&#x542B;P2a&#x7684;&#xFF0C;&#x56E0;&#x4E3A;&#x4E00;&#x4E2A;&#x63D0;&#x6848;&#x4E00;&#x5B9A;&#x662F;&#x88AB;&#x63D0;&#x51FA;&#x540E;&#x624D;&#x4F1A;&#x88AB;&#x6279;&#x51C6;&#xFF0C;&#x56E0;&#x6B64;P2b&#x4E5F;&#x5305;&#x542B;P2&#x3002;</p>
@@ -1423,7 +1423,7 @@ if (infoEle && infoEle.childNodes && infoEle.childNodes.length > 0){
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-backstretch/2.0.4/jquery.backstretch.min.js"></script>
 <script>
-+  $("body").backstretch("https://ws2.sinaimg.cn/large/006tNbRwly1fxb2gj33nhj319t0u0qv5.jpg")
++  $("body").backstretch("http://pqre7ktqk.bkt.clouddn.com/blog/2019-04-30-b8513327d8754074ee30980fd0029e5f4f1dd2f9.jpg")
  </script>
 </body>
 </html>
