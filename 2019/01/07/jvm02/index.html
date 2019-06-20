@@ -136,18 +136,18 @@
 <meta property="og:site_name" content="cdream">
 <meta property="og:description" content="本文主要讲述虚拟机内存区域，下图是本文结构。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://pqre7ktqk.bkt.clouddn.com/blog/2019-04-30-054649.jpg">
-<meta property="og:image" content="http://pqre7ktqk.bkt.clouddn.com/blog/2019-04-30-054650.jpg">
-<meta property="og:image" content="http://pqre7ktqk.bkt.clouddn.com/blog/2019-04-30-54651.jpg">
-<meta property="og:image" content="http://pqre7ktqk.bkt.clouddn.com/blog/2019-04-30-054651.jpg">
-<meta property="og:image" content="http://pqre7ktqk.bkt.clouddn.com/blog/2019-04-30-054655.jpg">
-<meta property="og:image" content="http://pqre7ktqk.bkt.clouddn.com/blog/2019-04-30-54656.jpg">
-<meta property="og:image" content="http://pqre7ktqk.bkt.clouddn.com/blog/2019-04-30-054656.jpg">
-<meta property="og:updated_time" content="2019-04-30T05:48:04.473Z">
+<meta property="og:image" content="http://cdn.cdream.site/blog/2019-04-30-054649.jpg">
+<meta property="og:image" content="http://cdn.cdream.site/blog/2019-04-30-054650.jpg">
+<meta property="og:image" content="http://cdn.cdream.site/blog/2019-04-30-54651.jpg">
+<meta property="og:image" content="http://cdn.cdream.site/blog/2019-04-30-054651.jpg">
+<meta property="og:image" content="http://cdn.cdream.site/blog/2019-04-30-054655.jpg">
+<meta property="og:image" content="http://cdn.cdream.site/blog/2019-04-30-54656.jpg">
+<meta property="og:image" content="http://cdn.cdream.site/blog/2019-04-30-054656.jpg">
+<meta property="og:updated_time" content="2019-06-20T14:18:58.254Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="java虚拟机——java内存区域">
 <meta name="twitter:description" content="本文主要讲述虚拟机内存区域，下图是本文结构。">
-<meta name="twitter:image" content="http://pqre7ktqk.bkt.clouddn.com/blog/2019-04-30-054649.jpg">
+<meta name="twitter:image" content="http://cdn.cdream.site/blog/2019-04-30-054649.jpg">
 
 
 
@@ -476,10 +476,10 @@
 
       
         <p>&#x672C;&#x6587;&#x4E3B;&#x8981;&#x8BB2;&#x8FF0;&#x865A;&#x62DF;&#x673A;&#x5185;&#x5B58;&#x533A;&#x57DF;&#xFF0C;&#x4E0B;&#x56FE;&#x662F;&#x672C;&#x6587;&#x7ED3;&#x6784;&#x3002;</p>
-<p><img src="http://pqre7ktqk.bkt.clouddn.com/blog/2019-04-30-054649.jpg" alt="image-20190109072717365"></p>
+<p><img src="http://cdn.cdream.site/blog/2019-04-30-054649.jpg" alt="image-20190109072717365"></p>
 <a id="more"></a>
 <h2 id="&#x4E00;&#x3001;&#x6982;&#x8FF0;"><a href="#&#x4E00;&#x3001;&#x6982;&#x8FF0;" class="headerlink" title="&#x4E00;&#x3001;&#x6982;&#x8FF0;"></a>&#x4E00;&#x3001;&#x6982;&#x8FF0;</h2><p>&#x5F53;&#x521D;&#x521A;&#x5B66;&#x4E60;java&#x7684;&#x65F6;&#x5019;&#xFF0C;&#x53EA;&#x77E5;&#x9053;java&#x5185;&#x5B58;&#x5305;&#x62EC;&#x5806;&#x548C;&#x6808;&#xFF0C;&#x57FA;&#x672C;&#x6570;&#x636E;&#x7C7B;&#x578B;&#x548C;&#x5F15;&#x7528;&#x6570;&#x636E;&#x7C7B;&#x578B;&#x7684;&#x5F15;&#x7528;&#x50A8;&#x5B58;&#x5728;&#x6808;&#x4E2D;&#xFF0C;&#x5BF9;&#x8C61;&#x50A8;&#x5B58;&#x5728;&#x5806;&#x4E2D;&#x3002;&#x5176;&#x5B9E;&#x8FD9;&#x662F;&#x4E00;&#x4E2A;&#x5341;&#x5206;&#x7C97;&#x7565;&#x7684;&#x5212;&#x5206;&#x65B9;&#x5F0F;&#xFF0C;java&#x7684;&#x5185;&#x5B58;&#x7ED3;&#x6784;&#x8981;&#x590D;&#x6742;&#x7684;&#x591A;&#x3002;&#x4E0B;&#x9762;&#x6211;&#x4F1A;&#x5177;&#x4F53;&#x4ECB;&#x7ECD;&#x4E00;&#x4E0B;java&#x5185;&#x5B58;&#x533A;&#x57DF;&#x7684;&#x5212;&#x5206;&#x3002;</p>
-<h2 id="&#x4E8C;&#x3001;&#x8FD0;&#x884C;&#x65F6;&#x6570;&#x636E;&#x533A;&#x57DF;"><a href="#&#x4E8C;&#x3001;&#x8FD0;&#x884C;&#x65F6;&#x6570;&#x636E;&#x533A;&#x57DF;" class="headerlink" title="&#x4E8C;&#x3001;&#x8FD0;&#x884C;&#x65F6;&#x6570;&#x636E;&#x533A;&#x57DF;"></a>&#x4E8C;&#x3001;&#x8FD0;&#x884C;&#x65F6;&#x6570;&#x636E;&#x533A;&#x57DF;</h2><p><img src="http://pqre7ktqk.bkt.clouddn.com/blog/2019-04-30-054650.jpg" alt="image-20190107225823114"></p>
+<h2 id="&#x4E8C;&#x3001;&#x8FD0;&#x884C;&#x65F6;&#x6570;&#x636E;&#x533A;&#x57DF;"><a href="#&#x4E8C;&#x3001;&#x8FD0;&#x884C;&#x65F6;&#x6570;&#x636E;&#x533A;&#x57DF;" class="headerlink" title="&#x4E8C;&#x3001;&#x8FD0;&#x884C;&#x65F6;&#x6570;&#x636E;&#x533A;&#x57DF;"></a>&#x4E8C;&#x3001;&#x8FD0;&#x884C;&#x65F6;&#x6570;&#x636E;&#x533A;&#x57DF;</h2><p><img src="http://cdn.cdream.site/blog/2019-04-30-054650.jpg" alt="image-20190107225823114"></p>
 <p>&#x8FD9;&#x5F20;&#x56FE;&#x6211;&#x5DF2;&#x7ECF;&#x770B;&#x8FC7;1001&#x904D;&#x4E86;&#xFF0C;&#x6211;&#x4E5F;&#x4E0D;&#x77E5;&#x9053;&#x539F;&#x51FA;&#x5904;&#x662F;&#x54EA;&#x91CC;&#xFF0C;&#x6211;&#x8FD9;&#x5F20;&#x662F;&#x5728;<a href="http://www.ityouknow.com/jvm/2017/08/25/jvm-memory-structure.html" target="_blank" rel="noopener">&#x7EAF;&#x6D01;&#x7684;&#x5FAE;&#x7B11;</a>&#x7684;&#x865A;&#x62DF;&#x673A;&#x6587;&#x7AE0;&#x4E2D;&#x6458;&#x8FC7;&#x6765;&#x7684;&#x3002;&#x6839;&#x636E;&#x300A;Java&#x865A;&#x62DF;&#x673A;&#x89C4;&#x8303;(Java SE7)&#x300B;&#x89C4;&#x5B9A;,Java&#x865A;&#x62DF;&#x673A;&#x6240;&#x7BA1;&#x7406;&#x7684;&#x5185;&#x5B58;&#x5C06;&#x5305;&#x62EC;&#x4E0A;&#x8FF0;&#x51E0;&#x4E2A;&#x8FD0;&#x884C;&#x65F6;&#x533A;&#x57DF;&#x3002;</p>
 <h3 id="&#x7EBF;&#x7A0B;&#x79C1;&#x6709;&#x5185;&#x5B58;&#x533A;&#x57DF;"><a href="#&#x7EBF;&#x7A0B;&#x79C1;&#x6709;&#x5185;&#x5B58;&#x533A;&#x57DF;" class="headerlink" title="&#x7EBF;&#x7A0B;&#x79C1;&#x6709;&#x5185;&#x5B58;&#x533A;&#x57DF;"></a>&#x7EBF;&#x7A0B;&#x79C1;&#x6709;&#x5185;&#x5B58;&#x533A;&#x57DF;</h3><h4 id="&#x7A0B;&#x5E8F;&#x8BA1;&#x6570;&#x5668;-Program-Counter-Register"><a href="#&#x7A0B;&#x5E8F;&#x8BA1;&#x6570;&#x5668;-Program-Counter-Register" class="headerlink" title="&#x7A0B;&#x5E8F;&#x8BA1;&#x6570;&#x5668;(Program Counter Register)"></a>&#x7A0B;&#x5E8F;&#x8BA1;&#x6570;&#x5668;(Program Counter Register)</h4><p><strong>&#x8BA1;&#x7B97;&#x673A;</strong>&#x4E2D;&#x7684;&#x7A0B;&#x5E8F;&#x8BA1;&#x6570;&#x5668;(Program Counter)&#x662F;&#x4E00;&#x4E2A;&#x5904;&#x7406;&#x5668;&#x7684;&#x5BC4;&#x5B58;&#x5668;&#xFF0C;&#x7528;&#x4E8E;&#x6307;&#x793A;&#x8BA1;&#x7B97;&#x673A;&#x5728;&#x7A0B;&#x5E8F;&#x5E8F;&#x5217;&#x4E2D;&#x7684;&#x4F4D;&#x7F6E;&#xFF0C;&#x4E3A;&#x4E86;&#x4F7F;&#x7528;&#x7A0B;&#x5E8F;&#x8FDE;&#x7EED;&#x6267;&#x884C;&#x4E0B;&#x53BB;&#xFF0C;cpu&#x5FC5;&#x987B;&#x901A;&#x8FC7;&#x67D0;&#x4E9B;&#x624B;&#x6BB5;&#x83B7;&#x53D6;&#x4E0B;&#x4E00;&#x6761;&#x6307;&#x4EE4;&#x53D6;&#x5740;&#x5730;&#x5740;&#x3002;&#x7A0B;&#x5E8F;&#x8BA1;&#x6570;&#x5668;&#x5C31;&#x662F;&#x8D77;&#x5230;&#x8FD9;&#x4E2A;&#x4F5C;&#x7528;&#x3002;</p>
 <p><strong>Java</strong>&#x4E2D;&#x7684;&#x7A0B;&#x5E8F;&#x8BA1;&#x6570;&#x5668;(Program Counter Register)&#x4E5F;&#x5F88;&#x7C7B;&#x4F3C;&#xFF0C;&#x662F;&#x4E00;&#x5757;&#x5F88;&#x5C0F;&#x7684;&#x5185;&#x5B58;&#x533A;&#x57DF;&#xFF0C;&#x53EF;&#x4EE5;&#x770B;&#x6210;&#x5F53;&#x524D;&#x7EBF;&#x7A0B;&#x7684;&#x884C;&#x53F7;&#x6307;&#x793A;&#x5668;&#x3002;&#x5B57;&#x8282;&#x7801;&#x89E3;&#x91CA;&#x5668;&#x5728;&#x5DE5;&#x4F5C;&#x65F6;&#x5C31;&#x662F;&#x901A;&#x8FC7;&#x6539;&#x53D8;&#x8BA1;&#x6570;&#x5668;&#x7684;&#x503C;&#x6765;&#x9009;&#x53D6;&#x4E0B;&#x4E00;&#x6761;&#x9700;&#x8981;&#x6267;&#x884C;&#x7684;&#x5B57;&#x8282;&#x7801;&#x547D;&#x4EE4;&#x3002;</p>
@@ -523,15 +523,15 @@
 <li>&#x6C38;&#x4E45;&#x4EE3;&#x4F1A;&#x4E3A; GC &#x5E26;&#x6765;&#x4E0D;&#x5FC5;&#x8981;&#x7684;&#x590D;&#x6742;&#x5EA6;&#xFF0C;&#x5E76;&#x4E14;&#x56DE;&#x6536;&#x6548;&#x7387;&#x504F;&#x4F4E;&#x3002;</li>
 </ul>
 <p>&#x6839;&#x636E;&#x5B98;&#x65B9;&#x6587;&#x6863;&#xFF0C;&#x5728;java7&#x4E2D;&#xFF0C;&#x5C06;&#x539F;&#x6765;&#x5728;&#x65B9;&#x6CD5;&#x533A;&#x7684;&#x5E38;&#x91CF;&#x6C60;&#x79FB;&#x52A8;&#x5230; Java&#x5806;&#x4E2D;&#xFF0C;&#x5728;java8&#x4E2D;&#x5DF2;&#x7ECF;&#x53BB;&#x9664;&#x6C38;&#x4E45;&#x4EE3;&#xFF0C;&#x4F7F;&#x7528;&#x5143;&#x7A7A;&#x95F4;&#x6765;&#x5B9E;&#x73B0;&#x65B9;&#x6CD5;&#x533A;&#x3002;&#x5176;&#x5B9E;&#x8FD9;&#x4E5F;&#x662F;HotSpot &#x4E0E; JRockit&#x7ED3;&#x5408;&#x7684;&#x7ED3;&#x679C;&#x3002;&#x56E0;&#x4E3A;JRockit&#x4ECE;&#x6765;&#x6CA1;&#x6709;&#x4E00;&#x4E2A;&#x53EB;&#x6C38;&#x4E45;&#x4EE3;&#x7684;&#x4E1C;&#x897F;, &#x4F46;&#x662F;&#x8FD0;&#x884C;&#x826F;&#x597D;, &#x4E5F;&#x4E0D;&#x9700;&#x8981;&#x5F00;&#x53D1;&#x8FD0;&#x7EF4;&#x4EBA;&#x5458;&#x8BBE;&#x7F6E;&#x8FD9;&#x4E48;&#x4E00;&#x4E2A;&#x6C38;&#x4E45;&#x4EE3;&#x7684;&#x5927;&#x5C0F;&#x3002;</p>
-<p><img src="http://pqre7ktqk.bkt.clouddn.com/blog/2019-04-30-54651.jpg" alt="image-20190108225939117"></p>
+<p><img src="http://cdn.cdream.site/blog/2019-04-30-54651.jpg" alt="image-20190108225939117"></p>
 <p>&#x4E0A;&#x9762;&#x8FD9;&#x5F20;&#x56FE;&#x662F;java8&#x4E2D;&#x7684;&#x865A;&#x62DF;&#x673A;&#x5185;&#x5B58;&#x6A21;&#x5F0F;&#xFF0C;&#x65B9;&#x6CD5;&#x533A;&#x4F7F;&#x7528;&#x672C;&#x5730;&#x5185;&#x5B58;&#x5927;&#x5143;&#x7A7A;&#x95F4;&#x6765;&#x5B9E;&#x73B0;&#x4E86;&#x3002;</p>
-<h2 id="&#x4E09;&#x3001;&#x4E24;&#x5F20;&#x56FE;"><a href="#&#x4E09;&#x3001;&#x4E24;&#x5F20;&#x56FE;" class="headerlink" title="&#x4E09;&#x3001;&#x4E24;&#x5F20;&#x56FE;"></a>&#x4E09;&#x3001;&#x4E24;&#x5F20;&#x56FE;</h2><p><img src="http://pqre7ktqk.bkt.clouddn.com/blog/2019-04-30-054651.jpg" alt="image-20190108214013962"></p>
+<h2 id="&#x4E09;&#x3001;&#x4E24;&#x5F20;&#x56FE;"><a href="#&#x4E09;&#x3001;&#x4E24;&#x5F20;&#x56FE;" class="headerlink" title="&#x4E09;&#x3001;&#x4E24;&#x5F20;&#x56FE;"></a>&#x4E09;&#x3001;&#x4E24;&#x5F20;&#x56FE;</h2><p><img src="http://cdn.cdream.site/blog/2019-04-30-054651.jpg" alt="image-20190108214013962"></p>
 <p>&#x770B;&#x5B8C;&#x4E0A;&#x9762;&#x7684;&#x5185;&#x5BB9;&#x5E94;&#x8BE5;&#x5C31;&#x6BD4;&#x8F83;&#x5BB9;&#x6613;&#x7406;&#x89E3;&#x8FD9;&#x5F20;&#x56FE;&#x4E86;&#xFF0C;&#x8FD9;&#x662F;&#x4E00;&#x5F20;java&#x5185;&#x5B58;&#x6A21;&#x578B;&#x56FE;&#x3002;</p>
 <p>java&#x5185;&#x5B58;&#x5305;&#x62EC;&#x5806;&#x3001;&#x65B9;&#x6CD5;&#x533A;&#x3001;&#x7EBF;&#x7A0B;&#x79C1;&#x6709;&#x5185;&#x5B58;&#x533A;&#x3002;</p>
 <p>&#x5806;&#x4E2D;&#x5305;&#x62EC;&#x5E74;&#x8F7B;&#x4EE3;&#x548C;&#x8001;&#x5E74;&#x4EE3;&#x3002;</p>
 <p>&#x5E74;&#x8F7B;&#x5E26;&#x5305;&#x62EC;EdenSpace&#x3001;FromSpace&#x3001;ToSpace&#x3002;</p>
 <p>&#x4E0B;&#x9762;&#x8FD9;&#x5F20;&#x56FE;&#x662F;&#x865A;&#x62DF;&#x673A;&#x53C2;&#x6570;&#x63A7;&#x5236;&#x7684;&#x5185;&#x5B58;&#x533A;&#x57DF;&#xFF0C;&#x865A;&#x62DF;&#x673A;&#x6027;&#x80FD;&#x8C03;&#x4F18;&#x4E5F;&#x662F;&#x4F7F;&#x7528;&#x8FD9;&#x4E9B;&#x53C2;&#x6570;&#x6765;&#x8C03;&#x4F18;&#x3002;</p>
-<p><img src="http://pqre7ktqk.bkt.clouddn.com/blog/2019-04-30-054655.jpg" alt="image-20190108214738707"></p>
+<p><img src="http://cdn.cdream.site/blog/2019-04-30-054655.jpg" alt="image-20190108214738707"></p>
 <ul>
 <li>-Xms&#x8BBE;&#x7F6E;&#x5806;&#x7684;&#x6700;&#x5C0F;&#x7A7A;&#x95F4;&#x5927;&#x5C0F;&#x3002;</li>
 <li>-Xmx&#x8BBE;&#x7F6E;&#x5806;&#x7684;&#x6700;&#x5927;&#x7A7A;&#x95F4;&#x5927;&#x5C0F;&#x3002;</li>
@@ -586,7 +586,7 @@
 <ol>
 <li>&#x53E5;&#x67C4;</li>
 </ol>
-<p><img src="http://pqre7ktqk.bkt.clouddn.com/blog/2019-04-30-54656.jpg" alt="image-20190108223537637"></p>
+<p><img src="http://cdn.cdream.site/blog/2019-04-30-54656.jpg" alt="image-20190108223537637"></p>
 <ul>
 <li><p>java&#x5806;&#x4E2D;&#x5206;&#x51FA;&#x53E5;&#x67C4;&#x6C60;,reference&#x50A8;&#x5B58;&#x53E5;&#x67C4;&#x5730;&#x5740;&#xFF0C;&#x53E5;&#x67C4;&#x4E2D;&#x50A8;&#x5B58;&#x5BF9;&#x8C61;&#x793A;&#x4F8B;&#x6570;&#x636E;&#x597D;&#x5BF9;&#x8C61;&#x7C7B;&#x578B;&#x6570;&#x636E;&#x7684;&#x6307;&#x9488;</p>
 </li>
@@ -596,7 +596,7 @@
 <ol start="2">
 <li>&#x76F4;&#x63A5;&#x6307;&#x9488;(HotSpot)</li>
 </ol>
-<p><img src="http://pqre7ktqk.bkt.clouddn.com/blog/2019-04-30-054656.jpg" alt="image-20190108224145859"></p>
+<p><img src="http://cdn.cdream.site/blog/2019-04-30-054656.jpg" alt="image-20190108224145859"></p>
 <ul>
 <li><p>reference&#x76F4;&#x63A5;&#x6307;&#x5411;&#x5BF9;&#x8C61;&#x5B9E;&#x4F8B;&#x6570;&#x636E;&#x5730;&#x5740;,&#x5806;&#x4E2D;&#x7684;&#x5BF9;&#x8C61;&#x8003;&#x8651;&#x653E;&#x7F6E;&#x5BF9;&#x8C61;&#x7C7B;&#x578B;&#x6570;&#x636E;&#x7684;&#x6307;&#x9488;</p>
 </li>
@@ -1444,7 +1444,7 @@ if (infoEle && infoEle.childNodes && infoEle.childNodes.length > 0){
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-backstretch/2.0.4/jquery.backstretch.min.js"></script>
 <script>
-+  $("body").backstretch("http://pqre7ktqk.bkt.clouddn.com/blog/2019-04-30-b8513327d8754074ee30980fd0029e5f4f1dd2f9.jpg")
++  $("body").backstretch("http://cdn.cdream.site/blog/2019-04-30-b8513327d8754074ee30980fd0029e5f4f1dd2f9.jpg")
  </script>
 </body>
 </html>
